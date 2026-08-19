@@ -5,9 +5,7 @@ import {
   BellNotification,
   DashboardSpeed,
   Page,
-  StatsUpSquare,
   CheckCircle,
-  Sparks,
   ArrowRight,
   Eye,
   Refresh,
@@ -25,7 +23,6 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
   const { login } = useAuth();
   const navigate = useNavigate();
   const [demoLoading, setDemoLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'reminder' | 'nota' | 'analytics'>('reminder');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
   const [mobileOdo, setMobileOdo] = useState<number>(24500);
 
@@ -92,13 +89,8 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </header>
 
-      {/* 2. Mobile Hero Section */}
-      <section className="px-5 pt-6 pb-8 bg-gradient-to-b from-white to-slate-50 space-y-4">
-        <div className="inline-flex items-center gap-1.5 bg-brand-50 border border-brand-200 px-3 py-1 rounded-full text-brand-700 text-[11px] font-extrabold">
-          <Sparks className="w-3.5 h-3.5 text-amber-500" />
-          <span>Buku Servis Digital Modern #1</span>
-        </div>
-
+      {/* 2. Mobile Hero Section (No Eyebrow, No Pills Strip) */}
+      <section className="px-5 pt-6 pb-6 bg-gradient-to-b from-white to-slate-50 space-y-4">
         <h1 className="text-3xl font-extrabold text-slate-950 tracking-tight leading-tight">
           Rawat Mobil &amp; Motor Lebih Hemat, <br />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-700">
@@ -110,7 +102,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           Catat riwayat perawatan, simpan foto kuitansi bengkel, dan pantau jatuh tempo ganti oli di saku Anda.
         </p>
 
-        {/* Action Buttons with Emil Tactile Polish */}
+        {/* Action Buttons */}
         <div className="pt-2 flex flex-col gap-2.5">
           <Link
             to="/register"
@@ -127,26 +119,10 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
             <span>Coba Demo 1-Klik Tanpa Daftar</span>
           </button>
         </div>
-
-        {/* Feature Badges Strip */}
-        <div className="pt-3 grid grid-cols-3 gap-2 text-center text-[10px] text-slate-500 font-bold">
-          <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
-            <span className="text-emerald-600 block text-xs font-extrabold font-mono tabular-nums">100%</span>
-            <span>Gratis 2 Kendaraan</span>
-          </div>
-          <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
-            <span className="text-brand-600 block text-xs font-extrabold font-mono tabular-nums">106+</span>
-            <span>Preset Mobil/Motor</span>
-          </div>
-          <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
-            <span className="text-amber-600 block text-xs font-extrabold font-mono tabular-nums">0 Iklan</span>
-            <span>Aman &amp; Nyaman</span>
-          </div>
-        </div>
       </section>
 
       {/* 3. Mobile Interactive Vehicle Preview Widget */}
-      <section className="px-5 py-4">
+      <section className="px-5 py-3">
         <div className="bg-white rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_24px_-6px_rgba(15,23,42,0.08)] border border-slate-200/80 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
@@ -205,80 +181,35 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 4. Mobile Feature Tabs Switcher */}
+      {/* 4. Streamlined 2-Part Feature Overview (No 3-tab repetitive switch) */}
       <section className="px-5 py-4 space-y-3">
-        <h3 className="font-extrabold text-base text-slate-900">Fitur Utama di Ponsel Anda</h3>
+        <h3 className="font-extrabold text-base text-slate-900">Fitur Utama di Ponsel</h3>
         
-        {/* Tab Buttons with Fluid Transition */}
-        <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-200/80 rounded-xl">
-          <button
-            onClick={() => setActiveTab('reminder')}
-            className={`py-2 text-[11px] font-extrabold rounded-lg active:scale-95 transition-[transform,background-color,color,box-shadow] duration-150 cursor-pointer ${
-              activeTab === 'reminder' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
-            }`}
-          >
-            Pengingat
-          </button>
-          <button
-            onClick={() => setActiveTab('nota')}
-            className={`py-2 text-[11px] font-extrabold rounded-lg active:scale-95 transition-[transform,background-color,color,box-shadow] duration-150 cursor-pointer ${
-              activeTab === 'nota' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
-            }`}
-          >
-            Foto Nota
-          </button>
-          <button
-            onClick={() => setActiveTab('analytics')}
-            className={`py-2 text-[11px] font-extrabold rounded-lg active:scale-95 transition-[transform,background-color,color,box-shadow] duration-150 cursor-pointer ${
-              activeTab === 'analytics' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
-            }`}
-          >
-            Analitik
-          </button>
-        </div>
+        <div className="space-y-3">
+          <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-1">
+              <BellNotification className="w-5 h-5" />
+            </div>
+            <h4 className="font-extrabold text-sm text-slate-900">Pengingat Servis Presisi KM</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Jadwal ganti oli, ban, filter, busi, dan transmisi terhitung otomatis sesuai pola pemakaian kilometer harian Anda.
+            </p>
+          </div>
 
-        {/* Tab Content Cards */}
-        <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
-          {activeTab === 'reminder' && (
-            <>
-              <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-1">
-                <BellNotification className="w-5 h-5" />
-              </div>
-              <h4 className="font-extrabold text-sm text-slate-900">Pengingat Servis Presisi KM</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Jadwal ganti oli, ban, filter, busi, dan transmisi terhitung otomatis sesuai pola pemakaian kilometer harian Anda.
-              </p>
-            </>
-          )}
-
-          {activeTab === 'nota' && (
-            <>
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-1">
-                <Page className="w-5 h-5" />
-              </div>
-              <h4 className="font-extrabold text-sm text-slate-900">Scan &amp; Upload Nota Bengkel</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Foto kuitansi langsung dari kamera smartphone. Tersimpan rapi di cloud, bukti valid saat mobil/motor Anda mau dijual kembali.
-              </p>
-            </>
-          )}
-
-          {activeTab === 'analytics' && (
-            <>
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1">
-                <StatsUpSquare className="w-5 h-5" />
-              </div>
-              <h4 className="font-extrabold text-sm text-slate-900">Grafik Pengeluaran 12 Bulan</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Ketahui total pengeluaran suku cadang, jasa mekanik, dan tren biaya perawatan bulanan secara transparan.
-              </p>
-            </>
-          )}
+          <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-1">
+              <Page className="w-5 h-5" />
+            </div>
+            <h4 className="font-extrabold text-sm text-slate-900">Scan Nota &amp; Analitik Pengeluaran</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Foto kuitansi langsung dari kamera smartphone. Tersimpan rapi di cloud dan otomatis terangkum dalam grafik pengeluaran 12 bulan.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* 5. Mobile Android & Web App Integration Banner */}
-      <section className="px-5 py-4">
+      <section className="px-5 py-3">
         <div className="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl p-4 shadow-md flex items-center gap-3 border border-slate-800">
           <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-emerald-400">
             <SmartphoneDevice className="w-6 h-6" />
@@ -292,14 +223,9 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 6. Mobile Pricing Quick Card */}
+      {/* 6. Mobile Pricing Quick Card (No Eyebrow) */}
       <section className="px-5 py-4 space-y-3">
-        <div className="text-center space-y-1">
-          <span className="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
-            Paket FixGarasi
-          </span>
-          <h3 className="font-extrabold text-lg text-slate-900">Pilihan Harga Sederhana</h3>
-        </div>
+        <h3 className="font-extrabold text-lg text-slate-900">Pilihan Paket</h3>
 
         <div className="bg-white rounded-2xl p-5 border-2 border-amber-500 shadow-[0_4px_16px_-4px_rgba(245,158,11,0.25)] relative space-y-3">
           <div className="flex items-center justify-between">
@@ -378,7 +304,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         <p className="text-[10px] text-slate-400">&copy; 2026 FixGarasi Indonesia. Hak Cipta Dilindungi.</p>
       </footer>
 
-      {/* 9. Floating Thumb Sticky Bottom Action Bar with Emil Kowalski Active State */}
+      {/* 9. Floating Thumb Sticky Bottom Action Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200/90 p-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] flex items-center gap-2.5 max-w-lg mx-auto">
         <button
           onClick={handleDemoLogin}

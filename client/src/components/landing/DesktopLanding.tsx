@@ -9,10 +9,8 @@ import {
   StatsUpSquare,
   ShieldCheck,
   CheckCircle,
-  Sparks,
   CreditCard,
   ArrowRight,
-  Calculator,
   Eye,
   Refresh,
   Lock
@@ -55,7 +53,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
     }
   };
 
-  // Calculator estimations with tabular arithmetic
+  // Calculator estimations
   const estimatedYearlyOilCost = vehicleType === 'CAR' ? Math.round((monthlyKm * 12 / 5000) * 450000) : Math.round((monthlyKm * 12 / 2500) * 85000);
   const estimatedRoutineTotal = vehicleType === 'CAR' ? Math.round(estimatedYearlyOilCost * 2.2 + (vehicleAge * 150000)) : Math.round(estimatedYearlyOilCost * 2.0 + (vehicleAge * 50000));
   const estimatedMajorBreakdownPrevented = vehicleType === 'CAR' ? 12500000 : 3500000;
@@ -105,14 +103,14 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-8 text-xs font-bold text-slate-600">
-            <a href="#fitur" className="hover:text-brand-600 transition-colors duration-150">Fitur Unggulan</a>
+            <a href="#fitur" className="hover:text-brand-600 transition-colors duration-150">Fitur</a>
             <a href="#kalkulator" className="hover:text-brand-600 transition-colors duration-150">Kalkulator Servis</a>
-            <a href="#katalog" className="hover:text-brand-600 transition-colors duration-150">106+ Model Kendaraan</a>
+            <a href="#katalog" className="hover:text-brand-600 transition-colors duration-150">Model Kendaraan</a>
             <a href="#harga" className="hover:text-brand-600 transition-colors duration-150">Paket &amp; Harga</a>
             <a href="#faq" className="hover:text-brand-600 transition-colors duration-150">FAQ</a>
           </nav>
 
-          {/* Right Action CTAs with Emil Kowalski Active State Polish */}
+          {/* Right Action CTAs */}
           <div className="flex items-center gap-3">
             <button
               onClick={handleDemoLogin}
@@ -141,7 +139,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </header>
 
-      {/* 2. Hero Section (Wide 2-Column Desktop Grid) */}
+      {/* 2. Hero Section (Clean 2-Column Split: No Eyebrow, No Pills Strip) */}
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200/80">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -149,11 +147,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Value Proposition */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 bg-brand-50 border border-brand-200/80 px-3.5 py-1.5 rounded-full text-brand-700 text-xs font-extrabold shadow-xs">
-              <Sparks className="w-4 h-4 text-amber-500" />
-              <span>Platform SaaS Manajemen Kendaraan #1 di Indonesia</span>
-            </div>
-
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
               Buku Servis Digital &amp; <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-brand-700 to-indigo-800">
@@ -165,7 +158,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               Catat riwayat perawatan mobil &amp; motor, arsipkan nota kuitansi bengkel secara aman terenkripsi, dan dapatkan pengingat servis otomatis berbasis jarak tempuh odometer maupun waktu.
             </p>
 
-            {/* Action Buttons with Tactile Press Feedback */}
+            {/* Action Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
                 to="/register"
@@ -183,25 +176,9 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 <span>Buka Demo Interaktif</span>
               </button>
             </div>
-
-            {/* Feature Pills */}
-            <div className="pt-4 grid grid-cols-3 gap-4 border-t border-slate-200/80 max-w-xl">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Tanpa Biaya Registrasi</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>100% Bebas Iklan</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Support Android APK</span>
-              </div>
-            </div>
           </div>
 
-          {/* Right Column: Interactive Digital Garage Preview Card (Emil Nested Radius Polish) */}
+          {/* Right Column: Interactive Digital Garage Preview Card */}
           <div className="lg:col-span-5 relative">
             <div className="bg-white rounded-3xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_16px_36px_-8px_rgba(15,23,42,0.12)] border border-slate-200/80 relative overflow-hidden">
               {/* Header inside mockup */}
@@ -315,78 +292,85 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 4. Core Features Deep Dive */}
+      {/* 4. Asymmetric 2-Part Deep Dive Feature Section (No 3 equal cards, no eyebrows) */}
       <section id="fitur" className="py-20 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-extrabold text-brand-600 tracking-wider uppercase bg-brand-50 px-3 py-1 rounded-full border border-brand-200">
-              Solusi Terpadu Garasi Anda
-            </span>
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          <div className="max-w-2xl">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Fitur Lengkap untuk Pemilik Mobil &amp; Motor
+              Manajemen Perawatan Tanpa Buku Kertas
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base">
-              Tinggalkan catatan kertas yang mudah hilang. Kelola seluruh aspek teknis dan finansial armada kendaraan Anda dalam satu aplikasi.
+            <p className="text-slate-600 text-sm sm:text-base mt-2">
+              Seluruh riwayat mekanik, interval ganti oli, dan arsip kuitansi tersusun rapi dan dapat diakses kapan saja.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-brand-500 hover:bg-white hover:shadow-[0_12px_28px_-6px_rgba(37,99,235,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out group">
-              <div className="w-14 h-14 rounded-2xl bg-brand-500 text-white flex items-center justify-center mb-6 shadow-md shadow-brand-500/20 group-hover:scale-110 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                <BellNotification className="w-7 h-7" />
+          {/* Feature Showcase: 2-Part Bento Deep Dive */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Block 1: Smart Reminders & Odometer (7 cols) */}
+            <div className="lg:col-span-7 bg-slate-50 rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:border-brand-500 transition-[border-color,box-shadow] duration-200 hover:shadow-[0_12px_28px_-6px_rgba(37,99,235,0.12)]">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center mb-6 shadow-md shadow-brand-600/20">
+                  <BellNotification className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-extrabold text-slate-900 mb-2">
+                  Pengingat Servis Presisi Berbasis Kilometer
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed max-w-xl">
+                  Sistem otomatis menghitung mundur sisa jarak tempuh sebelum jadwal servis oli mesin, aki, rem, ban, dan transmisi jatuh tempo. Anda dapat me-reset siklus cukup dengan satu klik setelah servis selesai.
+                </p>
               </div>
-              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Smart Maintenance Reminder</h3>
-              <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                Sistem menghitung jatuh tempo penggantian oli mesin, oli gardan, minyak rem, aki, dan ban otomatis berdasarkan jarak tempuh KM maupun rentang bulan kalender.
-              </p>
-              <div className="text-xs font-bold text-brand-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
-                <span>One-Click Cycle Reset</span> &rarr;
+
+              <div className="mt-8 pt-6 border-t border-slate-200/80 grid grid-cols-2 gap-4 text-xs">
+                <div className="p-4 bg-white rounded-2xl border border-slate-200/60">
+                  <span className="font-bold text-slate-900 block mb-1">Dual-Trigger Tracking</span>
+                  <span className="text-slate-500">Mendukung interval kombinasi jarak tempuh KM dan tanggal kalender.</span>
+                </div>
+                <div className="p-4 bg-white rounded-2xl border border-slate-200/60">
+                  <span className="font-bold text-slate-900 block mb-1">Multi-Vehicle Sync</span>
+                  <span className="text-slate-500">Pantau seluruh mobil dan motor keluarga dalam satu akun terpusat.</span>
+                </div>
               </div>
             </div>
 
-            {/* Card 2 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-indigo-500 hover:bg-white hover:shadow-[0_12px_28px_-6px_rgba(99,102,241,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out group">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center mb-6 shadow-md shadow-indigo-600/20 group-hover:scale-110 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                <Page className="w-7 h-7" />
+            {/* Block 2: Vault Nota & Analitik Biaya (5 cols) */}
+            <div className="lg:col-span-5 bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 flex flex-col justify-between shadow-[0_12px_32px_-8px_rgba(15,23,42,0.4)]">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500 text-white flex items-center justify-center mb-6 shadow-md shadow-indigo-500/30">
+                  <Page className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-extrabold text-white mb-2">
+                  Vault Foto Nota &amp; Rekap Pengeluaran
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Arsipkan foto kuitansi bengkel langsung dari smartphone. Nilai jual kembali kendaraan Anda terjaga tinggi berkat bukti transparansi perawatan digital.
+                </p>
               </div>
-              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Arsip Foto Nota &amp; Kuitansi</h3>
-              <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                Foto bukti transaksi dari bengkel resmi maupun bengkel umum langsung tersimpan aman di cloud. Dilengkapi fitur zoom gambar untuk transparansi saat mobil dijual kembali.
-              </p>
-              <div className="text-xs font-bold text-indigo-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
-                <span>Digital Resale Value Booster</span> &rarr;
-              </div>
-            </div>
 
-            {/* Card 3 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-emerald-500 hover:bg-white hover:shadow-[0_12px_28px_-6px_rgba(16,185,129,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out group">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-6 shadow-md shadow-emerald-600/20 group-hover:scale-110 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                <StatsUpSquare className="w-7 h-7" />
-              </div>
-              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Analitik Biaya &amp; Anggaran</h3>
-              <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                Pantau pengeluaran servis 12 bulan terakhir, diagram persentase sparepart vs jasa mekanik, dan komparasi biaya operasional antar mobil/motor di garasi Anda.
-              </p>
-              <div className="text-xs font-bold text-emerald-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
-                <span>Laporan Finansial Rinci</span> &rarr;
+              <div className="mt-8 pt-6 border-t border-slate-800 space-y-3">
+                <div className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/10 text-xs">
+                  <span className="text-slate-300 flex items-center gap-2">
+                    <StatsUpSquare className="w-4 h-4 text-emerald-400" /> Analitik 12 Bulan
+                  </span>
+                  <span className="font-mono tabular-nums text-emerald-400 font-bold">Otomatis Terkalkulasi</span>
+                </div>
+                <div className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/10 text-xs">
+                  <span className="text-slate-300 flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-brand-400" /> Enkripsi Nota Cloud
+                  </span>
+                  <span className="font-mono tabular-nums text-brand-300 font-bold">SSL 256-bit</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. Interactive ROI & Maintenance Cost Calculator */}
+      {/* 5. Interactive ROI & Maintenance Cost Calculator (No Eyebrow) */}
       <section id="kalkulator" className="py-20 bg-slate-50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_-10px_rgba(15,23,42,0.1)] border border-slate-200/80 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Calculator Controls */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full text-amber-800 text-xs font-extrabold">
-                <Calculator className="w-4 h-4 text-amber-600" />
-                <span>Simulasi Biaya &amp; Penghematan</span>
-              </div>
-
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Kalkulator Estimasi Biaya Perawatan Rutin
               </h3>
@@ -466,10 +450,10 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </div>
             </div>
 
-            {/* Calculator Results Display (Emil High-Contrast Polish) */}
+            {/* Calculator Results Display */}
             <div className="lg:col-span-6 bg-gradient-to-br from-slate-900 to-slate-950 text-white p-8 rounded-3xl shadow-[0_1px_2px_rgba(0,0,0,0.1),0_18px_36px_-8px_rgba(0,0,0,0.5)] space-y-6 border border-slate-800">
               <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider block">
-                Hasil Kalkulasi Estimasi Tahunan
+                Hasil Estimasi Tahunan
               </span>
 
               <div className="grid grid-cols-2 gap-4">
@@ -516,13 +500,10 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 6. Vehicle Catalog Brand Showcase */}
+      {/* 6. Vehicle Catalog Brand Showcase (No Eyebrow) */}
       <section id="katalog" className="py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-            <span className="text-xs font-extrabold text-brand-600 tracking-wider uppercase bg-brand-50 px-3 py-1 rounded-full border border-brand-200">
-              Katalog Lengkap Indonesia
-            </span>
+          <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Mendukung 106+ Model Mobil &amp; Motor Populer
             </h2>
@@ -531,7 +512,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </p>
           </div>
 
-          {/* Brand Tabs with Tactile Press Feedback */}
+          {/* Brand Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
             {brands.map(b => (
               <button
@@ -574,15 +555,12 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 7. Transparent Midtrans Pricing Table */}
+      {/* 7. Transparent Midtrans Pricing Table (No Eyebrow) */}
       <section id="harga" className="py-20 bg-slate-50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-extrabold text-amber-600 tracking-wider uppercase bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-              Biaya Transparan &amp; Fleksibel
-            </span>
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-2">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Pilihan Paket Sesuai Kebutuhan Garasi Anda
+              Pilihan Paket Garasi
             </h2>
             <p className="text-slate-600 text-sm">
               Mulai gratis untuk kendaraan harian, atau tingkatkan ke Pro untuk garasi keluarga tanpa batas kuota.
@@ -630,7 +608,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </Link>
             </div>
 
-            {/* Pro Plan (Highlighted with Layered Glow & Soft Borders) */}
+            {/* Pro Plan */}
             <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-8 border-2 border-amber-500 shadow-[0_1px_2px_rgba(0,0,0,0.1),0_20px_40px_-10px_rgba(245,158,11,0.25)] relative flex flex-col justify-between">
               <div className="absolute -top-3.5 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-[10px] px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
                 Paling Populer &bull; Hemat 35%
@@ -751,7 +729,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
           <div className="space-y-3 text-xs">
             <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Navigasi Layanan</h5>
             <ul className="space-y-2 text-slate-400">
-              <li><a href="#fitur" className="hover:text-white transition-colors duration-150">Fitur Unggulan</a></li>
+              <li><a href="#fitur" className="hover:text-white transition-colors duration-150">Fitur</a></li>
               <li><a href="#kalkulator" className="hover:text-white transition-colors duration-150">Kalkulator Servis</a></li>
               <li><a href="#katalog" className="hover:text-white transition-colors duration-150">Katalog Kendaraan</a></li>
               <li><a href="#harga" className="hover:text-white transition-colors duration-150">Paket &amp; Harga PRO</a></li>
