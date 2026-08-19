@@ -5,112 +5,244 @@ interface ThreeCarHeroProps {
   isMobile?: boolean;
 }
 
-// 1. Procedural Texture Generators
-function createCarbonFiberTexture(): THREE.CanvasTexture {
-  const canvas = document.createElement('canvas');
-  canvas.width = 128;
-  canvas.height = 128;
-  const ctx = canvas.getContext('2d')!;
+// 1. Procedural Studio HDRI Environment Map Generator (Creates realistic metallic/clearcoat reflections)
+function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRenderTarget {
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
 
-  ctx.fillStyle = '#15171c';
-  ctx.fillRect(0, 0, 128, 128);
+  const envScene = new THREE.Scene();
+  envScene.background = new THREE.Color(0x0a0d14);
 
-  ctx.fillStyle = '#262930';
-  for (let i = 0; i < 128; i += 8) {
-    for (let j = 0; j < 128; j += 8) {
-      if ((i / 8 + j / 8) % 2 === 0) {
-        ctx.fillRect(i, j, 8, 8);
-      }
-    }
-  }
+  // Overhead Studio Softbox (Key reflection)
+  const softboxGeo = new THREE.PlaneGeometry(12, 6);
+  const softboxMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+  const softbox = new THREE.Mesh(softboxGeo, softboxMat);
+  softbox.position.set(0, 7, 0);
+  softbox.rotation.x = Math.PI / 2;
+  envScene.add(softbox);
 
-  ctx.fillStyle = '#3a3e47';
-  for (let i = 0; i < 128; i += 16) {
-    for (let j = 0; j < 128; j += 16) {
-      ctx.fillRect(i + 2, j + 2, 4, 4);
-    }
-  }
+  // Side Softbox Left (Frosted Blue Rim)
+  const sideSoftbox1 = new THREE.Mesh(
+    new THREE.PlaneGeometry(10, 4),
+    new THREE.MeshBasicMaterial({ color: 0x90e0ef, side: THREE.DoubleSide })
+  );
+  sideSoftbox1.position.set(6, 4, 0);
+  sideSoftbox1.rotation.y = -Math.PI / 2;
+  envScene.add(sideSoftbox1);
 
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(4, 4);
-  return texture;
+  // Side Softbox Right (Warm Horizon Fill)
+  const sideSoftbox2 = new THREE.Mesh(
+    new THREE.PlaneGeometry(10, 4),
+    new THREE.MeshBasicMaterial({ color: 0xffe5d9, side: THREE.DoubleSide })
+  );
+  sideSoftbox2.position.set(-6, 4, 0);
+  sideSoftbox2.rotation.y = Math.PI / 2;
+  envScene.add(sideSoftbox2);
+
+  // Front Horizon Light Strip
+  const frontStrip = new THREE.Mesh(
+    new THREE.PlaneGeometry(12, 1.5),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
+  );
+  frontStrip.position.set(0, 2, 8);
+  frontStrip.rotation.x = Math.PI;
+  envScene.add(frontStrip);
+
+  const envRenderTarget = pmremGenerator.fromScene(envScene, 0.04);
+  pmremGenerator.dispose();
+  return envRenderTarget;
 }
 
-function createTireTreadTexture(): THREE.CanvasTexture {
+// 2. High-Resolution Carbon Fiber Weave Texture & Normal Map
+function createCarbonFiberMaps(): { map: THREE.CanvasTexture; normalMap: THREE.CanvasTexture } {
+  const size = 256;
   const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 128;
+  canvas.width = size;
+  canvas.height = size;
   const ctx = canvas.getContext('2d')!;
 
-  ctx.fillStyle = '#111317';
-  ctx.fillRect(0, 0, 512, 128);
+  // Diffuse Base
+  ctx.fillStyle = '#0f1115';
+  ctx.fillRect(0, 0, size, size);
 
+  const normalCanvas = document.createElement('canvas');
+  normalCanvas.width = size;
+  normalCanvas.height = size;
+  const nCtx = normalCanvas.getContext('2d')!;
+  nCtx.fillStyle = 'rgb(128,128,255)';
+  nCtx.fillRect(0, 0, size, size);
+
+  const step = 8;
+  for (let x = 0; x < size; x += step) {
+    for (let y = 0; y < size; y += step) {
+      const isPattern = ((x / step) + (y / step)) % 2 === 0;
+
+      // Diffuse Color Pattern
+      ctx.fillStyle = isPattern ? '#242830' : '#14161a';
+      ctx.fillRect(x, y, step, step);
+
+      // Micro Strand Highlights
+      ctx.fillStyle = isPattern ? '#3a404c' : '#1a1d24';
+      ctx.fillRect(x + 1, y + 1, step - 2, step - 2);
+
+      // Normal Map Perturbation
+      nCtx.fillStyle = isPattern ? 'rgb(150,110,255)' : 'rgb(105,145,255)';
+      nCtx.fillRect(x, y, step, step);
+    }
+  }
+
+  const map = new THREE.CanvasTexture(canvas);
+  map.wrapS = THREE.RepeatWrapping;
+  map.wrapT = THREE.RepeatWrapping;
+  map.repeat.set(6, 6);
+
+  const normalMap = new THREE.CanvasTexture(normalCanvas);
+  normalMap.wrapS = THREE.RepeatWrapping;
+  normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(6, 6);
+
+  return { map, normalMap };
+}
+
+// 3. High-Definition Tire Tread & Sidewall Normal Map
+function createTireMaps(): { map: THREE.CanvasTexture; normalMap: THREE.CanvasTexture } {
+  const width = 512;
+  const height = 128;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d')!;
+
+  const normalCanvas = document.createElement('canvas');
+  normalCanvas.width = width;
+  normalCanvas.height = height;
+  const nCtx = normalCanvas.getContext('2d')!;
+
+  ctx.fillStyle = '#14161a';
+  ctx.fillRect(0, 0, width, height);
+
+  nCtx.fillStyle = 'rgb(128,128,255)';
+  nCtx.fillRect(0, 0, width, height);
+
+  // Directional High-Performance Tread Channels
   ctx.strokeStyle = '#050608';
-  ctx.lineWidth = 4;
-  for (let x = 0; x < 512; x += 16) {
+  ctx.lineWidth = 5;
+  nCtx.strokeStyle = 'rgb(80,80,255)';
+  nCtx.lineWidth = 5;
+
+  for (let x = 0; x < width; x += 20) {
+    // V-Channel Sipes
     ctx.beginPath();
-    ctx.moveTo(x, 10);
-    ctx.lineTo(x + 12, 64);
-    ctx.lineTo(x, 118);
+    ctx.moveTo(x, 8);
+    ctx.lineTo(x + 16, 64);
+    ctx.lineTo(x, 120);
     ctx.stroke();
 
-    ctx.strokeStyle = '#1e2129';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(x + 6, 20);
-    ctx.lineTo(x + 14, 50);
-    ctx.stroke();
-    ctx.strokeStyle = '#050608';
-    ctx.lineWidth = 4;
+    nCtx.beginPath();
+    nCtx.moveTo(x, 8);
+    nCtx.lineTo(x + 16, 64);
+    nCtx.lineTo(x, 120);
+    nCtx.stroke();
+
+    // Lateral Drainage Ribs
+    ctx.fillStyle = '#20242b';
+    ctx.fillRect(x + 4, 25, 4, 35);
+    ctx.fillRect(x + 4, 68, 4, 35);
   }
 
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(6, 1);
-  return texture;
+  // Longitudinal Center Grooves
+  ctx.fillStyle = '#060709';
+  ctx.fillRect(0, 38, width, 6);
+  ctx.fillRect(0, 84, width, 6);
+
+  nCtx.fillStyle = 'rgb(60,60,255)';
+  nCtx.fillRect(0, 38, width, 6);
+  nCtx.fillRect(0, 84, width, 6);
+
+  const map = new THREE.CanvasTexture(canvas);
+  map.wrapS = THREE.RepeatWrapping;
+  map.wrapT = THREE.RepeatWrapping;
+  map.repeat.set(6, 1);
+
+  const normalMap = new THREE.CanvasTexture(normalCanvas);
+  normalMap.wrapS = THREE.RepeatWrapping;
+  normalMap.wrapT = THREE.RepeatWrapping;
+  normalMap.repeat.set(6, 1);
+
+  return { map, normalMap };
 }
 
-function createBrakeRotorTexture(): THREE.CanvasTexture {
+// 4. Cross-Drilled Carbon-Ceramic Brake Rotor Texture & Normal Map
+function createBrakeRotorMaps(): { map: THREE.CanvasTexture; normalMap: THREE.CanvasTexture } {
+  const size = 512;
   const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 256;
+  canvas.width = size;
+  canvas.height = size;
   const ctx = canvas.getContext('2d')!;
 
-  ctx.fillStyle = '#94a3b8';
-  ctx.fillRect(0, 0, 256, 256);
+  const normalCanvas = document.createElement('canvas');
+  normalCanvas.width = size;
+  normalCanvas.height = size;
+  const nCtx = normalCanvas.getContext('2d')!;
 
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1;
-  for (let r = 20; r < 120; r += 4) {
+  ctx.fillStyle = '#a1a1aa';
+  ctx.fillRect(0, 0, size, size);
+
+  nCtx.fillStyle = 'rgb(128,128,255)';
+  nCtx.fillRect(0, 0, size, size);
+
+  // Concentric CNC Machining Lathe Rings
+  for (let r = 50; r < 240; r += 3) {
+    ctx.strokeStyle = r % 6 === 0 ? '#71717a' : '#d4d4d8';
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(128, 128, r, 0, Math.PI * 2);
+    ctx.arc(256, 256, r, 0, Math.PI * 2);
     ctx.stroke();
+
+    nCtx.strokeStyle = 'rgb(140,128,255)';
+    nCtx.lineWidth = 1;
+    nCtx.beginPath();
+    nCtx.arc(256, 256, r, 0, Math.PI * 2);
+    nCtx.stroke();
   }
 
-  ctx.fillStyle = '#1e293b';
-  for (let i = 0; i < 24; i++) {
-    const angle = (i * Math.PI * 2) / 24;
-    for (let d = 40; d < 110; d += 22) {
-      const hx = 128 + Math.cos(angle + d * 0.01) * d;
-      const hy = 128 + Math.sin(angle + d * 0.01) * d;
+  // Cross-Drilled Curved Ventilation Holes with Chamfered Edges
+  for (let i = 0; i < 28; i++) {
+    const baseAngle = (i * Math.PI * 2) / 28;
+    for (let d = 80; d < 230; d += 35) {
+      const angle = baseAngle + d * 0.005; // Curved spiral drill path
+      const hx = 256 + Math.cos(angle) * d;
+      const hy = 256 + Math.sin(angle) * d;
+
+      // Dark Hole Core
+      ctx.fillStyle = '#18181b';
       ctx.beginPath();
-      ctx.arc(hx, hy, 2.5, 0, Math.PI * 2);
+      ctx.arc(hx, hy, 4, 0, Math.PI * 2);
       ctx.fill();
+
+      // Chamfer Highlight Ring
+      ctx.strokeStyle = '#f4f4f5';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      nCtx.fillStyle = 'rgb(50,50,255)';
+      nCtx.beginPath();
+      nCtx.arc(hx, hy, 4, 0, Math.PI * 2);
+      nCtx.fill();
     }
   }
 
-  const texture = new THREE.CanvasTexture(canvas);
-  return texture;
+  const map = new THREE.CanvasTexture(canvas);
+  const normalMap = new THREE.CanvasTexture(normalCanvas);
+  return { map, normalMap };
 }
 
 export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hintVisible, setHintVisible] = useState(true);
 
-  // Door & Hood Hinged Animation State References
+  // Door & Hood State References
   const leftDoorOpenRef = useRef(false);
   const rightDoorOpenRef = useRef(false);
   const hoodOpenRef = useRef(false);
@@ -126,6 +258,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   const carGroupRef = useRef<THREE.Group | null>(null);
   const rotatingWheelsRef = useRef<THREE.Group[]>([]);
   const materialsRef = useRef<THREE.Material[]>([]);
+  const texturesRef = useRef<THREE.Texture[]>([]);
   const clickableMeshesRef = useRef<{ mesh: THREE.Object3D; action: () => void }[]>([]);
 
   const isDraggingRef = useRef(false);
@@ -147,159 +280,209 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
     camera.position.set(0, 1.7, 6.2);
 
-    // 3. Renderer with transparent background
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // 3. WebGL Renderer with Tone Mapping & Physical Precision
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
     container.replaceChildren(renderer.domElement);
 
-    // 4. Studio Lighting Rig
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
+    // 4. Generate Studio HDRI Environment Map for Realistic Clearcoat & Reflections
+    const envRenderTarget = createStudioEnvironment(renderer);
+    scene.environment = envRenderTarget.texture;
+
+    // 5. Studio Key & Rim Lighting Rig
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    keyLight.position.set(6, 9, 6);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
+    keyLight.position.set(6, 10, 6);
     keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
+    keyLight.shadow.bias = -0.001;
     scene.add(keyLight);
 
     const rimLight = new THREE.DirectionalLight(0x90e0ef, 1.2);
     rimLight.position.set(-6, 5, -5);
     scene.add(rimLight);
 
-    const frontLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    frontLight.position.set(2, 2, 5);
-    scene.add(frontLight);
+    const underGlow = new THREE.DirectionalLight(0xffe5d9, 0.6);
+    underGlow.position.set(0, -2, 4);
+    scene.add(underGlow);
 
-    // 5. Materials with Procedural Textures
-    const carbonTexture = createCarbonFiberTexture();
-    const tireTexture = createTireTreadTexture();
-    const brakeTexture = createBrakeRotorTexture();
+    // 6. Realistic Procedural Textures & PBR Materials
+    const carbonMaps = createCarbonFiberMaps();
+    const tireMaps = createTireMaps();
+    const brakeMaps = createBrakeRotorMaps();
 
-    const lamboRedPaintMat = new THREE.MeshStandardMaterial({
+    texturesRef.current.push(
+      carbonMaps.map,
+      carbonMaps.normalMap,
+      tireMaps.map,
+      tireMaps.normalMap,
+      brakeMaps.map,
+      brakeMaps.normalMap
+    );
+
+    // --- REALISTIC PHYSICAL AUTOMOTIVE MATERIALS ---
+
+    // A. Lamborghini Rosso Mars Multi-Stage Car Paint (Clearcoat + Flake Depth)
+    const lamboPaintMat = new THREE.MeshPhysicalMaterial({
       color: 0xd90429,
+      emissive: 0x200104,
       metalness: 0.85,
-      roughness: 0.14,
+      roughness: 0.12,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.04,
+      reflectivity: 1.0,
     });
 
-    const carbonAeroMat = new THREE.MeshStandardMaterial({
-      map: carbonTexture,
-      color: 0x22242a,
-      metalness: 0.8,
-      roughness: 0.25,
+    // B. Authentic Twill Weave Carbon Fiber with Normal Map
+    const carbonFiberMat = new THREE.MeshStandardMaterial({
+      map: carbonMaps.map,
+      normalMap: carbonMaps.normalMap,
+      normalScale: new THREE.Vector2(0.8, 0.8),
+      roughness: 0.28,
+      metalness: 0.7,
     });
 
-    const cockpitGlassMat = new THREE.MeshStandardMaterial({
-      color: 0x0a0d14,
-      metalness: 0.95,
-      roughness: 0.05,
+    // C. Automotive Solar Tinted Safety Glass with Optical Transmission
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0x080c14,
+      metalness: 0.1,
+      roughness: 0.02,
+      transmission: 0.75,
+      thickness: 0.4,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.92,
+      ior: 1.52,
     });
 
+    // D. Alcantara / Leather Cockpit Interior
     const interiorMat = new THREE.MeshStandardMaterial({
-      color: 0x181a20,
-      metalness: 0.3,
-      roughness: 0.7,
-    });
-
-    const interiorAccentMat = new THREE.MeshStandardMaterial({
-      color: 0xd90429,
-      metalness: 0.5,
-      roughness: 0.4,
-    });
-
-    const tireTreadMat = new THREE.MeshStandardMaterial({
-      map: tireTexture,
-      color: 0x181a1f,
+      color: 0x16181d,
       roughness: 0.85,
       metalness: 0.1,
     });
 
-    const supercarRimMat = new THREE.MeshStandardMaterial({
-      color: 0xe2e8f0,
-      metalness: 0.9,
+    const interiorRedMat = new THREE.MeshStandardMaterial({
+      color: 0xc1121f,
+      roughness: 0.6,
+      metalness: 0.2,
+    });
+
+    // E. High-Grip Tread Rubber Tire with Bump Texture
+    const tireMat = new THREE.MeshStandardMaterial({
+      map: tireMaps.map,
+      normalMap: tireMaps.normalMap,
+      normalScale: new THREE.Vector2(1.2, 1.2),
+      roughness: 0.85,
+      metalness: 0.05,
+    });
+
+    // F. Forged Diamond-Cut Gunmetal Supercar Alloy Rim
+    const rimMat = new THREE.MeshStandardMaterial({
+      color: 0x1e293b,
+      metalness: 0.92,
       roughness: 0.15,
     });
 
+    const rimPolishedLipMat = new THREE.MeshStandardMaterial({
+      color: 0xf1f5f9,
+      metalness: 0.98,
+      roughness: 0.06,
+    });
+
+    // G. Carbon-Ceramic Ventilated Brake Disc with Anisotropic Lathe Grooves
     const brakeDiscMat = new THREE.MeshStandardMaterial({
-      map: brakeTexture,
-      metalness: 0.9,
-      roughness: 0.2,
+      map: brakeMaps.map,
+      normalMap: brakeMaps.normalMap,
+      normalScale: new THREE.Vector2(0.6, 0.6),
+      metalness: 0.88,
+      roughness: 0.22,
     });
 
-    const redBrakeCaliperMat = new THREE.MeshStandardMaterial({
+    // H. Gloss Red Brembo 6-Piston Brake Caliper
+    const caliperMat = new THREE.MeshPhysicalMaterial({
       color: 0xef233c,
-      metalness: 0.7,
-      roughness: 0.2,
+      metalness: 0.6,
+      roughness: 0.18,
+      clearcoat: 0.9,
     });
 
-    const yHeadlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    const yTaillightMat = new THREE.MeshBasicMaterial({ color: 0xff002b });
-    const exhaustMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.95, roughness: 0.1 });
+    // I. High-Intensity LED Projector & Y-Shaped Laser Lights
+    const ledHeadlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const ledTaillightMat = new THREE.MeshBasicMaterial({ color: 0xff002b });
+
+    // J. Burnt Titanium Quad Exhaust Tips
+    const exhaustMat = new THREE.MeshStandardMaterial({
+      color: 0x475569,
+      metalness: 0.96,
+      roughness: 0.12,
+    });
 
     materialsRef.current.push(
-      lamboRedPaintMat,
-      carbonAeroMat,
-      cockpitGlassMat,
+      lamboPaintMat,
+      carbonFiberMat,
+      glassMat,
       interiorMat,
-      interiorAccentMat,
-      tireTreadMat,
-      supercarRimMat,
+      interiorRedMat,
+      tireMat,
+      rimMat,
+      rimPolishedLipMat,
       brakeDiscMat,
-      redBrakeCaliperMat,
-      yHeadlightMat,
-      yTaillightMat,
+      caliperMat,
+      ledHeadlightMat,
+      ledTaillightMat,
       exhaustMat
     );
 
-    // --- 6. BUILD INTERACTIVE LAMBORGHINI SUPERCAR ---
+    // --- 7. ASSEMBLE PHOTOREALISTIC LAMBORGHINI SUPERCAR MODEL ---
     const carGroup = new THREE.Group();
     carGroupRef.current = carGroup;
     rotatingWheelsRef.current = [];
     clickableMeshesRef.current = [];
 
-    // A. Main Wedge Chassis Lower Body
-    const lowerHullGeo = new THREE.BoxGeometry(2.9, 0.28, 1.36);
-    const lowerHull = new THREE.Mesh(lowerHullGeo, lamboRedPaintMat);
+    // A. Main Sculpted Low-Wedge Monocoque Chassis
+    const lowerHullGeo = new THREE.BoxGeometry(2.95, 0.28, 1.38);
+    const lowerHull = new THREE.Mesh(lowerHullGeo, lamboPaintMat);
     lowerHull.position.set(0, 0.32, 0);
     lowerHull.castShadow = true;
     lowerHull.receiveShadow = true;
     carGroup.add(lowerHull);
 
-    // Cockpit Interior Tub (Visible when Scissor Doors Open)
-    const cockpitTubGeo = new THREE.BoxGeometry(1.2, 0.25, 0.96);
-    const cockpitTub = new THREE.Mesh(cockpitTubGeo, interiorMat);
+    // Cockpit Interior Tub & Ergonomic Sport Bucket Seats
+    const cockpitTub = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.24, 0.98), interiorMat);
     cockpitTub.position.set(-0.05, 0.44, 0);
     carGroup.add(cockpitTub);
 
-    // Sport Bucket Seats (Red Trim)
     const seatGeo = new THREE.BoxGeometry(0.35, 0.38, 0.32);
-    const leftSeat = new THREE.Mesh(seatGeo, interiorAccentMat);
+    const leftSeat = new THREE.Mesh(seatGeo, interiorRedMat);
     leftSeat.position.set(-0.18, 0.56, 0.22);
     carGroup.add(leftSeat);
 
-    const rightSeat = new THREE.Mesh(seatGeo, interiorAccentMat);
+    const rightSeat = new THREE.Mesh(seatGeo, interiorRedMat);
     rightSeat.position.set(-0.18, 0.56, -0.22);
     carGroup.add(rightSeat);
 
-    // F1 Steering Wheel & Dashboard
-    const dashGeo = new THREE.BoxGeometry(0.28, 0.16, 0.8);
-    const dash = new THREE.Mesh(dashGeo, interiorMat);
+    const dash = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.16, 0.8), interiorMat);
     dash.position.set(0.32, 0.58, 0);
     carGroup.add(dash);
 
     // B. INTERACTIVE HINGED FRONT HOOD (Kap Mesin Depan)
     const hoodPivot = new THREE.Group();
-    hoodPivot.position.set(0.92, 0.42, 0); // Windshield base hinge
+    hoodPivot.position.set(0.92, 0.42, 0);
     hoodPivotRef.current = hoodPivot;
 
     const hoodMeshGroup = new THREE.Group();
-    const hoodGeo = new THREE.BoxGeometry(0.96, 0.12, 1.26);
-    const hoodMesh = new THREE.Mesh(hoodGeo, lamboRedPaintMat);
+    const hoodGeo = new THREE.BoxGeometry(0.96, 0.12, 1.28);
+    const hoodMesh = new THREE.Mesh(hoodGeo, lamboPaintMat);
     hoodMesh.position.set(0.48, -0.06, 0);
-    hoodMesh.rotation.z = -0.14;
+    hoodMesh.rotation.z = -0.15;
     hoodMesh.castShadow = true;
     hoodMeshGroup.add(hoodMesh);
 
@@ -315,26 +498,24 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     });
 
     // Front Luggage Tub under Hood
-    const frontTrunkGeo = new THREE.BoxGeometry(0.7, 0.2, 0.9);
-    const frontTrunk = new THREE.Mesh(frontTrunkGeo, carbonAeroMat);
+    const frontTrunk = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.2, 0.92), carbonFiberMat);
     frontTrunk.position.set(1.4, 0.3, 0);
     carGroup.add(frontTrunk);
 
-    // Front Splitter / Carbon Fiber Bumper
-    const frontSplitterGeo = new THREE.BoxGeometry(0.35, 0.05, 1.38);
-    const frontSplitter = new THREE.Mesh(frontSplitterGeo, carbonAeroMat);
-    frontSplitter.position.set(1.88, 0.16, 0);
+    // Front Splitter / Carbon Fiber Aero Bumper
+    const frontSplitter = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.05, 1.4), carbonFiberMat);
+    frontSplitter.position.set(1.9, 0.16, 0);
     carGroup.add(frontSplitter);
 
     // Front Dual Hexagonal Air Intakes
-    const intakeGeo = new THREE.BoxGeometry(0.08, 0.14, 0.5);
-    const leftIntake = new THREE.Mesh(intakeGeo, carbonAeroMat);
-    leftIntake.position.set(1.92, 0.24, 0.38);
+    const intakeGeo = new THREE.BoxGeometry(0.08, 0.15, 0.52);
+    const leftIntake = new THREE.Mesh(intakeGeo, carbonFiberMat);
+    leftIntake.position.set(1.94, 0.24, 0.38);
     leftIntake.rotation.y = 0.15;
     carGroup.add(leftIntake);
 
-    const rightIntake = new THREE.Mesh(intakeGeo, carbonAeroMat);
-    rightIntake.position.set(1.92, 0.24, -0.38);
+    const rightIntake = new THREE.Mesh(intakeGeo, carbonFiberMat);
+    rightIntake.position.set(1.94, 0.24, -0.38);
     rightIntake.rotation.y = -0.15;
     carGroup.add(rightIntake);
 
@@ -342,23 +523,21 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     // --- LEFT SCISSOR DOOR ---
     const leftDoorPivot = new THREE.Group();
-    leftDoorPivot.position.set(0.45, 0.48, 0.58); // A-Pillar Hinge
+    leftDoorPivot.position.set(0.45, 0.48, 0.59);
     leftDoorPivotRef.current = leftDoorPivot;
 
     const leftDoorMeshGroup = new THREE.Group();
-    const doorBodyGeo = new THREE.BoxGeometry(0.85, 0.34, 0.1);
-    const leftDoorBody = new THREE.Mesh(doorBodyGeo, lamboRedPaintMat);
+    const doorBodyGeo = new THREE.BoxGeometry(0.86, 0.35, 0.1);
+    const leftDoorBody = new THREE.Mesh(doorBodyGeo, lamboPaintMat);
     leftDoorBody.position.set(-0.42, 0, 0);
     leftDoorBody.castShadow = true;
     leftDoorMeshGroup.add(leftDoorBody);
 
-    const doorWindowGeo = new THREE.BoxGeometry(0.72, 0.24, 0.04);
-    const leftDoorWindow = new THREE.Mesh(doorWindowGeo, cockpitGlassMat);
+    const leftDoorWindow = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.25, 0.04), glassMat);
     leftDoorWindow.position.set(-0.4, 0.24, 0);
     leftDoorMeshGroup.add(leftDoorWindow);
 
-    // Carbon Aero Mirror on Door
-    const leftMirror = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 0.14), carbonAeroMat);
+    const leftMirror = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 0.14), carbonFiberMat);
     leftMirror.position.set(0.05, 0.16, 0.06);
     leftDoorMeshGroup.add(leftMirror);
 
@@ -375,20 +554,20 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     // --- RIGHT SCISSOR DOOR ---
     const rightDoorPivot = new THREE.Group();
-    rightDoorPivot.position.set(0.45, 0.48, -0.58); // A-Pillar Hinge
+    rightDoorPivot.position.set(0.45, 0.48, -0.59);
     rightDoorPivotRef.current = rightDoorPivot;
 
     const rightDoorMeshGroup = new THREE.Group();
-    const rightDoorBody = new THREE.Mesh(doorBodyGeo, lamboRedPaintMat);
+    const rightDoorBody = new THREE.Mesh(doorBodyGeo, lamboPaintMat);
     rightDoorBody.position.set(-0.42, 0, 0);
     rightDoorBody.castShadow = true;
     rightDoorMeshGroup.add(rightDoorBody);
 
-    const rightDoorWindow = new THREE.Mesh(doorWindowGeo, cockpitGlassMat);
+    const rightDoorWindow = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.25, 0.04), glassMat);
     rightDoorWindow.position.set(-0.4, 0.24, 0);
     rightDoorMeshGroup.add(rightDoorWindow);
 
-    const rightMirror = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 0.14), carbonAeroMat);
+    const rightMirror = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 0.14), carbonFiberMat);
     rightMirror.position.set(0.05, 0.16, -0.06);
     rightDoorMeshGroup.add(rightMirror);
 
@@ -403,34 +582,30 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       },
     });
 
-    // Fixed Cockpit Windshield & Roof Center Spine
-    const windshieldGeo = new THREE.BoxGeometry(0.65, 0.32, 1.0);
-    const windshield = new THREE.Mesh(windshieldGeo, cockpitGlassMat);
+    // Fixed Cockpit Windshield & Roof Spine
+    const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.66, 0.32, 1.02), glassMat);
     windshield.position.set(0.32, 0.68, 0);
     windshield.rotation.z = -0.32;
     carGroup.add(windshield);
 
-    const roofSpineGeo = new THREE.BoxGeometry(0.9, 0.03, 0.86);
-    const roofSpine = new THREE.Mesh(roofSpineGeo, lamboRedPaintMat);
+    const roofSpine = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.03, 0.88), lamboPaintMat);
     roofSpine.position.set(-0.08, 0.81, 0);
     carGroup.add(roofSpine);
 
-    // D. INTERACTIVE HINGED REAR V12 ENGINE COVER
+    // D. INTERACTIVE HINGED REAR V12 ENGINE COVER (Carbon Fiber Louvers)
     const engineCoverPivot = new THREE.Group();
     engineCoverPivot.position.set(-0.45, 0.72, 0);
     engineCoverPivotRef.current = engineCoverPivot;
 
     const engineCoverGroup = new THREE.Group();
-    const engineCoverGeo = new THREE.BoxGeometry(0.9, 0.08, 1.04);
-    const engineCover = new THREE.Mesh(engineCoverGeo, carbonAeroMat);
+    const engineCover = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.08, 1.06), carbonFiberMat);
     engineCover.position.set(-0.45, -0.04, 0);
     engineCover.castShadow = true;
     engineCoverGroup.add(engineCover);
 
-    // Engine Slats / Louvers
+    // Stepped Engine Louvers
     for (let i = 0; i < 4; i++) {
-      const slatGeo = new THREE.BoxGeometry(0.04, 0.02, 0.88);
-      const slat = new THREE.Mesh(slatGeo, lamboRedPaintMat);
+      const slat = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.02, 0.9), lamboPaintMat);
       slat.position.set(-0.15 - i * 0.18, 0.02 - i * 0.02, 0);
       engineCoverGroup.add(slat);
     }
@@ -446,83 +621,79 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       },
     });
 
-    // V12 Engine Block & Manifolds under Engine Cover
-    const engineBlockGeo = new THREE.BoxGeometry(0.65, 0.22, 0.6);
-    const engineBlock = new THREE.Mesh(engineBlockGeo, carbonAeroMat);
+    // V12 Engine Block with Gold Anodized Intake Manifolds
+    const engineBlock = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.22, 0.62), carbonFiberMat);
     engineBlock.position.set(-0.9, 0.44, 0);
     carGroup.add(engineBlock);
 
-    // Golden V12 Intake Plenums
-    const plenumMat = new THREE.MeshStandardMaterial({ color: 0xe2a829, metalness: 0.85, roughness: 0.2 });
-    const plenumGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.55, 16);
+    const goldPlenumMat = new THREE.MeshPhysicalMaterial({ color: 0xeca72c, metalness: 0.95, roughness: 0.15 });
+    const plenumGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.58, 16);
     plenumGeo.rotateZ(Math.PI / 2);
-    const leftPlenum = new THREE.Mesh(plenumGeo, plenumMat);
+
+    const leftPlenum = new THREE.Mesh(plenumGeo, goldPlenumMat);
     leftPlenum.position.set(-0.9, 0.55, 0.16);
     carGroup.add(leftPlenum);
 
-    const rightPlenum = new THREE.Mesh(plenumGeo, plenumMat);
+    const rightPlenum = new THREE.Mesh(plenumGeo, goldPlenumMat);
     rightPlenum.position.set(-0.9, 0.55, -0.16);
     carGroup.add(rightPlenum);
 
-    // E. Aggressive Rear Carbon Fiber Aerodynamic Diffuser & Wing
-    const rearDiffuserGeo = new THREE.BoxGeometry(0.45, 0.14, 1.36);
-    const rearDiffuser = new THREE.Mesh(rearDiffuserGeo, carbonAeroMat);
-    rearDiffuser.position.set(-1.62, 0.24, 0);
+    // E. Aggressive Rear Carbon Fiber Aerodynamic Diffuser & GT Wing
+    const rearDiffuser = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.15, 1.38), carbonFiberMat);
+    rearDiffuser.position.set(-1.64, 0.24, 0);
     rearDiffuser.rotation.z = -0.1;
     carGroup.add(rearDiffuser);
 
-    // Carbon Fiber GT Wing / Rear Spoiler
-    const wingBladeGeo = new THREE.BoxGeometry(0.24, 0.03, 1.48);
-    const wingBlade = new THREE.Mesh(wingBladeGeo, carbonAeroMat);
-    wingBlade.position.set(-1.68, 0.68, 0);
+    const wingBlade = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.035, 1.5), carbonFiberMat);
+    wingBlade.position.set(-1.7, 0.68, 0);
     carGroup.add(wingBlade);
 
     const wingStrutGeo = new THREE.BoxGeometry(0.04, 0.22, 0.03);
-    const leftStrut = new THREE.Mesh(wingStrutGeo, carbonAeroMat);
-    leftStrut.position.set(-1.62, 0.54, 0.42);
+    const leftStrut = new THREE.Mesh(wingStrutGeo, carbonFiberMat);
+    leftStrut.position.set(-1.64, 0.54, 0.44);
     carGroup.add(leftStrut);
 
-    const rightStrut = new THREE.Mesh(wingStrutGeo, carbonAeroMat);
-    rightStrut.position.set(-1.62, 0.54, -0.42);
+    const rightStrut = new THREE.Mesh(wingStrutGeo, carbonFiberMat);
+    rightStrut.position.set(-1.64, 0.54, -0.44);
     carGroup.add(rightStrut);
 
-    // Quad Central Exhausts
+    // Quad Exhausts
     for (let i = -1.5; i <= 1.5; i += 1.0) {
-      const exhaustGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.12, 16);
+      const exhaustGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.14, 16);
       exhaustGeo.rotateZ(Math.PI / 2);
       const exhaust = new THREE.Mesh(exhaustGeo, exhaustMat);
-      exhaust.position.set(-1.76, 0.32, i * 0.1);
+      exhaust.position.set(-1.78, 0.32, i * 0.1);
       carGroup.add(exhaust);
     }
 
-    // F. Side NACA Ducts & Skirts
-    const sideSkirtGeo = new THREE.BoxGeometry(1.6, 0.06, 0.08);
-    const leftSkirt = new THREE.Mesh(sideSkirtGeo, carbonAeroMat);
-    leftSkirt.position.set(0, 0.16, 0.69);
+    // F. Side NACA Ducts & Aero Skirts
+    const sideSkirtGeo = new THREE.BoxGeometry(1.65, 0.06, 0.08);
+    const leftSkirt = new THREE.Mesh(sideSkirtGeo, carbonFiberMat);
+    leftSkirt.position.set(0, 0.16, 0.7);
     carGroup.add(leftSkirt);
 
-    const rightSkirt = new THREE.Mesh(sideSkirtGeo, carbonAeroMat);
-    rightSkirt.position.set(0, 0.16, -0.69);
+    const rightSkirt = new THREE.Mesh(sideSkirtGeo, carbonFiberMat);
+    rightSkirt.position.set(0, 0.16, -0.7);
     carGroup.add(rightSkirt);
 
-    // G. Iconic Y-Shaped LED Headlights & Taillight
+    // G. Lamborghini Y-Shaped LED Headlights & Laser Taillight
     const headlightGeo = new THREE.BoxGeometry(0.08, 0.06, 0.28);
-    const leftHeadlight = new THREE.Mesh(headlightGeo, yHeadlightMat);
-    leftHeadlight.position.set(1.88, 0.38, 0.44);
+    const leftHeadlight = new THREE.Mesh(headlightGeo, ledHeadlightMat);
+    leftHeadlight.position.set(1.9, 0.38, 0.44);
     leftHeadlight.rotation.y = 0.2;
     carGroup.add(leftHeadlight);
 
-    const rightHeadlight = new THREE.Mesh(headlightGeo, yHeadlightMat);
-    rightHeadlight.position.set(1.88, 0.38, -0.44);
+    const rightHeadlight = new THREE.Mesh(headlightGeo, ledHeadlightMat);
+    rightHeadlight.position.set(1.9, 0.38, -0.44);
     rightHeadlight.rotation.y = -0.2;
     carGroup.add(rightHeadlight);
 
-    const taillightGeo = new THREE.BoxGeometry(0.06, 0.05, 1.24);
-    const rearTaillight = new THREE.Mesh(taillightGeo, yTaillightMat);
-    rearTaillight.position.set(-1.72, 0.44, 0);
+    const taillightGeo = new THREE.BoxGeometry(0.06, 0.05, 1.26);
+    const rearTaillight = new THREE.Mesh(taillightGeo, ledTaillightMat);
+    rearTaillight.position.set(-1.74, 0.44, 0);
     carGroup.add(rearTaillight);
 
-    // --- 7. HIGH-PERFORMANCE WHEELS WITH TEXTURED BRAKES & TIRES ---
+    // --- 8. HIGH-PRECISION SUPERCAR WHEEL & TIRE ASSEMBLIES ---
     const wheelPositions = [
       { x: 1.08, y: 0.29, z: 0.66, isLeft: true },
       { x: 1.08, y: 0.29, z: -0.66, isLeft: false },
@@ -530,14 +701,14 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       { x: -1.06, y: 0.29, z: -0.68, isLeft: false },
     ];
 
-    const tireGeo = new THREE.CylinderGeometry(0.29, 0.29, 0.24, 32);
+    const tireGeo = new THREE.CylinderGeometry(0.29, 0.29, 0.24, 36);
     tireGeo.rotateX(Math.PI / 2);
 
     const rimLipGeo = new THREE.TorusGeometry(0.2, 0.018, 16, 32);
     const rimCenterGeo = new THREE.CylinderGeometry(0.07, 0.07, 0.26, 16);
     rimCenterGeo.rotateX(Math.PI / 2);
 
-    const rotorGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.025, 24);
+    const rotorGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.025, 28);
     rotorGeo.rotateX(Math.PI / 2);
 
     const caliperGeo = new THREE.BoxGeometry(0.07, 0.11, 0.08);
@@ -548,21 +719,25 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
       const rotatingHub = new THREE.Group();
 
-      const tireMesh = new THREE.Mesh(tireGeo, tireTreadMat);
+      // Textured Rubber Tire
+      const tireMesh = new THREE.Mesh(tireGeo, tireMat);
       tireMesh.castShadow = true;
       rotatingHub.add(tireMesh);
 
-      const rimLip = new THREE.Mesh(rimLipGeo, supercarRimMat);
+      // Polished Outer Lip
+      const rimLip = new THREE.Mesh(rimLipGeo, rimPolishedLipMat);
       rimLip.position.z = pos.isLeft ? 0.11 : -0.11;
       rotatingHub.add(rimLip);
 
-      const hubCap = new THREE.Mesh(rimCenterGeo, supercarRimMat);
+      // Gunmetal Inner Hub Cap
+      const hubCap = new THREE.Mesh(rimCenterGeo, rimMat);
       rotatingHub.add(hubCap);
 
+      // 5-Double-Spoke Sport Rims
       for (let i = 0; i < 5; i++) {
         const angle = (i * Math.PI * 2) / 5;
         const spokeGeo = new THREE.BoxGeometry(0.16, 0.024, 0.02);
-        const spoke = new THREE.Mesh(spokeGeo, supercarRimMat);
+        const spoke = new THREE.Mesh(spokeGeo, rimMat);
         spoke.position.set(Math.cos(angle) * 0.1, Math.sin(angle) * 0.1, pos.isLeft ? 0.1 : -0.1);
         spoke.rotation.z = angle;
         rotatingHub.add(spoke);
@@ -570,11 +745,12 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
       wheelAssembly.add(rotatingHub);
 
+      // Static Cross-Drilled Brake Rotor & Red Brembo Caliper
       const brakeRotor = new THREE.Mesh(rotorGeo, brakeDiscMat);
       brakeRotor.position.z = pos.isLeft ? -0.04 : 0.04;
       wheelAssembly.add(brakeRotor);
 
-      const caliper = new THREE.Mesh(caliperGeo, redBrakeCaliperMat);
+      const caliper = new THREE.Mesh(caliperGeo, caliperMat);
       caliper.position.set(-0.06, 0.09, pos.isLeft ? -0.04 : 0.04);
       caliper.rotation.z = 0.35;
       wheelAssembly.add(caliper);
@@ -583,9 +759,9 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       rotatingWheelsRef.current.push(rotatingHub);
     });
 
-    // 8. Ground Contact Shadow & Glow Ring
+    // 9. Ground Contact Shadow & Studio Glow Ring
     const groundGeo = new THREE.PlaneGeometry(8, 8);
-    const groundMat = new THREE.ShadowMaterial({ opacity: 0.22 });
+    const groundMat = new THREE.ShadowMaterial({ opacity: 0.28 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = 0;
@@ -608,7 +784,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     scene.add(carGroup);
     carGroup.position.set(0, 0, 0);
 
-    // --- 9. RAYCASTING & INTERACTION FOR DOORS / HOOD ---
+    // --- 10. RAYCASTING & INTERACTION ---
     const raycaster = new THREE.Raycaster();
     const mouseVector = new THREE.Vector2();
 
@@ -633,7 +809,6 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       isDraggingRef.current = false;
       const dist = Math.hypot(clientX - pointerDownPosRef.current.x, clientY - pointerDownPosRef.current.y);
 
-      // If displacement is less than 6px, treat as a direct CLICK / TAP on the car
       if (dist < 6 && containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         mouseVector.x = ((clientX - rect.left) / rect.width) * 2 - 1;
@@ -645,7 +820,6 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
         if (intersects.length > 0) {
           const hit = intersects[0];
-          // Find corresponding registered action
           const matched = clickableMeshesRef.current.find(
             (item) => item.mesh === hit.object || item.mesh.children.includes(hit.object)
           );
@@ -679,7 +853,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('touchend', onTouchEnd);
 
-    // --- 10. POLISHED RENDER LOOP WITH SLOW ROTATION & HINGE INTERPOLATION ---
+    // --- 11. POLISHED RENDER LOOP ---
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -687,7 +861,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Slower, elegant showroom auto-rotation (0.002 instead of 0.007)
+      // Slow showroom auto-rotation
       if (!isDraggingRef.current) {
         targetRotationY.current += 0.0022;
       }
@@ -698,16 +872,13 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       // Subtle suspension breath
       carGroup.position.y = Math.sin(elapsedTime * 2.0) * 0.02 + 0.02;
 
-      // Ground ring slow rotation
       groundRing.rotation.z -= 0.004;
 
-      // Slow wheel rolling rotation
       rotatingWheelsRef.current.forEach((wheelHub) => {
         wheelHub.rotation.z -= 0.02;
       });
 
-      // --- SMOOTH HINGE INTERPOLATION FOR SCISSOR DOORS & HOOD ---
-      // Left Scissor Door (Opens Upwards ~55° and slightly outward)
+      // Hinge Interpolation
       if (leftDoorPivotRef.current) {
         const targetZ = leftDoorOpenRef.current ? 0.88 : 0.0;
         const targetX = leftDoorOpenRef.current ? -0.14 : 0.0;
@@ -715,7 +886,6 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         leftDoorPivotRef.current.rotation.x += (targetX - leftDoorPivotRef.current.rotation.x) * 0.08;
       }
 
-      // Right Scissor Door
       if (rightDoorPivotRef.current) {
         const targetZ = rightDoorOpenRef.current ? 0.88 : 0.0;
         const targetX = rightDoorOpenRef.current ? 0.14 : 0.0;
@@ -723,13 +893,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         rightDoorPivotRef.current.rotation.x += (targetX - rightDoorPivotRef.current.rotation.x) * 0.08;
       }
 
-      // Front Hood (Opens Upwards ~38°)
       if (hoodPivotRef.current) {
         const targetZ = hoodOpenRef.current ? -0.62 : 0.0;
         hoodPivotRef.current.rotation.z += (targetZ - hoodPivotRef.current.rotation.z) * 0.08;
       }
 
-      // Rear Engine Bay Cover (Opens Upwards ~32°)
       if (engineCoverPivotRef.current) {
         const targetZ = engineCoverOpenRef.current ? 0.54 : 0.0;
         engineCoverPivotRef.current.rotation.z += (targetZ - engineCoverPivotRef.current.rotation.z) * 0.08;
@@ -740,7 +908,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     animate();
 
-    // 11. Responsive Resize
+    // 12. Responsive Resize
     const handleResize = () => {
       if (!containerRef.current) return;
       const newWidth = containerRef.current.clientWidth;
@@ -763,16 +931,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('touchend', onTouchEnd);
 
-      carbonTexture.dispose();
-      tireTexture.dispose();
-      brakeTexture.dispose();
+      envRenderTarget.dispose();
+      texturesRef.current.forEach((t) => t.dispose());
       materialsRef.current.forEach((m) => m.dispose());
       scene.clear();
       renderer.dispose();
     };
   }, [isMobile]);
 
-  // Quick Action Buttons for Users
+  // Quick Action Buttons
   const toggleAllDoors = () => {
     const next = !leftDoorOpenRef.current;
     leftDoorOpenRef.current = next;
@@ -789,13 +956,13 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
   return (
     <div className="relative w-full flex flex-col items-center justify-center select-none overflow-visible">
-      {/* 3D WebGL Canvas Viewport for Red Lamborghini */}
+      {/* 3D WebGL Canvas Viewport for Photorealistic Red Lamborghini */}
       <div
         ref={containerRef}
         className="w-full h-[320px] sm:h-[440px] flex items-center justify-center cursor-grab active:cursor-grabbing"
       />
 
-      {/* Interactive Floating Micro-Buttons & Click Hint */}
+      {/* Interactive Floating Micro-Buttons */}
       <div className="absolute bottom-2 flex items-center gap-2 z-10">
         <button
           onClick={toggleAllDoors}
@@ -811,7 +978,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         </button>
       </div>
 
-      {/* Subtle First-Time User Interaction Hint */}
+      {/* First-Time User Interaction Hint */}
       {hintVisible && (
         <div className="absolute top-2 bg-[#03045e]/80 text-[#caf0f8] px-3 py-1 rounded-full text-[10px] font-mono border border-[#90e0ef]/30 pointer-events-none animate-pulse">
           💡 Klik bodi / pintu / kap untuk buka-tutup
