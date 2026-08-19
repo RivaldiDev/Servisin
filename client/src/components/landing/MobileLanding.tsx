@@ -65,10 +65,10 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-28 flex flex-col selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-28 flex flex-col selection:bg-brand-500 selection:text-white antialiased">
       {/* 1. Mobile Top Frosted Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-3 flex items-center justify-between shadow-2xs">
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 active:scale-95 transition-transform duration-150">
           <img src="/logo.webp" alt="FixGarasi Logo" className="w-8 h-8 rounded-xl object-contain shadow-2xs" />
           <span className="font-extrabold text-base tracking-tight text-slate-900">
             FIX<span className="text-brand-600">GARASI</span>
@@ -78,14 +78,14 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           <button
             onClick={handleDemoLogin}
             disabled={demoLoading}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-white text-[11px] font-extrabold flex items-center gap-1 shadow-2xs"
+            className="px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-white active:scale-95 text-[11px] font-extrabold flex items-center gap-1 shadow-2xs transition-[transform,background-color] duration-150 cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5 text-brand-600" />
             <span>{demoLoading ? '...' : 'Demo'}</span>
           </button>
           <Link
             to="/login"
-            className="px-3 py-1.5 bg-brand-600 text-white text-xs font-extrabold rounded-lg shadow-xs"
+            className="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white text-xs font-extrabold rounded-lg shadow-xs transition-transform duration-150"
           >
             Masuk
           </Link>
@@ -100,7 +100,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
 
         <h1 className="text-3xl font-extrabold text-slate-950 tracking-tight leading-tight">
-          Rawat Mobil & Motor Lebih Hemat, <br />
+          Rawat Mobil &amp; Motor Lebih Hemat, <br />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-700">
             Bebas Lupa Servis.
           </span>
@@ -110,18 +110,18 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           Catat riwayat perawatan, simpan foto kuitansi bengkel, dan pantau jatuh tempo ganti oli di saku Anda.
         </p>
 
-        {/* Action Buttons */}
+        {/* Action Buttons with Emil Tactile Polish */}
         <div className="pt-2 flex flex-col gap-2.5">
           <Link
             to="/register"
-            className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl shadow-lg shadow-brand-600/20 text-center flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 active:scale-[0.97] text-white text-xs font-extrabold rounded-xl shadow-[0_4px_14px_-2px_rgba(37,99,235,0.35)] text-center flex items-center justify-center gap-2 transition-[transform,background-color] duration-150 ease-out"
           >
             <span>Daftar Gratis Sekarang</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <button
             onClick={handleDemoLogin}
-            className="w-full py-3 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-xl shadow-2xs flex items-center justify-center gap-1.5"
+            className="w-full py-3 bg-white border border-slate-200 active:scale-[0.97] text-slate-700 text-xs font-bold rounded-xl shadow-2xs flex items-center justify-center gap-1.5 transition-[transform,background-color] duration-150 ease-out cursor-pointer"
           >
             <Eye className="w-4 h-4 text-brand-600" />
             <span>Coba Demo 1-Klik Tanpa Daftar</span>
@@ -130,24 +130,24 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
 
         {/* Feature Badges Strip */}
         <div className="pt-3 grid grid-cols-3 gap-2 text-center text-[10px] text-slate-500 font-bold">
-          <div className="p-2 bg-white rounded-xl border border-slate-100 shadow-2xs">
-            <span className="text-emerald-600 block text-xs font-extrabold">100%</span>
+          <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
+            <span className="text-emerald-600 block text-xs font-extrabold font-mono tabular-nums">100%</span>
             <span>Gratis 2 Kendaraan</span>
           </div>
-          <div className="p-2 bg-white rounded-xl border border-slate-100 shadow-2xs">
-            <span className="text-brand-600 block text-xs font-extrabold">106+</span>
+          <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
+            <span className="text-brand-600 block text-xs font-extrabold font-mono tabular-nums">106+</span>
             <span>Preset Mobil/Motor</span>
           </div>
-          <div className="p-2 bg-white rounded-xl border border-slate-100 shadow-2xs">
-            <span className="text-amber-600 block text-xs font-extrabold">0 Iklan</span>
-            <span>Aman & Nyaman</span>
+          <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
+            <span className="text-amber-600 block text-xs font-extrabold font-mono tabular-nums">0 Iklan</span>
+            <span>Aman &amp; Nyaman</span>
           </div>
         </div>
       </section>
 
       {/* 3. Mobile Interactive Vehicle Preview Widget */}
       <section className="px-5 py-4">
-        <div className="bg-white rounded-2xl p-4 shadow-md border border-slate-200/80 space-y-3">
+        <div className="bg-white rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_10px_24px_-6px_rgba(15,23,42,0.08)] border border-slate-200/80 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
@@ -155,7 +155,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
               </div>
               <div>
                 <h4 className="font-extrabold text-xs text-slate-900">Honda HR-V 1.5 SE</h4>
-                <p className="text-[10px] font-mono text-slate-400">B 1984 RVD</p>
+                <p className="text-[10px] font-mono tabular-nums text-slate-400">B 1984 RVD</p>
               </div>
             </div>
             <span className="bg-emerald-50 text-emerald-700 text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-emerald-200">
@@ -164,29 +164,29 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           </div>
 
           {/* Quick Odometer Simulator */}
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-2">
+          <div className="p-3 bg-slate-50/90 rounded-xl border border-slate-100 space-y-2">
             <div className="flex justify-between items-center text-xs">
               <span className="text-[11px] font-bold text-slate-600 flex items-center gap-1">
                 <DashboardSpeed className="w-3.5 h-3.5 text-brand-600" /> Simulasi KM:
               </span>
-              <span className="font-extrabold font-mono text-slate-900">{mobileOdo.toLocaleString('id-ID')} KM</span>
+              <span className="font-extrabold font-mono tabular-nums text-slate-900">{mobileOdo.toLocaleString('id-ID')} KM</span>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
               <button
                 onClick={() => setMobileOdo(prev => prev + 100)}
-                className="py-1 bg-white border border-slate-200 text-slate-700 text-[10px] font-bold rounded-md shadow-2xs"
+                className="py-1.5 bg-white border border-slate-200 hover:border-brand-400 active:scale-95 text-slate-700 text-[10px] font-bold rounded-lg shadow-2xs transition-[transform,border-color] duration-150 cursor-pointer"
               >
                 +100 KM
               </button>
               <button
                 onClick={() => setMobileOdo(prev => prev + 500)}
-                className="py-1 bg-white border border-slate-200 text-slate-700 text-[10px] font-bold rounded-md shadow-2xs"
+                className="py-1.5 bg-white border border-slate-200 hover:border-brand-400 active:scale-95 text-slate-700 text-[10px] font-bold rounded-lg shadow-2xs transition-[transform,border-color] duration-150 cursor-pointer"
               >
                 +500 KM
               </button>
               <button
                 onClick={() => setMobileOdo(24500)}
-                className="py-1 bg-slate-200 text-slate-700 text-[10px] font-bold rounded-md flex items-center justify-center gap-0.5"
+                className="py-1.5 bg-slate-200 active:scale-95 text-slate-700 text-[10px] font-bold rounded-lg flex items-center justify-center gap-0.5 transition-[transform,background-color] duration-150 cursor-pointer"
               >
                 <Refresh className="w-2.5 h-2.5" /> Reset
               </button>
@@ -194,13 +194,13 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           </div>
 
           {/* Live Status indicator */}
-          <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between ${
+          <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition-colors duration-150 ${
             mobileOdo >= 25000 ? 'bg-amber-50 border-amber-200 text-amber-900' : 'bg-emerald-50 border-emerald-200 text-emerald-900'
           }`}>
             <span className="font-bold text-[11px]">
               {mobileOdo >= 25000 ? '⚠️ Waktunya Ganti Oli Mesin!' : `✅ Oli Mesin Aman (Sisa ${25000 - mobileOdo} KM)`}
             </span>
-            <span className="text-[10px] font-mono font-bold">25.000 KM</span>
+            <span className="text-[10px] font-mono tabular-nums font-bold">25.000 KM</span>
           </div>
         </div>
       </section>
@@ -209,11 +209,11 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
       <section className="px-5 py-4 space-y-3">
         <h3 className="font-extrabold text-base text-slate-900">Fitur Utama di Ponsel Anda</h3>
         
-        {/* Tab Buttons */}
+        {/* Tab Buttons with Fluid Transition */}
         <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-200/80 rounded-xl">
           <button
             onClick={() => setActiveTab('reminder')}
-            className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
+            className={`py-2 text-[11px] font-extrabold rounded-lg active:scale-95 transition-[transform,background-color,color,box-shadow] duration-150 cursor-pointer ${
               activeTab === 'reminder' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
             }`}
           >
@@ -221,7 +221,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           </button>
           <button
             onClick={() => setActiveTab('nota')}
-            className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
+            className={`py-2 text-[11px] font-extrabold rounded-lg active:scale-95 transition-[transform,background-color,color,box-shadow] duration-150 cursor-pointer ${
               activeTab === 'nota' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
             }`}
           >
@@ -229,7 +229,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           </button>
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
+            className={`py-2 text-[11px] font-extrabold rounded-lg active:scale-95 transition-[transform,background-color,color,box-shadow] duration-150 cursor-pointer ${
               activeTab === 'analytics' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
             }`}
           >
@@ -256,7 +256,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
               <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-1">
                 <Page className="w-5 h-5" />
               </div>
-              <h4 className="font-extrabold text-sm text-slate-900">Scan & Upload Nota Bengkel</h4>
+              <h4 className="font-extrabold text-sm text-slate-900">Scan &amp; Upload Nota Bengkel</h4>
               <p className="text-xs text-slate-600 leading-relaxed">
                 Foto kuitansi langsung dari kamera smartphone. Tersimpan rapi di cloud, bukti valid saat mobil/motor Anda mau dijual kembali.
               </p>
@@ -279,12 +279,12 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
 
       {/* 5. Mobile Android & Web App Integration Banner */}
       <section className="px-5 py-4">
-        <div className="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl p-4 shadow-md flex items-center gap-3">
+        <div className="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl p-4 shadow-md flex items-center gap-3 border border-slate-800">
           <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0 text-emerald-400">
             <SmartphoneDevice className="w-6 h-6" />
           </div>
           <div className="space-y-0.5">
-            <h4 className="font-extrabold text-xs text-white">Ringan & Siap di HP Android</h4>
+            <h4 className="font-extrabold text-xs text-white">Ringan &amp; Siap di HP Android</h4>
             <p className="text-[10px] text-slate-300 leading-relaxed">
               Buka lewat browser Chrome/Safari, simpan sebagai PWA, atau integrasikan ke APK Android WebView secara instan.
             </p>
@@ -295,17 +295,17 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
       {/* 6. Mobile Pricing Quick Card */}
       <section className="px-5 py-4 space-y-3">
         <div className="text-center space-y-1">
-          <span className="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+          <span className="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
             Paket FixGarasi
           </span>
           <h3 className="font-extrabold text-lg text-slate-900">Pilihan Harga Sederhana</h3>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 border-2 border-amber-500 shadow-md relative space-y-3">
+        <div className="bg-white rounded-2xl p-5 border-2 border-amber-500 shadow-[0_4px_16px_-4px_rgba(245,158,11,0.25)] relative space-y-3">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-xs font-extrabold text-amber-600 uppercase">FixGarasi PRO</span>
-              <h4 className="text-2xl font-extrabold text-slate-950 font-mono">Rp 149.000 <span className="text-xs font-normal text-slate-500">/tahun</span></h4>
+              <h4 className="text-2xl font-extrabold text-slate-950 font-mono tabular-nums">Rp 149.000 <span className="text-xs font-normal text-slate-500">/tahun</span></h4>
             </div>
             <span className="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
               Hemat 35%
@@ -315,7 +315,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           <ul className="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-3">
             <li className="flex items-center gap-2">
               <CheckCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-              <span>Unlimited Kendaraan (Mobil & Motor)</span>
+              <span>Unlimited Kendaraan (Mobil &amp; Motor)</span>
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
@@ -323,13 +323,13 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-              <span>Garansi 7 Hari & Pembayaran QRIS Midtrans</span>
+              <span>Garansi 7 Hari &amp; Pembayaran QRIS Midtrans</span>
             </li>
           </ul>
 
           <Link
             to="/register"
-            className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-extrabold rounded-xl text-center block shadow-md"
+            className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 active:scale-[0.97] text-slate-950 text-xs font-extrabold rounded-xl text-center block shadow-[0_4px_14px_-2px_rgba(245,158,11,0.35)] transition-[transform,background-color] duration-150 cursor-pointer"
           >
             Upgrade ke PRO Sekarang
           </Link>
@@ -344,7 +344,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
             <div key={idx} className="bg-white rounded-xl border border-slate-200/80 overflow-hidden shadow-2xs">
               <button
                 onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                className="w-full p-3.5 text-left font-extrabold text-xs text-slate-900 flex items-center justify-between gap-2"
+                className="w-full p-3.5 text-left font-extrabold text-xs text-slate-900 flex items-center justify-between gap-2 active:bg-slate-50 transition-colors duration-150 cursor-pointer"
               >
                 <span>{faq.q}</span>
                 {expandedFaq === idx ? (
@@ -370,27 +370,27 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           <span className="font-extrabold text-slate-800 text-sm">FIXGARASI</span>
         </div>
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[11px] text-slate-600 font-bold">
-          <button onClick={() => onOpenLegal('terms')}>Ketentuan</button>
-          <button onClick={() => onOpenLegal('privacy')}>Privasi</button>
-          <button onClick={() => onOpenLegal('refund')}>Refund</button>
-          <button onClick={() => onOpenLegal('contact')}>Bantuan</button>
+          <button onClick={() => onOpenLegal('terms')} className="cursor-pointer active:scale-95">Ketentuan</button>
+          <button onClick={() => onOpenLegal('privacy')} className="cursor-pointer active:scale-95">Privasi</button>
+          <button onClick={() => onOpenLegal('refund')} className="cursor-pointer active:scale-95">Refund</button>
+          <button onClick={() => onOpenLegal('contact')} className="cursor-pointer active:scale-95">Bantuan</button>
         </div>
         <p className="text-[10px] text-slate-400">&copy; 2026 FixGarasi Indonesia. Hak Cipta Dilindungi.</p>
       </footer>
 
-      {/* 9. Floating Thumb Sticky Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200/90 p-3 shadow-lg flex items-center gap-2.5 max-w-lg mx-auto">
+      {/* 9. Floating Thumb Sticky Bottom Action Bar with Emil Kowalski Active State */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200/90 p-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] flex items-center gap-2.5 max-w-lg mx-auto">
         <button
           onClick={handleDemoLogin}
           disabled={demoLoading}
-          className="w-1/3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold rounded-xl transition-all text-center flex items-center justify-center gap-1"
+          className="w-1/3 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 text-xs font-extrabold rounded-xl transition-[transform,background-color] duration-150 text-center flex items-center justify-center gap-1 cursor-pointer"
         >
           <Eye className="w-3.5 h-3.5 text-brand-600" />
           <span>Demo</span>
         </button>
         <Link
           to="/register"
-          className="w-2/3 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl shadow-md shadow-brand-600/20 text-center flex items-center justify-center gap-1.5"
+          className="w-2/3 py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-[0.97] text-white text-xs font-extrabold rounded-xl shadow-[0_4px_14px_-2px_rgba(37,99,235,0.35)] text-center flex items-center justify-center gap-1.5 transition-[transform,background-color] duration-150 cursor-pointer"
         >
           <span>Mulai Gratis</span>
           <ArrowRight className="w-3.5 h-3.5" />

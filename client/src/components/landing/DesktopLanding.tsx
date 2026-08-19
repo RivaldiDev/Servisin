@@ -55,7 +55,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
     }
   };
 
-  // Calculator estimations
+  // Calculator estimations with tabular arithmetic
   const estimatedYearlyOilCost = vehicleType === 'CAR' ? Math.round((monthlyKm * 12 / 5000) * 450000) : Math.round((monthlyKm * 12 / 2500) * 85000);
   const estimatedRoutineTotal = vehicleType === 'CAR' ? Math.round(estimatedYearlyOilCost * 2.2 + (vehicleAge * 150000)) : Math.round(estimatedYearlyOilCost * 2.0 + (vehicleAge * 50000));
   const estimatedMajorBreakdownPrevented = vehicleType === 'CAR' ? 12500000 : 3500000;
@@ -82,42 +82,42 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
   ].filter(v => activeBrandFilter === 'ALL' || v.brand === activeBrandFilter);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-brand-500 selection:text-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-brand-500 selection:text-white flex flex-col antialiased">
       {/* 1. Desktop Sticky Navigation Header */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-[background-color,border-color] duration-200">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group active:scale-[0.98] transition-transform duration-150 ease-out">
             <img
               src="/logo.webp"
               alt="FixGarasi Logo"
-              className="w-11 h-11 rounded-2xl object-contain shadow-xs border border-slate-100 bg-white group-hover:scale-105 transition-transform"
+              className="w-11 h-11 rounded-2xl object-contain shadow-xs border border-slate-100 bg-white group-hover:scale-105 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
             />
             <div>
               <span className="font-extrabold text-xl tracking-tight text-slate-900 block leading-none">
                 FIX<span className="text-brand-600">GARASI</span>
               </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mt-0.5">
-                Digital Garage & Maintenance
+                Digital Garage &amp; Maintenance
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-8 text-xs font-bold text-slate-600">
-            <a href="#fitur" className="hover:text-brand-600 transition-colors">Fitur Unggulan</a>
-            <a href="#kalkulator" className="hover:text-brand-600 transition-colors">Kalkulator Servis</a>
-            <a href="#katalog" className="hover:text-brand-600 transition-colors">106+ Model Kendaraan</a>
-            <a href="#harga" className="hover:text-brand-600 transition-colors">Paket & Harga</a>
-            <a href="#faq" className="hover:text-brand-600 transition-colors">FAQ</a>
+            <a href="#fitur" className="hover:text-brand-600 transition-colors duration-150">Fitur Unggulan</a>
+            <a href="#kalkulator" className="hover:text-brand-600 transition-colors duration-150">Kalkulator Servis</a>
+            <a href="#katalog" className="hover:text-brand-600 transition-colors duration-150">106+ Model Kendaraan</a>
+            <a href="#harga" className="hover:text-brand-600 transition-colors duration-150">Paket &amp; Harga</a>
+            <a href="#faq" className="hover:text-brand-600 transition-colors duration-150">FAQ</a>
           </nav>
 
-          {/* Right Action CTAs */}
+          {/* Right Action CTAs with Emil Kowalski Active State Polish */}
           <div className="flex items-center gap-3">
             <button
               onClick={handleDemoLogin}
               disabled={demoLoading}
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 hover:border-brand-500 bg-white hover:bg-brand-50/50 text-slate-700 hover:text-brand-700 text-xs font-extrabold transition-all shadow-xs"
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 hover:border-brand-500 bg-white hover:bg-brand-50/50 text-slate-700 hover:text-brand-700 active:scale-[0.97] text-xs font-extrabold transition-[transform,background-color,border-color,color] duration-150 ease-out shadow-xs cursor-pointer"
             >
               <Eye className="w-4 h-4 text-brand-600" />
               <span>{demoLoading ? 'Menyiapkan...' : 'Coba Demo 1-Klik'}</span>
@@ -125,14 +125,14 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
             <Link
               to="/login"
-              className="px-4 py-2.5 text-xs font-bold text-slate-700 hover:text-brand-600 transition-colors"
+              className="px-4 py-2.5 text-xs font-bold text-slate-700 hover:text-brand-600 active:scale-[0.97] transition-[transform,color] duration-150 ease-out"
             >
               Masuk
             </Link>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold rounded-xl shadow-md shadow-brand-600/20 hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-[0.97] text-white text-xs font-extrabold rounded-xl shadow-[0_4px_14px_-2px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_20px_-4px_rgba(37,99,235,0.45)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <span>Mulai Gratis</span>
               <ArrowRight className="w-4 h-4" />
@@ -155,21 +155,21 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.15]">
-              Buku Servis Digital & <br />
+              Buku Servis Digital &amp; <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-brand-700 to-indigo-800">
                 Pengingat Perawatan Cerdas
               </span>
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
-              Catat riwayat perawatan mobil & motor, arsipkan nota kuitansi bengkel secara aman terenkripsi, dan dapatkan pengingat servis otomatis berbasis jarak tempuh odometer maupun waktu.
+              Catat riwayat perawatan mobil &amp; motor, arsipkan nota kuitansi bengkel secara aman terenkripsi, dan dapatkan pengingat servis otomatis berbasis jarak tempuh odometer maupun waktu.
             </p>
 
-            {/* Action Buttons */}
+            {/* Action Buttons with Tactile Press Feedback */}
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
                 to="/register"
-                className="inline-flex items-center gap-2.5 px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white text-sm font-extrabold rounded-2xl shadow-xl shadow-brand-600/25 hover:shadow-2xl transition-all"
+                className="inline-flex items-center gap-2.5 px-8 py-4 bg-brand-600 hover:bg-brand-700 active:scale-[0.97] text-white text-sm font-extrabold rounded-2xl shadow-[0_10px_25px_-5px_rgba(37,99,235,0.35),0_1px_2px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_32px_-6px_rgba(37,99,235,0.45)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
               >
                 <span>Daftar Gratis Sekarang</span>
                 <ArrowRight className="w-4 h-4" />
@@ -177,7 +177,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
               <button
                 onClick={handleDemoLogin}
-                className="inline-flex items-center gap-2 px-6 py-4 bg-white hover:bg-slate-100 text-slate-800 text-sm font-bold rounded-2xl border border-slate-200/90 shadow-xs transition-all"
+                className="inline-flex items-center gap-2 px-6 py-4 bg-white hover:bg-slate-100 active:scale-[0.97] text-slate-800 text-sm font-bold rounded-2xl border border-slate-200/90 shadow-xs hover:border-brand-300 transition-[transform,background-color,border-color] duration-150 ease-out cursor-pointer"
               >
                 <Eye className="w-4 h-4 text-brand-600" />
                 <span>Buka Demo Interaktif</span>
@@ -201,9 +201,9 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </div>
           </div>
 
-          {/* Right Column: Interactive Digital Garage Preview Card */}
+          {/* Right Column: Interactive Digital Garage Preview Card (Emil Nested Radius Polish) */}
           <div className="lg:col-span-5 relative">
-            <div className="bg-white rounded-3xl p-6 shadow-2xl border border-slate-200/80 relative overflow-hidden">
+            <div className="bg-white rounded-3xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_16px_36px_-8px_rgba(15,23,42,0.12)] border border-slate-200/80 relative overflow-hidden">
               {/* Header inside mockup */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-3">
@@ -212,7 +212,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </div>
                   <div>
                     <h3 className="font-extrabold text-sm text-slate-900">Honda HR-V 1.5 SE</h3>
-                    <p className="text-[11px] font-mono text-slate-500 font-bold">B 1984 RVD &bull; 2022</p>
+                    <p className="text-[11px] font-mono tabular-nums text-slate-500 font-bold">B 1984 RVD &bull; 2022</p>
                   </div>
                 </div>
                 <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold px-2.5 py-1 rounded-full">
@@ -221,32 +221,32 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </div>
 
               {/* Odometer Quick Adjust Interactive */}
-              <div className="my-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="my-4 p-4 bg-slate-50/90 rounded-2xl border border-slate-100">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="font-bold text-slate-600 flex items-center gap-1.5">
                     <DashboardSpeed className="w-4 h-4 text-brand-600" />
                     Odometer Aktif:
                   </span>
-                  <span className="font-extrabold text-slate-900 font-mono text-sm">
+                  <span className="font-extrabold text-slate-900 font-mono tabular-nums text-sm transition-all duration-150">
                     {previewOdo.toLocaleString('id-ID')} KM
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     onClick={() => setPreviewOdo(prev => prev + 100)}
-                    className="py-1.5 bg-white border border-slate-200 hover:border-brand-500 text-slate-700 text-[11px] font-extrabold rounded-lg shadow-2xs hover:text-brand-600 transition-colors"
+                    className="py-1.5 bg-white border border-slate-200 hover:border-brand-500 text-slate-700 active:scale-95 text-[11px] font-extrabold rounded-xl shadow-2xs hover:text-brand-600 transition-[transform,border-color,color] duration-150 cursor-pointer"
                   >
                     +100 KM
                   </button>
                   <button
                     onClick={() => setPreviewOdo(prev => prev + 500)}
-                    className="py-1.5 bg-white border border-slate-200 hover:border-brand-500 text-slate-700 text-[11px] font-extrabold rounded-lg shadow-2xs hover:text-brand-600 transition-colors"
+                    className="py-1.5 bg-white border border-slate-200 hover:border-brand-500 text-slate-700 active:scale-95 text-[11px] font-extrabold rounded-xl shadow-2xs hover:text-brand-600 transition-[transform,border-color,color] duration-150 cursor-pointer"
                   >
                     +500 KM
                   </button>
                   <button
                     onClick={() => setPreviewOdo(24500)}
-                    className="py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-[11px] font-extrabold rounded-lg transition-colors flex items-center justify-center gap-1"
+                    className="py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 active:scale-95 text-[11px] font-extrabold rounded-xl transition-[transform,background-color] duration-150 flex items-center justify-center gap-1 cursor-pointer"
                   >
                     <Refresh className="w-3 h-3" /> Reset
                   </button>
@@ -265,17 +265,17 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                       </span>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono font-bold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded">
+                  <span className="text-[11px] font-mono tabular-nums font-bold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded-lg">
                     Target: 25.000 KM
                   </span>
                 </div>
 
                 <div className="p-3 bg-white rounded-xl border border-slate-100 flex items-center justify-between text-xs shadow-2xs">
                   <div>
-                    <strong className="text-slate-900 block font-bold">Rotasi Ban & Spooring</strong>
+                    <strong className="text-slate-900 block font-bold">Rotasi Ban &amp; Spooring</strong>
                     <span className="text-[11px] text-slate-500">Target 30.000 KM (Aman)</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-slate-700">30.000 KM</span>
+                  <span className="text-xs font-mono tabular-nums font-bold text-slate-700">30.000 KM</span>
                 </div>
               </div>
 
@@ -284,7 +284,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 <span className="text-slate-500 flex items-center gap-1">
                   <Lock className="w-3.5 h-3.5 text-emerald-600" /> Data terenkripsi Neon DB
                 </span>
-                <span className="text-brand-600 font-bold hover:underline cursor-pointer" onClick={handleDemoLogin}>
+                <span className="text-brand-600 font-bold hover:underline cursor-pointer active:scale-95 inline-block transition-transform" onClick={handleDemoLogin}>
                   Lihat Buku Servis Lengkap &rarr;
                 </span>
               </div>
@@ -297,19 +297,19 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
       <section className="bg-slate-900 text-white py-8 border-y border-slate-800">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl lg:text-4xl font-extrabold text-brand-400 font-mono">106+</div>
+            <div className="text-3xl lg:text-4xl font-extrabold text-brand-400 font-mono tabular-nums">106+</div>
             <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">Preset Model Lokal</p>
           </div>
           <div>
-            <div className="text-3xl lg:text-4xl font-extrabold text-amber-400 font-mono">12</div>
+            <div className="text-3xl lg:text-4xl font-extrabold text-amber-400 font-mono tabular-nums">12</div>
             <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">Kategori Perawatan</p>
           </div>
           <div>
-            <div className="text-3xl lg:text-4xl font-extrabold text-emerald-400 font-mono">99.9%</div>
+            <div className="text-3xl lg:text-4xl font-extrabold text-emerald-400 font-mono tabular-nums">99.9%</div>
             <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">Cloud Uptime</p>
           </div>
           <div>
-            <div className="text-3xl lg:text-4xl font-extrabold text-indigo-400 font-mono">0 Iklan</div>
+            <div className="text-3xl lg:text-4xl font-extrabold text-indigo-400 font-mono tabular-nums">0 Iklan</div>
             <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">Privasi Pengguna Terjaga</p>
           </div>
         </div>
@@ -323,7 +323,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               Solusi Terpadu Garasi Anda
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Fitur Lengkap untuk Pemilik Mobil & Motor
+              Fitur Lengkap untuk Pemilik Mobil &amp; Motor
             </h2>
             <p className="text-slate-600 text-sm sm:text-base">
               Tinggalkan catatan kertas yang mudah hilang. Kelola seluruh aspek teknis dan finansial armada kendaraan Anda dalam satu aplikasi.
@@ -332,43 +332,43 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-brand-500 hover:bg-white hover:shadow-xl transition-all group">
-              <div className="w-14 h-14 rounded-2xl bg-brand-500 text-white flex items-center justify-center mb-6 shadow-md shadow-brand-500/20 group-hover:scale-110 transition-transform">
+            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-brand-500 hover:bg-white hover:shadow-[0_12px_28px_-6px_rgba(37,99,235,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out group">
+              <div className="w-14 h-14 rounded-2xl bg-brand-500 text-white flex items-center justify-center mb-6 shadow-md shadow-brand-500/20 group-hover:scale-110 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <BellNotification className="w-7 h-7" />
               </div>
               <h3 className="text-lg font-extrabold text-slate-900 mb-2">Smart Maintenance Reminder</h3>
               <p className="text-xs text-slate-600 leading-relaxed mb-4">
                 Sistem menghitung jatuh tempo penggantian oli mesin, oli gardan, minyak rem, aki, dan ban otomatis berdasarkan jarak tempuh KM maupun rentang bulan kalender.
               </p>
-              <div className="text-xs font-bold text-brand-600 flex items-center gap-1">
+              <div className="text-xs font-bold text-brand-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
                 <span>One-Click Cycle Reset</span> &rarr;
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-brand-500 hover:bg-white hover:shadow-xl transition-all group">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center mb-6 shadow-md shadow-indigo-600/20 group-hover:scale-110 transition-transform">
+            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-indigo-500 hover:bg-white hover:shadow-[0_12px_28px_-6px_rgba(99,102,241,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out group">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center mb-6 shadow-md shadow-indigo-600/20 group-hover:scale-110 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <Page className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Arsip Foto Nota & Kuitansi</h3>
+              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Arsip Foto Nota &amp; Kuitansi</h3>
               <p className="text-xs text-slate-600 leading-relaxed mb-4">
                 Foto bukti transaksi dari bengkel resmi maupun bengkel umum langsung tersimpan aman di cloud. Dilengkapi fitur zoom gambar untuk transparansi saat mobil dijual kembali.
               </p>
-              <div className="text-xs font-bold text-indigo-600 flex items-center gap-1">
+              <div className="text-xs font-bold text-indigo-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
                 <span>Digital Resale Value Booster</span> &rarr;
               </div>
             </div>
 
             {/* Card 3 */}
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-brand-500 hover:bg-white hover:shadow-xl transition-all group">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-6 shadow-md shadow-emerald-600/20 group-hover:scale-110 transition-transform">
+            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-emerald-500 hover:bg-white hover:shadow-[0_12px_28px_-6px_rgba(16,185,129,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out group">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-6 shadow-md shadow-emerald-600/20 group-hover:scale-110 transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <StatsUpSquare className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Analitik Biaya & Anggaran</h3>
+              <h3 className="text-lg font-extrabold text-slate-900 mb-2">Analitik Biaya &amp; Anggaran</h3>
               <p className="text-xs text-slate-600 leading-relaxed mb-4">
                 Pantau pengeluaran servis 12 bulan terakhir, diagram persentase sparepart vs jasa mekanik, dan komparasi biaya operasional antar mobil/motor di garasi Anda.
               </p>
-              <div className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+              <div className="text-xs font-bold text-emerald-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-150">
                 <span>Laporan Finansial Rinci</span> &rarr;
               </div>
             </div>
@@ -379,12 +379,12 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
       {/* 5. Interactive ROI & Maintenance Cost Calculator */}
       <section id="kalkulator" className="py-20 bg-slate-50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-xl border border-slate-200/80 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_-10px_rgba(15,23,42,0.1)] border border-slate-200/80 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Calculator Controls */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full text-amber-800 text-xs font-extrabold">
                 <Calculator className="w-4 h-4 text-amber-600" />
-                <span>Simulasi Biaya & Penghematan</span>
+                <span>Simulasi Biaya &amp; Penghematan</span>
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -402,7 +402,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setVehicleType('CAR')}
-                      className={`py-2.5 px-4 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 border transition-all ${
+                      className={`py-2.5 px-4 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 border transition-[transform,background-color,border-color,color] duration-150 active:scale-95 cursor-pointer ${
                         vehicleType === 'CAR'
                           ? 'bg-brand-600 text-white border-brand-600 shadow-xs'
                           : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -413,7 +413,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                     </button>
                     <button
                       onClick={() => setVehicleType('MOTORCYCLE')}
-                      className={`py-2.5 px-4 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 border transition-all ${
+                      className={`py-2.5 px-4 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 border transition-[transform,background-color,border-color,color] duration-150 active:scale-95 cursor-pointer ${
                         vehicleType === 'MOTORCYCLE'
                           ? 'bg-brand-600 text-white border-brand-600 shadow-xs'
                           : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -429,7 +429,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 <div>
                   <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
                     <span>Jarak Tempuh Rata-Rata per Bulan:</span>
-                    <span className="text-brand-600 font-mono">{monthlyKm.toLocaleString('id-ID')} KM/bulan</span>
+                    <span className="text-brand-600 font-mono tabular-nums">{monthlyKm.toLocaleString('id-ID')} KM/bulan</span>
                   </div>
                   <input
                     type="range"
@@ -451,7 +451,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 <div>
                   <div className="flex justify-between text-xs font-bold text-slate-700 mb-1">
                     <span>Usia Kendaraan:</span>
-                    <span className="text-brand-600 font-mono">{vehicleAge} Tahun</span>
+                    <span className="text-brand-600 font-mono tabular-nums">{vehicleAge} Tahun</span>
                   </div>
                   <input
                     type="range"
@@ -466,8 +466,8 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </div>
             </div>
 
-            {/* Calculator Results Display */}
-            <div className="lg:col-span-6 bg-gradient-to-br from-slate-900 to-slate-950 text-white p-8 rounded-3xl shadow-xl space-y-6">
+            {/* Calculator Results Display (Emil High-Contrast Polish) */}
+            <div className="lg:col-span-6 bg-gradient-to-br from-slate-900 to-slate-950 text-white p-8 rounded-3xl shadow-[0_1px_2px_rgba(0,0,0,0.1),0_18px_36px_-8px_rgba(0,0,0,0.5)] space-y-6 border border-slate-800">
               <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider block">
                 Hasil Kalkulasi Estimasi Tahunan
               </span>
@@ -475,7 +475,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
                   <span className="text-[11px] text-slate-300 block">Biaya Ganti Oli Setahun</span>
-                  <span className="text-xl font-extrabold text-white font-mono block mt-1">
+                  <span className="text-xl font-extrabold text-white font-mono tabular-nums block mt-1">
                     Rp {estimatedYearlyOilCost.toLocaleString('id-ID')}
                   </span>
                   <span className="text-[10px] text-slate-400">~{Math.round(monthlyKm * 12 / (vehicleType === 'CAR' ? 5000 : 2500))}x ganti/tahun</span>
@@ -483,10 +483,10 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
                 <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
                   <span className="text-[11px] text-slate-300 block">Total Servis Berkala</span>
-                  <span className="text-xl font-extrabold text-amber-400 font-mono block mt-1">
+                  <span className="text-xl font-extrabold text-amber-400 font-mono tabular-nums block mt-1">
                     Rp {estimatedRoutineTotal.toLocaleString('id-ID')}
                   </span>
-                  <span className="text-[10px] text-slate-400">Termasuk filter & rem</span>
+                  <span className="text-[10px] text-slate-400">Termasuk filter &amp; rem</span>
                 </div>
               </div>
 
@@ -496,7 +496,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   <ShieldCheck className="w-4 h-4" />
                   <span>Potensi Kerugian yang Dicegah:</span>
                 </div>
-                <div className="text-2xl font-extrabold text-emerald-300 font-mono">
+                <div className="text-2xl font-extrabold text-emerald-300 font-mono tabular-nums">
                   Hingga Rp {estimatedMajorBreakdownPrevented.toLocaleString('id-ID')}
                 </div>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
@@ -506,7 +506,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
               <Link
                 to="/register"
-                className="w-full py-3.5 bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-center block"
+                className="w-full py-3.5 bg-brand-600 hover:bg-brand-500 active:scale-[0.97] text-white font-extrabold text-xs rounded-xl shadow-md transition-[transform,background-color] duration-150 flex items-center justify-center gap-2 text-center block cursor-pointer"
               >
                 <span>Mulai Lindungi Kendaraan Anda (Gratis)</span>
                 <ArrowRight className="w-4 h-4" />
@@ -524,20 +524,20 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               Katalog Lengkap Indonesia
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Mendukung 106+ Model Mobil & Motor Populer
+              Mendukung 106+ Model Mobil &amp; Motor Populer
             </h2>
             <p className="text-slate-600 text-sm">
               Preset spesifikasi, kapasitas CC, jenis bahan bakar, dan foto visual studio siap pakai tanpa perlu upload manual.
             </p>
           </div>
 
-          {/* Brand Tabs */}
+          {/* Brand Tabs with Tactile Press Feedback */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
             {brands.map(b => (
               <button
                 key={b.id}
                 onClick={() => setActiveBrandFilter(b.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-[transform,background-color,border-color,color] duration-150 active:scale-95 border cursor-pointer ${
                   activeBrandFilter === b.id
                     ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
@@ -551,18 +551,18 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
           {/* Vehicle Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {showcaseVehicles.map((veh, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-2xl p-5 border border-slate-200/80 hover:bg-white hover:border-brand-500 hover:shadow-lg transition-all">
+              <div key={idx} className="bg-slate-50 rounded-2xl p-5 border border-slate-200/80 hover:bg-white hover:border-brand-500 hover:shadow-[0_8px_20px_-4px_rgba(15,23,42,0.08)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-200 text-slate-700 uppercase">
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-lg bg-slate-200 text-slate-700 uppercase">
                     {veh.brand}
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400 font-bold">{veh.year}</span>
+                  <span className="text-[10px] font-mono tabular-nums text-slate-400 font-bold">{veh.year}</span>
                 </div>
                 <h4 className="font-extrabold text-sm text-slate-900 mb-1">{veh.model}</h4>
-                <p className="text-[11px] text-slate-500 font-mono mb-4">Jarak Odometer: {veh.odo}</p>
+                <p className="text-[11px] text-slate-500 font-mono tabular-nums mb-4">Jarak Odometer: {veh.odo}</p>
                 <div className="pt-3 border-t border-slate-200/70 flex items-center justify-between text-[10px]">
                   <span className="font-bold text-slate-500">Kondisi:</span>
-                  <span className={`font-extrabold px-2 py-0.5 rounded-full ${
+                  <span className={`font-extrabold px-2.5 py-0.5 rounded-full ${
                     veh.status.includes('Jatuh') ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
                   }`}>
                     {veh.status}
@@ -579,7 +579,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs font-extrabold text-amber-600 tracking-wider uppercase bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-              Biaya Transparan & Fleksibel
+              Biaya Transparan &amp; Fleksibel
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Pilihan Paket Sesuai Kebutuhan Garasi Anda
@@ -598,7 +598,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   <span className="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">Selamanya</span>
                 </div>
                 <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-extrabold text-slate-950 font-mono">Rp 0</span>
+                  <span className="text-4xl font-extrabold text-slate-950 font-mono tabular-nums">Rp 0</span>
                   <span className="text-xs text-slate-500">/selamanya</span>
                 </div>
 
@@ -609,7 +609,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Pencatatan Riwayat Servis & Odometer</span>
+                    <span>Pencatatan Riwayat Servis &amp; Odometer</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -617,21 +617,21 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Simpan Bukti Foto Nota & Kwitansi</span>
+                    <span>Simpan Bukti Foto Nota &amp; Kwitansi</span>
                   </li>
                 </ul>
               </div>
 
               <Link
                 to="/register"
-                className="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold rounded-xl transition-all text-center block"
+                className="w-full py-3.5 bg-slate-100 hover:bg-slate-200 active:scale-[0.97] text-slate-800 text-xs font-extrabold rounded-xl transition-[transform,background-color] duration-150 text-center block cursor-pointer"
               >
                 Mulai Akun Gratis
               </Link>
             </div>
 
-            {/* Pro Plan (Highlighted) */}
-            <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-8 border-2 border-amber-500 shadow-2xl relative flex flex-col justify-between">
+            {/* Pro Plan (Highlighted with Layered Glow & Soft Borders) */}
+            <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-8 border-2 border-amber-500 shadow-[0_1px_2px_rgba(0,0,0,0.1),0_20px_40px_-10px_rgba(245,158,11,0.25)] relative flex flex-col justify-between">
               <div className="absolute -top-3.5 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-[10px] px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
                 Paling Populer &bull; Hemat 35%
               </div>
@@ -642,7 +642,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   <span className="text-[10px] font-bold bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-md border border-amber-400/30">Garansi 7 Hari</span>
                 </div>
                 <div className="flex items-baseline gap-1 mb-2">
-                  <span className="text-4xl font-extrabold text-white font-mono">Rp 149.000</span>
+                  <span className="text-4xl font-extrabold text-white font-mono tabular-nums">Rp 149.000</span>
                   <span className="text-xs text-slate-400">/tahun (~Rp 12.400/bln)</span>
                 </div>
                 <p className="text-[11px] text-slate-400 mb-6">Tersedia opsi bulanan Rp 19.000 / bulan</p>
@@ -666,14 +666,14 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>Pembayaran Otomatis QRIS, VA, & E-Wallet (Midtrans)</span>
+                    <span>Pembayaran Otomatis QRIS, VA, &amp; E-Wallet (Midtrans)</span>
                   </li>
                 </ul>
               </div>
 
               <Link
                 to="/register"
-                className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-extrabold rounded-xl shadow-lg shadow-amber-500/25 transition-all text-center block"
+                className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 active:scale-[0.97] text-slate-950 text-xs font-extrabold rounded-xl shadow-[0_4px_14px_-2px_rgba(245,158,11,0.35)] transition-[transform,box-shadow,background-color] duration-150 text-center block cursor-pointer"
               >
                 Upgrade ke FixGarasi PRO
               </Link>
@@ -751,39 +751,39 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
           <div className="space-y-3 text-xs">
             <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Navigasi Layanan</h5>
             <ul className="space-y-2 text-slate-400">
-              <li><a href="#fitur" className="hover:text-white transition-colors">Fitur Unggulan</a></li>
-              <li><a href="#kalkulator" className="hover:text-white transition-colors">Kalkulator Servis</a></li>
-              <li><a href="#katalog" className="hover:text-white transition-colors">Katalog Kendaraan</a></li>
-              <li><a href="#harga" className="hover:text-white transition-colors">Paket & Harga PRO</a></li>
-              <li><button onClick={handleDemoLogin} className="hover:text-white transition-colors text-left">Demo Interaktif</button></li>
+              <li><a href="#fitur" className="hover:text-white transition-colors duration-150">Fitur Unggulan</a></li>
+              <li><a href="#kalkulator" className="hover:text-white transition-colors duration-150">Kalkulator Servis</a></li>
+              <li><a href="#katalog" className="hover:text-white transition-colors duration-150">Katalog Kendaraan</a></li>
+              <li><a href="#harga" className="hover:text-white transition-colors duration-150">Paket &amp; Harga PRO</a></li>
+              <li><button onClick={handleDemoLogin} className="hover:text-white transition-colors duration-150 text-left cursor-pointer">Demo Interaktif</button></li>
             </ul>
           </div>
 
           {/* Col 3: Legal & Bantuan */}
           <div className="space-y-3 text-xs">
-            <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Legal & Dukungan</h5>
+            <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Legal &amp; Dukungan</h5>
             <ul className="space-y-2 text-slate-400">
               <li>
-                <button onClick={() => onOpenLegal('terms')} className="hover:text-white transition-colors">
+                <button onClick={() => onOpenLegal('terms')} className="hover:text-white transition-colors duration-150 cursor-pointer">
                   Ketentuan Layanan
                 </button>
               </li>
               <li>
-                <button onClick={() => onOpenLegal('privacy')} className="hover:text-white transition-colors">
+                <button onClick={() => onOpenLegal('privacy')} className="hover:text-white transition-colors duration-150 cursor-pointer">
                   Kebijakan Privasi
                 </button>
               </li>
               <li>
-                <button onClick={() => onOpenLegal('refund')} className="hover:text-white transition-colors">
-                  Kebijakan Pembayaran & Refund
+                <button onClick={() => onOpenLegal('refund')} className="hover:text-white transition-colors duration-150 cursor-pointer">
+                  Kebijakan Pembayaran &amp; Refund
                 </button>
               </li>
               <li>
-                <button onClick={() => onOpenLegal('contact')} className="hover:text-white transition-colors">
+                <button onClick={() => onOpenLegal('contact')} className="hover:text-white transition-colors duration-150 cursor-pointer">
                   Hubungi Dukungan Support
                 </button>
               </li>
-              <li className="text-slate-500 pt-1">support@fixgarasi.id</li>
+              <li className="text-slate-500 pt-1 font-mono">support@fixgarasi.id</li>
             </ul>
           </div>
         </div>
@@ -791,7 +791,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         {/* Bottom Copyright */}
         <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-4">
           <p>&copy; 2026 FixGarasi Indonesia. Hak Cipta Dilindungi Undang-Undang.</p>
-          <p>Ditenagai oleh Neon Serverless PostgreSQL & Vercel Edge Network.</p>
+          <p>Ditenagai oleh Neon Serverless PostgreSQL &amp; Vercel Edge Network.</p>
         </div>
       </footer>
     </div>
