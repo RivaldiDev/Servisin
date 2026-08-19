@@ -206,7 +206,42 @@ async function runTests() {
       '13. GET /analytics/summary'
     );
 
-    // 14. Clean up test records
+    // 14. Midtrans: Create Snap Token
+    const snapRes = await fetch(`${baseUrl}/payments/create-snap-token`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ planType: 'YEARLY' }),
+    });
+    const snapData = await snapRes.json() as any;
+    assert(snapRes.status === 201 && snapData.success && !!snapData.data.snapToken, '14. POST /payments/create-snap-token');
+    const paymentOrderId = snapData.data.orderId;
+
+    // 15. Midtrans: Handle Webhook Notification (Settlement)
+    const webhookRes = await fetch(`${baseUrl}/payments/notification`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        order_id: paymentOrderId,
+        status_code: '200',
+        gross_amount: '149000',
+        transaction_status: 'settlement',
+        payment_type: 'qris',
+      }),
+    });
+    const webhookData = await webhookRes.json() as any;
+    assert(webhookRes.status === 200 && webhookData.success, '15. POST /payments/notification (Webhook)');
+
+    // 16. Midtrans: Get Payment History
+    const historyRes = await fetch(`${baseUrl}/payments/history`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    const historyData = await historyRes.json() as any;
+    assert(historyRes.status === 200 && historyData.success && historyData.data.length > 0, '16. GET /payments/history');
+
+    // 17. Clean up test records
     await fetch(`${baseUrl}/service-logs/${testLogId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${authToken}` },
@@ -221,7 +256,7 @@ async function runTests() {
     });
     console.log('✅ Cleaned up test records.');
 
-    console.log('\n🎉 ALL 13 END-TO-END INTEGRATION TESTS PASSED PERFECTLY!\n');
+    console.log('\n🎉 ALL 16 END-TO-END INTEGRATION TESTS PASSED PERFECTLY!\n');
   } catch (error: any) {
     console.error('\n❌ Test run failed:', error);
     process.exit(1);

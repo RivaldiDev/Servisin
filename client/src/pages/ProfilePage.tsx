@@ -14,11 +14,13 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { EditProfileModal } from '../components/profile/EditProfileModal';
 import { LegalModal } from '../components/profile/LegalModal';
+import { UpgradeModal } from '../components/profile/UpgradeModal';
 
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateTier } = useAuth();
   const [tierLoading, setTierLoading] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalTab, setLegalTab] = useState<'terms' | 'privacy' | 'refund' | 'contact'>('terms');
 
@@ -141,23 +143,27 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Demo Switcher Button */}
-        <div className="pt-2">
+        {/* Midtrans Payment Action */}
+        <div className="pt-2 space-y-2">
+          <button
+            onClick={() => setUpgradeModalOpen(true)}
+            className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-2xl font-extrabold text-xs shadow-md shadow-amber-500/25 transition-all flex items-center justify-center gap-2 tap-bounce"
+          >
+            <Sparks className="w-4 h-4" />
+            <span>{user?.tier === 'PRO' ? 'Perpanjang / Kelola Paket PRO (Midtrans)' : 'Upgrade ke Servisin PRO (Midtrans)'}</span>
+          </button>
+
           <button
             onClick={handleToggleTier}
             disabled={tierLoading}
-            className={`w-full py-3 rounded-2xl font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 tap-bounce ${
-              user?.tier === 'PRO'
-                ? 'bg-slate-800 hover:bg-slate-900 text-white'
-                : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/25'
-            }`}
+            className="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5"
           >
-            <Sparks className="w-4 h-4" />
+            <RefreshDouble className="w-3.5 h-3.5" />
             {tierLoading
               ? 'Mengubah status...'
               : user?.tier === 'PRO'
-              ? 'Beralih ke Akun Free (Demo)'
-              : 'Aktifkan Paket PRO Sekarang'}
+              ? 'Beralih ke Akun Free (Demo Toggle)'
+              : 'Aktifkan PRO Instan (Demo Toggle)'}
           </button>
         </div>
       </div>
@@ -238,6 +244,12 @@ export const ProfilePage: React.FC = () => {
       <EditProfileModal
         isOpen={showEditProfile}
         onClose={() => setShowEditProfile(false)}
+      />
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={upgradeModalOpen}
+        onClose={() => setUpgradeModalOpen(false)}
       />
 
       {/* Legal Modal */}

@@ -3,6 +3,7 @@ import { Car, Plus, Sparks, DashboardSpeed } from 'iconoir-react';
 import { VehicleCard } from '../components/vehicles/VehicleCard';
 import { UpdateOdometerModal } from '../components/vehicles/UpdateOdometerModal';
 import { AddVehicleModal } from '../components/vehicles/AddVehicleModal';
+import { UpgradeModal } from '../components/profile/UpgradeModal';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { Vehicle } from '../types';
@@ -15,6 +16,7 @@ export const GaragePage: React.FC = () => {
 
   const [selectedVehicleForOdo, setSelectedVehicleForOdo] = useState<Vehicle | null>(null);
   const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const fetchVehicles = async () => {
     try {
@@ -167,6 +169,12 @@ export const GaragePage: React.FC = () => {
               </p>
             </div>
           </div>
+          <button
+            onClick={() => setShowUpgradeModal(true)}
+            className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-[11px] font-bold shrink-0 shadow-xs"
+          >
+            Upgrade
+          </button>
         </div>
       )}
 
@@ -186,6 +194,14 @@ export const GaragePage: React.FC = () => {
         onClose={() => setShowAddVehicleModal(false)}
         onSuccess={() => {
           setShowAddVehicleModal(false);
+          fetchVehicles();
+        }}
+      />
+
+      <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        onSuccess={() => {
           fetchVehicles();
         }}
       />

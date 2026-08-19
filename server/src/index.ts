@@ -10,6 +10,7 @@ import vehicleRoutes from './routes/vehicleRoutes';
 import serviceLogRoutes from './routes/serviceLogRoutes';
 import reminderRoutes from './routes/reminderRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
 dotenv.config();
@@ -98,6 +99,7 @@ app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/service-logs', serviceLogRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // 404 Not Found Handler
 app.use('/api/*', (req, res) => {
