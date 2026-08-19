@@ -35,7 +35,7 @@ export const AppShell: React.FC = () => {
       <Modal
         isOpen={showQuickAddMenu}
         onClose={() => setShowQuickAddMenu(false)}
-        title="Aksi Cepat Servisin"
+        title="Aksi Cepat FixGarasi"
         subtitle="Pilih aktivitas yang ingin Anda catat sekarang"
         maxWidth="md"
       >
