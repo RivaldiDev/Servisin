@@ -141,16 +141,13 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
       </header>
 
       {/* 2. Hero Section (Strict Palette: Deep Twilight, Teal Blue, Turquoise Surf, Frosted Blue, Light Cyan) */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-white via-[#caf0f8]/30 to-[#caf0f8]/50 border-b border-[#90e0ef]/50">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#00b4d8]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-[#0077b6]/10 rounded-full blur-3xl pointer-events-none" />
-
+      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-[#caf0f8]/20 border-b border-[#90e0ef]/50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Value Proposition */}
           <div className="lg:col-span-7 space-y-6">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#03045e] tracking-tight leading-[1.15]">
               Buku Servis Digital &amp; <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0077b6] via-[#00b4d8] to-[#03045e]">
+              <span className="text-[#0077b6]">
                 Pengingat Perawatan Cerdas
               </span>
             </h1>
@@ -483,7 +480,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 <div 
                   className="absolute inset-0 opacity-25 pointer-events-none"
                   style={{
-                    backgroundImage: 'linear-gradient(to right, #0077b6 1px, transparent 1px), linear-gradient(to bottom, #0077b6 1px, transparent 1px)',
+                    backgroundColor: '#02033b',
                     backgroundSize: '20px 20px'
                   }}
                 />

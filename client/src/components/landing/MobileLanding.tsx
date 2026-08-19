@@ -89,10 +89,10 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
       </header>
 
       {/* 2. Mobile Hero Section */}
-      <section className="px-5 pt-6 pb-6 bg-gradient-to-b from-white to-[#caf0f8]/30 space-y-4">
+      <section className="px-5 pt-6 pb-6 bg-[#caf0f8]/20 space-y-4">
         <h1 className="text-3xl font-extrabold text-[#03045e] tracking-tight leading-tight">
           Rawat Mobil &amp; Motor Lebih Hemat, <br />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0077b6] via-[#00b4d8] to-[#03045e]">
+          <span className="text-[#0077b6]">
             Bebas Lupa Servis.
           </span>
         </h1>
