@@ -96,7 +96,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   const pointerDownPosRef = useRef({ x: 0, y: 0 });
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
   const targetRotationY = useRef(0.65);
-  const targetRotationX = useRef(0.12);
+  const targetRotationX = useRef(0.1);
 
   const colorOptions = [
     { id: 'red' as const, name: 'Rosso Corsa', hex: 0xd90429, labelBg: 'bg-[#d90429]' },
@@ -122,9 +122,9 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera with large bounding box perspective
+    // 2. Camera with floating zero-gravity isometric framing
     const camera = new THREE.PerspectiveCamera(38, initialWidth / initialHeight, 0.1, 100);
-    camera.position.set(0, 1.3, isMobile ? 5.6 : 5.0);
+    camera.position.set(0, 1.2, isMobile ? 5.6 : 5.0);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -163,6 +163,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     const frontFill = new THREE.DirectionalLight(0xffffff, 0.9);
     frontFill.position.set(0, 2, 6);
     scene.add(frontFill);
+
+    // Under-Glow Fill Light for Floating Silhouette
+    const underGlow = new THREE.DirectionalLight(0x90e0ef, 0.5);
+    underGlow.position.set(0, -3, 0);
+    scene.add(underGlow);
 
     // 5. Materials
     const carbonTexture = createCarbonFiberTexture();
@@ -219,28 +224,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       clearcoat: 0.95,
     });
 
-    // 6. Ground Shadow & Studio Floor Ring
-    const groundGeo = new THREE.PlaneGeometry(16, 16);
-    const groundMat = new THREE.ShadowMaterial({ opacity: 0.28 });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    const ringGeo = new THREE.RingGeometry(1.9, 1.95, 64);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0xd90429,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.3,
-    });
-    const groundRing = new THREE.Mesh(ringGeo, ringMat);
-    groundRing.rotation.x = -Math.PI / 2;
-    groundRing.position.y = 0.01;
-    scene.add(groundRing);
-
-    // 7. Load Real Photorealistic Supercar GLTF Model with DRACO Loader
+    // 6. 3D Car Root Group (Pure Floating Zero-Base)
     const carRootGroup = new THREE.Group();
     scene.add(carRootGroup);
     carRootGroupRef.current = carRootGroup;
@@ -284,15 +268,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
           }
         });
 
-        // Compute Bounding Box to Center and Place on Ground Plane y = 0
+        // Center model geometry perfectly
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
 
         model.position.x = -center.x;
-        model.position.y = -box.min.y;
+        model.position.y = -center.y; // Centered in 3D floating space
         model.position.z = -center.z;
 
-        // Compact, sleek 0.85x scale for generous breathing room inside bounding box
+        // Compact, elegant 0.85x scale
         model.scale.set(0.85, 0.85, 0.85);
 
         carRootGroup.add(model);
@@ -305,7 +289,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       }
     );
 
-    // 8. Interactive Mouse & Touch Drag Controls
+    // 7. Interactive Mouse & Touch Drag Controls
     const handlePointerDown = (clientX: number, clientY: number) => {
       isDraggingRef.current = true;
       pointerDownPosRef.current = { x: clientX, y: clientY };
@@ -317,8 +301,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       const deltaX = clientX - previousMousePositionRef.current.x;
       const deltaY = clientY - previousMousePositionRef.current.y;
 
-      targetRotationY.current += deltaX * 0.011;
-      targetRotationX.current = Math.max(-0.06, Math.min(0.38, targetRotationX.current + deltaY * 0.007));
+      targetRotationY.current += deltaX * 0.01;
+      targetRotationX.current = Math.max(-0.1, Math.min(0.35, targetRotationX.current + deltaY * 0.007));
 
       previousMousePositionRef.current = { x: clientX, y: clientY };
     };
@@ -348,7 +332,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('touchend', onTouchEnd);
 
-    // 9. Showroom Animation Loop
+    // 8. Gentle Floating Hover & Ultra-Slow Auto-Rotation Loop
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -356,23 +340,23 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth slow auto-rotation
+      // Ultra-slow, luxurious showroom drift (0.0008)
       if (!isDraggingRef.current) {
-        targetRotationY.current += 0.0022;
+        targetRotationY.current += 0.0008;
       }
 
       if (carRootGroup) {
-        carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.06;
-        carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.06;
+        carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.05;
+        carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.05;
 
-        // Subtle floating suspension wave
-        carRootGroup.position.y = Math.sin(elapsedTime * 2.0) * 0.015;
+        // Elegant Zero-Gravity Floating Wave
+        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06;
+        carRootGroup.rotation.z = Math.sin(elapsedTime * 1.2) * 0.01;
       }
 
-      groundRing.rotation.z -= 0.004;
-
+      // Gentle wheel spin
       wheelsRef.current.forEach((wheel) => {
-        wheel.rotation.x += 0.025;
+        wheel.rotation.x += 0.008;
       });
 
       renderer.render(scene, camera);
@@ -380,7 +364,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     animate();
 
-    // 10. Dynamic ResizeObserver for Container Bounding Box
+    // 9. Dynamic ResizeObserver
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
@@ -423,7 +407,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
   return (
     <div className="relative w-full flex flex-col items-center select-none isolate">
-      {/* 3D WebGL Canvas Stage - Expanded Bounding Box */}
+      {/* 3D WebGL Canvas Stage - Pure Floating Zero-Base */}
       <div
         ref={containerRef}
         className="w-full h-[380px] sm:h-[480px] lg:h-[560px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden rounded-3xl"
