@@ -4,6 +4,11 @@
 
 @layer base {
   :root {
+    --color-deep-twilight: #03045e;
+    --color-bright-teal: #0077b6;
+    --color-turquoise-surf: #00b4d8;
+    --color-frosted-blue: #90e0ef;
+    --color-light-cyan: #caf0f8;
     --safe-area-inset-top: env(safe-area-inset-top, 0px);
     --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
   }

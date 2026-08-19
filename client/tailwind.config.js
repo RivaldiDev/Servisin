@@ -8,17 +8,22 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6', // primary automotive electric blue
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#0f172a',
+          50: '#caf0f8',  // Light Cyan
+          100: '#b2ecf7',
+          200: '#90e0ef', // Frosted Blue
+          300: '#48cae4',
+          400: '#00b4d8', // Turquoise Surf
+          500: '#0096c7',
+          600: '#0077b6', // Bright Teal Blue (Primary)
+          700: '#023e8a',
+          800: '#03045e', // Deep Twilight
+          900: '#02033b',
+          950: '#010220',
+          twilight: '#03045e',
+          teal: '#0077b6',
+          turquoise: '#00b4d8',
+          frosted: '#90e0ef',
+          cyan: '#caf0f8',
         },
         accent: {
           50: '#fff7ed',
