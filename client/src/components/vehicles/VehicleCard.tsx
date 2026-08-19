@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Car, Motorcycle, DashboardSpeed, NavArrowRight, WarningTriangle, Clock, Calendar } from 'iconoir-react';
+import { getAssetUrl } from '../../services/api';
 import { Vehicle } from '../../types';
 
 interface VehicleCardProps {
@@ -24,7 +25,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({ vehicle, onUpdateOdome
             <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden shrink-0 relative">
               {vehicle.photoUrl ? (
                 <img
-                  src={vehicle.photoUrl}
+                  src={getAssetUrl(vehicle.photoUrl)}
                   alt={vehicle.model}
                   className="w-full h-full object-cover"
                 />

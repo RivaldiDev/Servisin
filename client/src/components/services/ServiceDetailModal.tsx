@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from '../common/Modal';
 import { Calendar, DashboardSpeed, MapPin, Page, Trash, Expand, WarningCircle } from 'iconoir-react';
 import { ServiceLog, CATEGORY_LABELS } from '../../types';
-import api from '../../services/api';
+import api, { getAssetUrl } from '../../services/api';
 
 interface ServiceDetailModalProps {
   isOpen: boolean;
@@ -157,7 +157,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                 className="relative h-44 w-full rounded-2xl overflow-hidden border border-slate-200 cursor-pointer group"
               >
                 <img
-                  src={serviceLog.invoicePhotoUrl}
+                  src={getAssetUrl(serviceLog.invoicePhotoUrl)}
                   alt="Nota Servis"
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />

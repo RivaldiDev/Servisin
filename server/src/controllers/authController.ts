@@ -192,15 +192,35 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
 export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const userId = req.user!.id;
-    const { fullName, phoneNumber, password } = req.body;
+    const { fullName, phoneNumber, currentPassword, newPassword, password } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'Pengguna tidak ditemukan.' });
+      return;
+    }
 
     const updateData: any = {};
     if (fullName) updateData.fullName = fullName;
     if (phoneNumber !== undefined) updateData.phoneNumber = phoneNumber;
 
-    if (password && password.trim().length >= 6) {
+    const targetNewPassword = newPassword || password;
+    if (targetNewPassword && targetNewPassword.trim().length >= 6) {
+      if (currentPassword) {
+        const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+        if (!isMatch) {
+          res.status(400).json({
+            success: false,
+            message: 'Kata sandi lama yang Anda masukkan tidak cocok.',
+          });
+          return;
+        }
+      }
       const salt = await bcrypt.genSalt(10);
-      updateData.passwordHash = await bcrypt.hash(password, salt);
+      updateData.passwordHash = await bcrypt.hash(targetNewPassword, salt);
     }
 
     if (req.file) {

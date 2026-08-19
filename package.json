@@ -1,6 +1,7 @@
 {
   "name": "servisin",
   "version": "1.0.0",
+  "type": "module",
   "description": "Servisin SaaS - Vehicle & Service History Management System (Android WebView Ready)",
   "scripts": {
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",

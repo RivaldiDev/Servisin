@@ -13,7 +13,7 @@ import {
   EditPencil,
   Book,
 } from 'iconoir-react';
-import api from '../services/api';
+import api, { getAssetUrl } from '../services/api';
 import { Vehicle, ServiceLog, ServiceReminder } from '../types';
 import { AddServiceModal } from '../components/services/AddServiceModal';
 import { EditServiceModal } from '../components/services/EditServiceModal';
@@ -172,7 +172,7 @@ export const VehicleDetailPage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
             {vehicle.photoUrl ? (
               <img
-                src={vehicle.photoUrl}
+                src={getAssetUrl(vehicle.photoUrl)}
                 alt={vehicle.model}
                 className="w-full h-full object-cover"
               />
