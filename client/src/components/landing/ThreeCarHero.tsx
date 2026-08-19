@@ -98,10 +98,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   const targetRotationY = useRef(0.65);
   const targetRotationX = useRef(0.1);
 
+  // Minimalist Color Swatches (No Text / Pure Swatches)
   const colorOptions = [
-    { id: 'red' as const, name: 'Rosso Corsa', hex: 0xd90429, labelBg: 'bg-[#d90429]' },
-    { id: 'blue' as const, name: 'Blu Pozzi', hex: 0x0077b6, labelBg: 'bg-[#0077b6]' },
-    { id: 'black' as const, name: 'Nero Daytona', hex: 0x14161d, labelBg: 'bg-[#14161d]' },
+    { id: 'red' as const, name: 'Merah', hex: 0xd90429, swatchBg: 'bg-[#d90429]' },
+    { id: 'blue' as const, name: 'Biru', hex: 0x0077b6, swatchBg: 'bg-[#0077b6]' },
+    { id: 'black' as const, name: 'Hitam', hex: 0x14161d, swatchBg: 'bg-[#14161d]' },
   ];
 
   const handleColorChange = (colorId: 'red' | 'blue' | 'black') => {
@@ -116,15 +117,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     if (!containerRef.current) return;
     const container = containerRef.current;
     const rect = container.getBoundingClientRect();
-    const initialWidth = rect.width || (isMobile ? 360 : 640);
-    const initialHeight = rect.height || (isMobile ? 380 : 540);
+    const initialWidth = rect.width || (isMobile ? 380 : 700);
+    const initialHeight = rect.height || (isMobile ? 460 : 680);
 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera with floating zero-gravity isometric framing
+    // 2. Camera Framing (Framed to focus on raised floating car)
     const camera = new THREE.PerspectiveCamera(38, initialWidth / initialHeight, 0.1, 100);
-    camera.position.set(0, 1.2, isMobile ? 5.6 : 5.0);
+    camera.position.set(0, 1.2, isMobile ? 5.8 : 5.1);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -164,8 +165,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     frontFill.position.set(0, 2, 6);
     scene.add(frontFill);
 
-    // Under-Glow Fill Light for Floating Silhouette
-    const underGlow = new THREE.DirectionalLight(0x90e0ef, 0.5);
+    const underGlow = new THREE.DirectionalLight(0x90e0ef, 0.55);
     underGlow.position.set(0, -3, 0);
     scene.add(underGlow);
 
@@ -224,7 +224,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       clearcoat: 0.95,
     });
 
-    // 6. 3D Car Root Group (Pure Floating Zero-Base)
+    // 6. 3D Car Root Group (Elevated Zero-Gravity Floating)
     const carRootGroup = new THREE.Group();
     scene.add(carRootGroup);
     carRootGroupRef.current = carRootGroup;
@@ -268,15 +268,14 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
           }
         });
 
-        // Center model geometry perfectly
+        // Center model geometry & RAISE IT HIGHER (+0.32 in Y)
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
 
         model.position.x = -center.x;
-        model.position.y = -center.y; // Centered in 3D floating space
+        model.position.y = -center.y + 0.32; // Elevated higher for majestic floating view
         model.position.z = -center.z;
 
-        // Compact, elegant 0.85x scale
         model.scale.set(0.85, 0.85, 0.85);
 
         carRootGroup.add(model);
@@ -349,12 +348,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.05;
         carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.05;
 
-        // Elegant Zero-Gravity Floating Wave
-        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06;
+        // Elegant Zero-Gravity Floating Wave (Elevated)
+        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06 + 0.08;
         carRootGroup.rotation.z = Math.sin(elapsedTime * 1.2) * 0.01;
       }
 
-      // Gentle wheel spin
       wheelsRef.current.forEach((wheel) => {
         wheel.rotation.x += 0.008;
       });
@@ -407,10 +405,10 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
   return (
     <div className="relative w-full flex flex-col items-center select-none isolate">
-      {/* 3D WebGL Canvas Stage - Pure Floating Zero-Base */}
+      {/* 3D WebGL Canvas Stage - Extra Large & Tall Bounding Box */}
       <div
         ref={containerRef}
-        className="w-full h-[380px] sm:h-[480px] lg:h-[560px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden rounded-3xl"
+        className="w-full h-[460px] sm:h-[580px] lg:h-[660px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden rounded-3xl"
       />
 
       {/* Loading Skeleton */}
@@ -423,24 +421,20 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         </div>
       )}
 
-      {/* Clean Bottom Floating Color Customizer */}
-      <div className="mt-3 flex items-center gap-2 z-10 bg-[#03045e]/85 px-3.5 py-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-md shadow-md">
-        <span className="text-[10px] font-bold text-[#90e0ef] uppercase tracking-wider hidden sm:inline mr-1">
-          Warna:
-        </span>
+      {/* Minimalist Color-Only Swatch Buttons (Zero Text / Pure Clean Swatches) */}
+      <div className="mt-3 flex items-center gap-3 z-10 bg-[#03045e]/80 p-2 rounded-full border border-[#90e0ef]/30 backdrop-blur-md shadow-lg">
         {colorOptions.map((opt) => (
           <button
             key={opt.id}
             onClick={() => handleColorChange(opt.id)}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-extrabold transition-all duration-150 cursor-pointer ${
+            title={opt.name}
+            aria-label={opt.name}
+            className={`w-6 h-6 rounded-full ${opt.swatchBg} transition-all duration-150 cursor-pointer border-2 ${
               activeColor === opt.id
-                ? 'bg-white text-[#03045e] shadow-xs scale-105'
-                : 'text-[#caf0f8] hover:bg-white/10'
+                ? 'border-white scale-125 shadow-md ring-2 ring-[#00b4d8]'
+                : 'border-white/30 hover:scale-110 opacity-75 hover:opacity-100'
             }`}
-          >
-            <span className={`w-2.5 h-2.5 rounded-full ${opt.labelBg} border border-white/40`} />
-            <span>{opt.name}</span>
-          </button>
+          />
         ))}
       </div>
     </div>
