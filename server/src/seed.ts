@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import prisma from './prisma';
 
 async function main() {
-  console.log('🌱 Seeding demo data for Servisin SaaS...');
+  console.log('🌱 Seeding demo data for FixGarasi SaaS...');
 
   // 1. Clean existing test data (optional)
   await prisma.serviceItem.deleteMany();
@@ -17,7 +17,7 @@ async function main() {
 
   const user = await prisma.user.create({
     data: {
-      email: 'demo@servisin.id',
+      email: 'demo@fixgarasi.id',
       fullName: 'Rivaldi Pratama',
       phoneNumber: '081234567890',
       passwordHash,
