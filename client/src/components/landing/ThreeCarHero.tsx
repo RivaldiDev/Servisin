@@ -16,7 +16,7 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
   envScene.background = new THREE.Color(0x0a0e17);
 
   // Overhead Key Softbox
-  const softboxGeo = new THREE.PlaneGeometry(16, 8);
+  const softboxGeo = new THREE.PlaneGeometry(18, 10);
   const softboxMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
   const softbox = new THREE.Mesh(softboxGeo, softboxMat);
   softbox.position.set(0, 8, 0);
@@ -25,7 +25,7 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
 
   // Left Softbox Fill (Frosted Cyan-Blue Highlight)
   const sideSoftbox1 = new THREE.Mesh(
-    new THREE.PlaneGeometry(12, 5),
+    new THREE.PlaneGeometry(14, 6),
     new THREE.MeshBasicMaterial({ color: 0x90e0ef, side: THREE.DoubleSide })
   );
   sideSoftbox1.position.set(7, 4, 0);
@@ -34,7 +34,7 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
 
   // Right Softbox (Warm Horizon Glow)
   const sideSoftbox2 = new THREE.Mesh(
-    new THREE.PlaneGeometry(12, 5),
+    new THREE.PlaneGeometry(14, 6),
     new THREE.MeshBasicMaterial({ color: 0xffedd5, side: THREE.DoubleSide })
   );
   sideSoftbox2.position.set(-7, 4, 0);
@@ -43,7 +43,7 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
 
   // Front Light Bar
   const frontStrip = new THREE.Mesh(
-    new THREE.PlaneGeometry(14, 2),
+    new THREE.PlaneGeometry(16, 2.5),
     new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
   );
   frontStrip.position.set(0, 2, 9);
@@ -116,14 +116,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     if (!containerRef.current) return;
     const container = containerRef.current;
     const width = container.clientWidth || (isMobile ? 360 : 640);
-    const height = isMobile ? 360 : 500;
+    const height = isMobile ? 360 : 480;
 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera with spacious perspective
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 1.4, isMobile ? 5.8 : 5.2);
+    // 2. Camera (Brought CLOSER for significantly larger car visual size)
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+    // Camera distance 3.8 (desktop) / 4.4 (mobile) makes the car much bolder and larger
+    camera.position.set(0, 1.15, isMobile ? 4.4 : 3.85);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -219,7 +220,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     });
 
     // 6. Ground Shadow & Studio Floor Ring
-    const groundGeo = new THREE.PlaneGeometry(12, 12);
+    const groundGeo = new THREE.PlaneGeometry(14, 14);
     const groundMat = new THREE.ShadowMaterial({ opacity: 0.28 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
@@ -227,7 +228,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const ringGeo = new THREE.RingGeometry(2.3, 2.36, 64);
+    const ringGeo = new THREE.RingGeometry(2.6, 2.66, 64);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xd90429,
       side: THREE.DoubleSide,
@@ -288,8 +289,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         const center = box.getCenter(new THREE.Vector3());
 
         model.position.x = -center.x;
-        model.position.y = -box.min.y; // Perfect ground level
+        model.position.y = -box.min.y;
         model.position.z = -center.z;
+
+        // BOLD, PROMINENT 1.35x SCALE (Makes the car much larger and impactful)
+        model.scale.set(1.35, 1.35, 1.35);
 
         carRootGroup.add(model);
         setLoading(false);
@@ -380,7 +384,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     const handleResize = () => {
       if (!containerRef.current) return;
       const newWidth = containerRef.current.clientWidth;
-      const newHeight = isMobile ? 360 : 500;
+      const newHeight = isMobile ? 360 : 480;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
@@ -419,7 +423,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       {/* 3D WebGL Canvas Stage */}
       <div
         ref={containerRef}
-        className="w-full h-[360px] sm:h-[460px] lg:h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+        className="w-full h-[360px] sm:h-[440px] lg:h-[480px] flex items-center justify-center cursor-grab active:cursor-grabbing"
       />
 
       {/* Loading Skeleton */}
@@ -432,7 +436,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         </div>
       )}
 
-      {/* Clean Bottom Floating Color Customizer (Spaced away from the car chassis) */}
+      {/* Clean Bottom Floating Color Customizer */}
       <div className="mt-2 flex items-center gap-2 z-10 bg-[#03045e]/85 px-3 py-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-md shadow-md">
         <span className="text-[10px] font-bold text-[#90e0ef] uppercase tracking-wider hidden sm:inline mr-1">
           Warna:
