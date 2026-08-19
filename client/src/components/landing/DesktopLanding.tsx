@@ -137,9 +137,9 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
       {/* 2. Hero Section with Three.js 3D Car Live Animation */}
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-[#caf0f8]/20 border-b border-[#90e0ef]/50">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Value Proposition */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-6 space-y-6">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#03045e] tracking-tight leading-[1.15]">
               Buku Servis Digital &amp; <br />
               <span className="text-[#0077b6]">
@@ -172,7 +172,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
           </div>
 
           {/* Right Column: Three.js Interactive 3D Car Live Studio */}
-          <div className="lg:col-span-5 relative">
+          <div className="lg:col-span-6 relative flex flex-col items-center justify-center">
             <ThreeCarHero isMobile={false} />
           </div>
         </div>

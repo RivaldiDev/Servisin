@@ -99,7 +99,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </p>
 
         {/* 3D Car Live Studio in Mobile Hero */}
-        <div className="my-2">
+        <div className="my-4 py-2">
           <ThreeCarHero isMobile={true} />
         </div>
 

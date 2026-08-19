@@ -7,15 +7,15 @@ interface ThreeCarHeroProps {
   isMobile?: boolean;
 }
 
-// 1. Procedural Studio HDRI Environment Map Generator for Ultra-Crisp Clearcoat Reflections
+// 1. Procedural Studio HDRI Environment Map Generator
 function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRenderTarget {
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
   pmremGenerator.compileEquirectangularShader();
 
   const envScene = new THREE.Scene();
-  envScene.background = new THREE.Color(0x06080d);
+  envScene.background = new THREE.Color(0x0a0e17);
 
-  // Overhead Key Softbox (Bright Pure White)
+  // Overhead Key Softbox
   const softboxGeo = new THREE.PlaneGeometry(16, 8);
   const softboxMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
   const softbox = new THREE.Mesh(softboxGeo, softboxMat);
@@ -41,7 +41,7 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
   sideSoftbox2.rotation.y = Math.PI / 2;
   envScene.add(sideSoftbox2);
 
-  // Front Horizontal Light Bar for Hood Reflection
+  // Front Light Bar
   const frontStrip = new THREE.Mesh(
     new THREE.PlaneGeometry(14, 2),
     new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
@@ -95,7 +95,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   const isDraggingRef = useRef(false);
   const pointerDownPosRef = useRef({ x: 0, y: 0 });
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
-  const targetRotationY = useRef(0.6);
+  const targetRotationY = useRef(0.65);
   const targetRotationX = useRef(0.12);
 
   const colorOptions = [
@@ -115,15 +115,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const width = container.clientWidth || (isMobile ? 320 : 560);
-    const height = isMobile ? 320 : 440;
+    const width = container.clientWidth || (isMobile ? 360 : 640);
+    const height = isMobile ? 360 : 500;
 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera (Cinematic 3/4 front isometric perspective)
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 1.4, 5.2);
+    // 2. Camera with spacious perspective
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    camera.position.set(0, 1.4, isMobile ? 5.8 : 5.2);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -136,15 +136,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.25;
     container.replaceChildren(renderer.domElement);
 
-    // 4. Studio Environment Lighting for Real Clearcoat Reflections
+    // 4. Studio Environment Lighting
     const envRenderTarget = createStudioEnvironment(renderer);
     scene.environment = envRenderTarget.texture;
 
     // Studio Directional Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
     scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
@@ -163,10 +163,9 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     frontFill.position.set(0, 2, 6);
     scene.add(frontFill);
 
-    // 5. High-End PBR Supercar Materials
+    // 5. Materials
     const carbonTexture = createCarbonFiberTexture();
 
-    // Multi-stage clearcoat automotive paint
     const bodyMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xd90429,
       metalness: 0.9,
@@ -220,20 +219,20 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     });
 
     // 6. Ground Shadow & Studio Floor Ring
-    const groundGeo = new THREE.PlaneGeometry(10, 10);
-    const groundMat = new THREE.ShadowMaterial({ opacity: 0.32 });
+    const groundGeo = new THREE.PlaneGeometry(12, 12);
+    const groundMat = new THREE.ShadowMaterial({ opacity: 0.28 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = 0;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const ringGeo = new THREE.RingGeometry(2.1, 2.16, 64);
+    const ringGeo = new THREE.RingGeometry(2.3, 2.36, 64);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xd90429,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.3,
     });
     const groundRing = new THREE.Mesh(ringGeo, ringMat);
     groundRing.rotation.x = -Math.PI / 2;
@@ -278,16 +277,19 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
             }
           }
 
-          // Register animated wheel parent nodes
           const nodeName = (child.name || '').toLowerCase();
           if (nodeName.startsWith('wheel_')) {
             wheelsRef.current.push(child);
           }
         });
 
-        // Center and scale model
-        model.scale.set(1.0, 1.0, 1.0);
-        model.position.set(0, 0, 0);
+        // Compute Bounding Box to Center and Place on Ground Plane y = 0
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+
+        model.position.x = -center.x;
+        model.position.y = -box.min.y; // Perfect ground level
+        model.position.z = -center.z;
 
         carRootGroup.add(model);
         setLoading(false);
@@ -312,7 +314,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       const deltaY = clientY - previousMousePositionRef.current.y;
 
       targetRotationY.current += deltaX * 0.011;
-      targetRotationX.current = Math.max(-0.06, Math.min(0.4, targetRotationX.current + deltaY * 0.007));
+      targetRotationX.current = Math.max(-0.06, Math.min(0.38, targetRotationX.current + deltaY * 0.007));
 
       previousMousePositionRef.current = { x: clientX, y: clientY };
     };
@@ -350,7 +352,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Slow, majestic showroom rotation
+      // Smooth slow auto-rotation
       if (!isDraggingRef.current) {
         targetRotationY.current += 0.0022;
       }
@@ -359,13 +361,12 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.06;
         carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.06;
 
-        // Subtle floating suspension wave
+        // Subtle floating suspension breath
         carRootGroup.position.y = Math.sin(elapsedTime * 2.0) * 0.015;
       }
 
       groundRing.rotation.z -= 0.004;
 
-      // Rotate wheels forward
       wheelsRef.current.forEach((wheel) => {
         wheel.rotation.x += 0.025;
       });
@@ -375,11 +376,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     animate();
 
-    // 10. Responsive Resize
+    // 10. Responsive Resize Handler
     const handleResize = () => {
       if (!containerRef.current) return;
       const newWidth = containerRef.current.clientWidth;
-      const newHeight = isMobile ? 320 : 440;
+      const newHeight = isMobile ? 360 : 500;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
@@ -414,30 +415,33 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   }, [isMobile]);
 
   return (
-    <div className="relative w-full flex flex-col items-center justify-center select-none overflow-visible">
-      {/* 3D WebGL Canvas Viewport for Real Supercar Model */}
+    <div className="relative w-full flex flex-col items-center select-none">
+      {/* 3D WebGL Canvas Stage */}
       <div
         ref={containerRef}
-        className="w-full h-[320px] sm:h-[440px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+        className="w-full h-[360px] sm:h-[460px] lg:h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing"
       />
 
       {/* Loading Skeleton */}
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="flex items-center gap-2 bg-[#03045e]/80 text-[#caf0f8] px-4 py-2 rounded-2xl text-xs font-bold border border-[#90e0ef]/30 backdrop-blur-xs">
+          <div className="flex items-center gap-2 bg-[#03045e]/90 text-[#caf0f8] px-4 py-2 rounded-2xl text-xs font-bold border border-[#90e0ef]/30 backdrop-blur-md shadow-xl">
             <div className="w-3.5 h-3.5 border-2 border-[#00b4d8] border-t-transparent rounded-full animate-spin" />
             <span>Memuat 3D Supercar...</span>
           </div>
         </div>
       )}
 
-      {/* Real-Time Color Customizer Chips */}
-      <div className="absolute bottom-2 flex items-center gap-2 z-10 bg-[#03045e]/80 p-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-xs shadow-lg">
+      {/* Clean Bottom Floating Color Customizer (Spaced away from the car chassis) */}
+      <div className="mt-2 flex items-center gap-2 z-10 bg-[#03045e]/85 px-3 py-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-md shadow-md">
+        <span className="text-[10px] font-bold text-[#90e0ef] uppercase tracking-wider hidden sm:inline mr-1">
+          Warna:
+        </span>
         {colorOptions.map((opt) => (
           <button
             key={opt.id}
             onClick={() => handleColorChange(opt.id)}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-extrabold transition-all duration-150 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-extrabold transition-all duration-150 cursor-pointer ${
               activeColor === opt.id
                 ? 'bg-white text-[#03045e] shadow-xs scale-105'
                 : 'text-[#caf0f8] hover:bg-white/10'
