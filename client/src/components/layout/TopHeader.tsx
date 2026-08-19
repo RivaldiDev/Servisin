@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Wrench, Bell, BellNotification, WarningTriangle, Clock, NavArrowRight } from 'iconoir-react';
+import { Bell, BellNotification, WarningTriangle, Clock, NavArrowRight } from 'iconoir-react';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { ServiceReminder } from '../../types';
@@ -35,10 +35,12 @@ export const TopHeader: React.FC = () => {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-3">
         <div className="max-w-md mx-auto flex items-center justify-between">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-              <Wrench className="w-4 h-4" />
-            </div>
+          <Link to="/" className="flex items-center gap-2.5">
+            <img
+              src="/logo.webp"
+              alt="Servisin Logo"
+              className="w-9 h-9 rounded-xl object-contain shadow-xs border border-slate-100 bg-white"
+            />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-extrabold text-base tracking-tight text-slate-900">

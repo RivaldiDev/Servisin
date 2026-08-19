@@ -1,5 +1,5 @@
-﻿<p align="center">
-  <img src="https://raw.githubusercontent.com/RivaldiDev/Servisin/main/client/public/favicon.svg" width="80" alt="Servisin Logo" />
+<p align="center">
+  <img src="https://raw.githubusercontent.com/RivaldiDev/Servisin/main/client/public/logo.png" width="160" alt="Servisin Logo" />
 </p>
 
 <h1 align="center">Servisin</h1>

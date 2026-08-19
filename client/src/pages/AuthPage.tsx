@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Wrench,
   Shield,
   CheckCircle,
   WarningCircle,
@@ -61,10 +60,12 @@ export const AuthPage: React.FC = () => {
           <div className="absolute -top-12 -right-12 w-36 h-36 bg-white/10 rounded-full blur-2xl pointer-events-none" />
           <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-amber-400/10 rounded-full blur-xl pointer-events-none" />
 
-          <div className="flex items-center gap-2.5 mb-3">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-inner">
-              <Wrench className="w-5 h-5" />
-            </div>
+          <div className="flex items-center gap-3 mb-3">
+            <img
+              src="/logo.webp"
+              alt="Servisin Logo"
+              className="w-12 h-12 rounded-2xl object-contain bg-white/95 p-1 shadow-md border border-white/20"
+            />
             <div>
               <h1 className="text-xl font-extrabold tracking-tight">
                 SERVIS<span className="text-amber-300">IN</span>
