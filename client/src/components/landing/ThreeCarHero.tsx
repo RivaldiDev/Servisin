@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 interface ThreeCarHeroProps {
   isMobile?: boolean;
 }
 
-// 1. Procedural Studio HDRI Environment Map Generator
+// 1. Procedural Studio HDRI Environment Map Generator for Ultra-Crisp Clearcoat Reflections
 function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRenderTarget {
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
   pmremGenerator.compileEquirectangularShader();
 
   const envScene = new THREE.Scene();
-  envScene.background = new THREE.Color(0x0a0d14);
+  envScene.background = new THREE.Color(0x06080d);
 
-  // Overhead Key Softbox
+  // Overhead Key Softbox (Bright Pure White)
   const softboxGeo = new THREE.PlaneGeometry(16, 8);
   const softboxMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
   const softbox = new THREE.Mesh(softboxGeo, softboxMat);
@@ -22,7 +23,7 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
   softbox.rotation.x = Math.PI / 2;
   envScene.add(softbox);
 
-  // Side Fill Softbox (Frosted Blue)
+  // Left Softbox Fill (Frosted Cyan-Blue Highlight)
   const sideSoftbox1 = new THREE.Mesh(
     new THREE.PlaneGeometry(12, 5),
     new THREE.MeshBasicMaterial({ color: 0x90e0ef, side: THREE.DoubleSide })
@@ -31,16 +32,16 @@ function createStudioEnvironment(renderer: THREE.WebGLRenderer): THREE.WebGLRend
   sideSoftbox1.rotation.y = -Math.PI / 2;
   envScene.add(sideSoftbox1);
 
-  // Rim Horizon Softbox
+  // Right Softbox (Warm Horizon Glow)
   const sideSoftbox2 = new THREE.Mesh(
     new THREE.PlaneGeometry(12, 5),
-    new THREE.MeshBasicMaterial({ color: 0xffe5d9, side: THREE.DoubleSide })
+    new THREE.MeshBasicMaterial({ color: 0xffedd5, side: THREE.DoubleSide })
   );
   sideSoftbox2.position.set(-7, 4, 0);
   sideSoftbox2.rotation.y = Math.PI / 2;
   envScene.add(sideSoftbox2);
 
-  // Front Horizontal Light Bar
+  // Front Horizontal Light Bar for Hood Reflection
   const frontStrip = new THREE.Mesh(
     new THREE.PlaneGeometry(14, 2),
     new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
@@ -65,7 +66,7 @@ function createCarbonFiberTexture(): THREE.CanvasTexture {
   ctx.fillStyle = '#111317';
   ctx.fillRect(0, 0, size, size);
 
-  ctx.fillStyle = '#22252c';
+  ctx.fillStyle = '#242830';
   for (let i = 0; i < size; i += 8) {
     for (let j = 0; j < size; j += 8) {
       if ((i / 8 + j / 8) % 2 === 0) {
@@ -77,7 +78,7 @@ function createCarbonFiberTexture(): THREE.CanvasTexture {
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(12, 12);
+  texture.repeat.set(16, 16);
   return texture;
 }
 
@@ -86,22 +87,21 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   const [loading, setLoading] = useState(true);
   const [activeColor, setActiveColor] = useState<'red' | 'blue' | 'black'>('red');
 
-  // References for render loop & interaction
-  const carModelRef = useRef<THREE.Group | null>(null);
+  // References
+  const carRootGroupRef = useRef<THREE.Group | null>(null);
   const wheelsRef = useRef<THREE.Object3D[]>([]);
   const bodyMaterialRef = useRef<THREE.MeshPhysicalMaterial | null>(null);
 
   const isDraggingRef = useRef(false);
   const pointerDownPosRef = useRef({ x: 0, y: 0 });
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
-  const targetRotationY = useRef(0.55);
+  const targetRotationY = useRef(0.6);
   const targetRotationX = useRef(0.12);
 
-  // Available Supercar Color Options
   const colorOptions = [
-    { id: 'red' as const, name: 'Rosso Mars', hex: 0xd90429, labelBg: 'bg-[#d90429]' },
-    { id: 'blue' as const, name: 'Blu Cepheus', hex: 0x0077b6, labelBg: 'bg-[#0077b6]' },
-    { id: 'black' as const, name: 'Nero Nemesis', hex: 0x111318, labelBg: 'bg-[#111318]' },
+    { id: 'red' as const, name: 'Rosso Corsa', hex: 0xd90429, labelBg: 'bg-[#d90429]' },
+    { id: 'blue' as const, name: 'Blu Pozzi', hex: 0x0077b6, labelBg: 'bg-[#0077b6]' },
+    { id: 'black' as const, name: 'Nero Daytona', hex: 0x14161d, labelBg: 'bg-[#14161d]' },
   ];
 
   const handleColorChange = (colorId: 'red' | 'blue' | 'black') => {
@@ -121,11 +121,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera (Slightly elevated cinematic 3/4 angle)
+    // 2. Camera (Cinematic 3/4 front isometric perspective)
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 1.4, 5.5);
+    camera.position.set(0, 1.4, 5.2);
 
-    // 3. WebGL Renderer with High-End Tonemapping
+    // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -136,18 +136,18 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.2;
     container.replaceChildren(renderer.domElement);
 
     // 4. Studio Environment Lighting for Real Clearcoat Reflections
     const envRenderTarget = createStudioEnvironment(renderer);
     scene.environment = envRenderTarget.texture;
 
-    // Studio Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // Studio Directional Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
     keyLight.position.set(6, 10, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 1024;
@@ -155,17 +155,21 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     keyLight.shadow.bias = -0.001;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x90e0ef, 1.2);
+    const rimLight = new THREE.DirectionalLight(0x90e0ef, 1.3);
     rimLight.position.set(-6, 5, -5);
     scene.add(rimLight);
+
+    const frontFill = new THREE.DirectionalLight(0xffffff, 0.9);
+    frontFill.position.set(0, 2, 6);
+    scene.add(frontFill);
 
     // 5. High-End PBR Supercar Materials
     const carbonTexture = createCarbonFiberTexture();
 
-    // Multi-stage clearcoat car paint
+    // Multi-stage clearcoat automotive paint
     const bodyMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xd90429,
-      metalness: 0.88,
+      metalness: 0.9,
       roughness: 0.12,
       clearcoat: 1.0,
       clearcoatRoughness: 0.03,
@@ -176,55 +180,55 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     const glassMaterial = new THREE.MeshPhysicalMaterial({
       color: 0x0a0f1d,
       metalness: 0.1,
-      roughness: 0.02,
-      transmission: 0.8,
-      thickness: 0.4,
+      roughness: 0.01,
+      transmission: 0.85,
+      thickness: 0.5,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.92,
       ior: 1.52,
     });
 
     const carbonMaterial = new THREE.MeshStandardMaterial({
       map: carbonTexture,
       roughness: 0.25,
-      metalness: 0.75,
+      metalness: 0.8,
     });
 
     const rimMaterial = new THREE.MeshStandardMaterial({
       color: 0xe2e8f0,
-      metalness: 0.95,
-      roughness: 0.1,
+      metalness: 0.98,
+      roughness: 0.08,
     });
 
     const tireMaterial = new THREE.MeshStandardMaterial({
-      color: 0x16181d,
-      roughness: 0.85,
+      color: 0x14161a,
+      roughness: 0.88,
       metalness: 0.05,
     });
 
     const brakeMaterial = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8,
-      metalness: 0.85,
-      roughness: 0.25,
+      color: 0xa1a1aa,
+      metalness: 0.88,
+      roughness: 0.2,
     });
 
     const caliperMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xef233c,
       metalness: 0.6,
       roughness: 0.15,
-      clearcoat: 0.9,
+      clearcoat: 0.95,
     });
 
-    // 6. Ground Mirror Shadow & Floor Grid
-    const groundGeo = new THREE.PlaneGeometry(9, 9);
-    const groundMat = new THREE.ShadowMaterial({ opacity: 0.28 });
+    // 6. Ground Shadow & Studio Floor Ring
+    const groundGeo = new THREE.PlaneGeometry(10, 10);
+    const groundMat = new THREE.ShadowMaterial({ opacity: 0.32 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = 0;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const ringGeo = new THREE.RingGeometry(1.9, 1.96, 64);
+    const ringGeo = new THREE.RingGeometry(2.1, 2.16, 64);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xd90429,
       side: THREE.DoubleSide,
@@ -236,32 +240,36 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     groundRing.position.y = 0.01;
     scene.add(groundRing);
 
-    // 7. Load Real Photorealistic Supercar GLTF Model
+    // 7. Load Real Photorealistic Supercar GLTF Model with DRACO Loader
     const carRootGroup = new THREE.Group();
     scene.add(carRootGroup);
-    carModelRef.current = carRootGroup;
+    carRootGroupRef.current = carRootGroup;
     wheelsRef.current = [];
 
-    const loader = new GLTFLoader();
-    loader.load(
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/draco/gltf/');
+
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.setDRACOLoader(dracoLoader);
+
+    gltfLoader.load(
       '/models/ferrari.glb',
       (gltf) => {
         const model = gltf.scene;
 
-        // Traverse and assign photorealistic materials
         model.traverse((child) => {
           if (child instanceof THREE.Mesh) {
             child.castShadow = true;
             child.receiveShadow = true;
 
-            const name = child.name.toLowerCase();
+            const name = (child.name || '').toLowerCase();
             if (name.includes('body')) {
               child.material = bodyMaterial;
             } else if (name.includes('glass')) {
               child.material = glassMaterial;
             } else if (name.includes('carbon')) {
               child.material = carbonMaterial;
-            } else if (name.includes('rim')) {
+            } else if (name.includes('rim') || name.includes('centre') || name.includes('nuts')) {
               child.material = rimMaterial;
             } else if (name.includes('tire')) {
               child.material = tireMaterial;
@@ -270,15 +278,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
             }
           }
 
-          // Register animated wheel groups
-          const nodeName = child.name.toLowerCase();
+          // Register animated wheel parent nodes
+          const nodeName = (child.name || '').toLowerCase();
           if (nodeName.startsWith('wheel_')) {
             wheelsRef.current.push(child);
           }
         });
 
-        // Scale & Position model precisely
-        model.scale.set(0.95, 0.95, 0.95);
+        // Center and scale model
+        model.scale.set(1.0, 1.0, 1.0);
         model.position.set(0, 0, 0);
 
         carRootGroup.add(model);
@@ -286,7 +294,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       },
       undefined,
       (err) => {
-        console.error('Error loading car model:', err);
+        console.error('Error loading supercar GLTF model:', err);
         setLoading(false);
       }
     );
@@ -304,7 +312,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       const deltaY = clientY - previousMousePositionRef.current.y;
 
       targetRotationY.current += deltaX * 0.011;
-      targetRotationX.current = Math.max(-0.08, Math.min(0.42, targetRotationX.current + deltaY * 0.007));
+      targetRotationX.current = Math.max(-0.06, Math.min(0.4, targetRotationX.current + deltaY * 0.007));
 
       previousMousePositionRef.current = { x: clientX, y: clientY };
     };
@@ -334,7 +342,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('touchend', onTouchEnd);
 
-    // 9. Showroom Render Loop
+    // 9. Showroom Animation Loop
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -351,15 +359,15 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.06;
         carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.06;
 
-        // Subtle floating suspension breath
+        // Subtle floating suspension wave
         carRootGroup.position.y = Math.sin(elapsedTime * 2.0) * 0.015;
       }
 
       groundRing.rotation.z -= 0.004;
 
-      // Realistic wheel rolling animation
+      // Rotate wheels forward
       wheelsRef.current.forEach((wheel) => {
-        wheel.rotation.x += 0.02;
+        wheel.rotation.x += 0.025;
       });
 
       renderer.render(scene, camera);
@@ -367,7 +375,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     animate();
 
-    // 10. Responsive Resize Handler
+    // 10. Responsive Resize
     const handleResize = () => {
       if (!containerRef.current) return;
       const newWidth = containerRef.current.clientWidth;
@@ -390,6 +398,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('touchend', onTouchEnd);
 
+      dracoLoader.dispose();
       envRenderTarget.dispose();
       carbonTexture.dispose();
       bodyMaterial.dispose();
@@ -417,12 +426,12 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="flex items-center gap-2 bg-[#03045e]/80 text-[#caf0f8] px-4 py-2 rounded-2xl text-xs font-bold border border-[#90e0ef]/30 backdrop-blur-xs">
             <div className="w-3.5 h-3.5 border-2 border-[#00b4d8] border-t-transparent rounded-full animate-spin" />
-            <span>Memuat Model 3D Supercar...</span>
+            <span>Memuat 3D Supercar...</span>
           </div>
         </div>
       )}
 
-      {/* Color Customizer Chips */}
+      {/* Real-Time Color Customizer Chips */}
       <div className="absolute bottom-2 flex items-center gap-2 z-10 bg-[#03045e]/80 p-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-xs shadow-lg">
         {colorOptions.map((opt) => (
           <button
