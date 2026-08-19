@@ -235,6 +235,14 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
 
 export const toggleTier = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    if (process.env.NODE_ENV === 'production') {
+      res.status(403).json({
+        success: false,
+        message: 'Pengubahan paket langsung tidak diizinkan pada lingkungan produksi. Harap selesaikan pembayaran.',
+      });
+      return;
+    }
+
     const userId = req.user!.id;
     const { tier } = req.body; // 'FREE' or 'PRO'
 

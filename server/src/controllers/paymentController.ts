@@ -225,6 +225,14 @@ export const getPaymentHistory = async (req: AuthRequest, res: Response): Promis
 
 export const simulateMockPaymentSuccess = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    if (process.env.NODE_ENV === 'production') {
+      res.status(403).json({
+        success: false,
+        message: 'Simulasi pembayaran dinonaktifkan pada lingkungan produksi.',
+      });
+      return;
+    }
+
     const userId = req.user!.id;
     const { orderId } = req.body;
 

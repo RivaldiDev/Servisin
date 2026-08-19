@@ -1,4 +1,4 @@
-﻿import crypto from 'crypto';
+import crypto from 'crypto';
 // @ts-ignore
 import midtransClient from 'midtrans-client';
 
@@ -68,5 +68,10 @@ export const verifyMidtransSignature = (
     .createHash('sha512')
     .update(`${orderId}${statusCode}${grossAmount}${currentServerKey}`)
     .digest('hex');
-  return hash === signatureKey;
+
+  if (!signatureKey || hash.length !== signatureKey.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(Buffer.from(hash, 'utf-8'), Buffer.from(signatureKey, 'utf-8'));
 };
