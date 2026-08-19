@@ -115,16 +115,16 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const width = container.clientWidth || (isMobile ? 360 : 640);
-    const height = isMobile ? 360 : 480;
+    const rect = container.getBoundingClientRect();
+    const initialWidth = rect.width || (isMobile ? 360 : 640);
+    const initialHeight = rect.height || (isMobile ? 380 : 540);
 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera (Brought CLOSER for significantly larger car visual size)
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    // Camera distance 3.8 (desktop) / 4.4 (mobile) makes the car much bolder and larger
-    camera.position.set(0, 1.15, isMobile ? 4.4 : 3.85);
+    // 2. Camera with large bounding box perspective
+    const camera = new THREE.PerspectiveCamera(38, initialWidth / initialHeight, 0.1, 100);
+    camera.position.set(0, 1.25, isMobile ? 5.2 : 4.6);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -132,7 +132,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       alpha: true,
       powerPreference: 'high-performance',
     });
-    renderer.setSize(width, height);
+    renderer.setSize(initialWidth, initialHeight, false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -220,7 +220,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     });
 
     // 6. Ground Shadow & Studio Floor Ring
-    const groundGeo = new THREE.PlaneGeometry(14, 14);
+    const groundGeo = new THREE.PlaneGeometry(16, 16);
     const groundMat = new THREE.ShadowMaterial({ opacity: 0.28 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
@@ -228,7 +228,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const ringGeo = new THREE.RingGeometry(2.6, 2.66, 64);
+    const ringGeo = new THREE.RingGeometry(2.4, 2.46, 64);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xd90429,
       side: THREE.DoubleSide,
@@ -292,8 +292,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         model.position.y = -box.min.y;
         model.position.z = -center.z;
 
-        // BOLD, PROMINENT 1.35x SCALE (Makes the car much larger and impactful)
-        model.scale.set(1.35, 1.35, 1.35);
+        // Natural, balanced 1.12x scale for generous bounding box clearance
+        model.scale.set(1.12, 1.12, 1.12);
 
         carRootGroup.add(model);
         setLoading(false);
@@ -365,7 +365,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.06;
         carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.06;
 
-        // Subtle floating suspension breath
+        // Subtle floating suspension wave
         carRootGroup.position.y = Math.sin(elapsedTime * 2.0) * 0.015;
       }
 
@@ -380,22 +380,25 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     animate();
 
-    // 10. Responsive Resize Handler
-    const handleResize = () => {
-      if (!containerRef.current) return;
-      const newWidth = containerRef.current.clientWidth;
-      const newHeight = isMobile ? 360 : 480;
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
-    };
+    // 10. Dynamic ResizeObserver for Container Bounding Box
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        if (width > 0 && height > 0) {
+          camera.aspect = width / height;
+          camera.updateProjectionMatrix();
+          renderer.setSize(width, height, false);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }
+      }
+    });
 
-    window.addEventListener('resize', handleResize);
+    resizeObserver.observe(container);
 
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       domElem.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
@@ -419,11 +422,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   }, [isMobile]);
 
   return (
-    <div className="relative w-full flex flex-col items-center select-none">
-      {/* 3D WebGL Canvas Stage */}
+    <div className="relative w-full flex flex-col items-center select-none isolate">
+      {/* 3D WebGL Canvas Stage - Expanded Bounding Box */}
       <div
         ref={containerRef}
-        className="w-full h-[360px] sm:h-[440px] lg:h-[480px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+        className="w-full h-[380px] sm:h-[480px] lg:h-[560px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden rounded-3xl"
       />
 
       {/* Loading Skeleton */}
@@ -437,7 +440,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       )}
 
       {/* Clean Bottom Floating Color Customizer */}
-      <div className="mt-2 flex items-center gap-2 z-10 bg-[#03045e]/85 px-3 py-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-md shadow-md">
+      <div className="mt-3 flex items-center gap-2 z-10 bg-[#03045e]/85 px-3.5 py-1.5 rounded-2xl border border-[#90e0ef]/30 backdrop-blur-md shadow-md">
         <span className="text-[10px] font-bold text-[#90e0ef] uppercase tracking-wider hidden sm:inline mr-1">
           Warna:
         </span>
