@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Eye, RefreshDouble, ShieldCheck, DashboardSpeed } from 'iconoir-react';
 
 interface ThreeCarHeroProps {
   isMobile?: boolean;
@@ -8,33 +7,30 @@ interface ThreeCarHeroProps {
 
 export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [wireframeMode, setWireframeMode] = useState(false);
-  const [activeView, setActiveView] = useState<'3D' | 'X-RAY'>('3D');
-  const [rpm] = useState(2400);
 
-  // References to communicate with Three.js render loop
+  // References for animation and interaction
   const carGroupRef = useRef<THREE.Group | null>(null);
-  const wheelsRef = useRef<THREE.Mesh[]>([]);
+  const wheelsRef = useRef<THREE.Group[]>([]);
   const materialsRef = useRef<THREE.Material[]>([]);
   const isDraggingRef = useRef(false);
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
-  const targetRotationY = useRef(0.4);
-  const targetRotationX = useRef(0.15);
+  const targetRotationY = useRef(0.55);
+  const targetRotationX = useRef(0.12);
 
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const width = container.clientWidth || (isMobile ? 320 : 480);
-    const height = isMobile ? 300 : 400;
+    const width = container.clientWidth || (isMobile ? 320 : 560);
+    const height = isMobile ? 320 : 440;
 
     // 1. Scene
     const scene = new THREE.Scene();
 
     // 2. Camera
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 2.2, 5.5);
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+    camera.position.set(0, 1.8, 6.2);
 
-    // 3. Renderer
+    // 3. Renderer with transparent background (no box)
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -42,171 +38,271 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.replaceChildren(renderer.domElement);
 
-    // 4. Lighting (Strict Palette)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    // 4. Lighting Rig (Strict Palette Highlight Reflection)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0x90e0ef, 1.2);
-    dirLight1.position.set(5, 8, 5);
-    dirLight1.castShadow = true;
-    scene.add(dirLight1);
+    // Key Light (Frosted Blue Tint)
+    const keyLight = new THREE.DirectionalLight(0x90e0ef, 1.4);
+    keyLight.position.set(5, 8, 5);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
 
-    const dirLight2 = new THREE.DirectionalLight(0x0077b6, 0.8);
-    dirLight2.position.set(-5, 4, -3);
-    scene.add(dirLight2);
+    // Rim / Contour Light (Bright Teal Blue)
+    const rimLight = new THREE.DirectionalLight(0x0077b6, 1.1);
+    rimLight.position.set(-6, 4, -4);
+    scene.add(rimLight);
 
-    const bottomLight = new THREE.DirectionalLight(0x00b4d8, 0.4);
-    bottomLight.position.set(0, -3, 2);
-    scene.add(bottomLight);
+    // Front Accent Light (Turquoise Surf)
+    const frontLight = new THREE.DirectionalLight(0x00b4d8, 0.8);
+    frontLight.position.set(2, 2, 4);
+    scene.add(frontLight);
 
-    // 5. Build Procedural 3D Car Model (Strict Palette: #03045e, #0077b6, #00b4d8, #90e0ef, #caf0f8)
+    // 5. Build Refined Sleek 3D Sports Sedan
     const carGroup = new THREE.Group();
     carGroupRef.current = carGroup;
     wheelsRef.current = [];
     materialsRef.current = [];
 
-    // Colors
+    // Strict 5-Color Palette:
+    // #03045e (Deep Twilight), #0077b6 (Bright Teal Blue), #00b4d8 (Turquoise Surf), #90e0ef (Frosted Blue), #caf0f8 (Light Cyan)
     const COLOR_TWILIGHT = 0x03045e;
     const COLOR_TEAL = 0x0077b6;
     const COLOR_TURQUOISE = 0x00b4d8;
+    const COLOR_FROSTED = 0x90e0ef;
     const COLOR_CYAN = 0xcaf0f8;
 
     // Materials
-    const bodyMat = new THREE.MeshStandardMaterial({
+    const bodyPaintMat = new THREE.MeshStandardMaterial({
       color: COLOR_TEAL,
-      metalness: 0.7,
-      roughness: 0.25,
-    });
-    const cabinMat = new THREE.MeshStandardMaterial({
-      color: COLOR_TWILIGHT,
-      metalness: 0.9,
-      roughness: 0.1,
-      transparent: true,
-      opacity: 0.88,
-    });
-    const trimMat = new THREE.MeshStandardMaterial({
-      color: COLOR_TURQUOISE,
       metalness: 0.8,
-      roughness: 0.2,
+      roughness: 0.18,
     });
-    const wheelMat = new THREE.MeshStandardMaterial({
-      color: COLOR_TWILIGHT,
-      roughness: 0.7,
-    });
-    const rimMat = new THREE.MeshStandardMaterial({
-      color: COLOR_CYAN,
+    const bodyAccentMat = new THREE.MeshStandardMaterial({
+      color: COLOR_TURQUOISE,
       metalness: 0.85,
       roughness: 0.15,
     });
-    const lightMat = new THREE.MeshBasicMaterial({
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: COLOR_TWILIGHT,
+      metalness: 0.95,
+      roughness: 0.05,
+      transparent: true,
+      opacity: 0.88,
+    });
+    const darkChassisMat = new THREE.MeshStandardMaterial({
+      color: COLOR_TWILIGHT,
+      metalness: 0.5,
+      roughness: 0.6,
+    });
+    const tireMat = new THREE.MeshStandardMaterial({
+      color: COLOR_TWILIGHT,
+      roughness: 0.8,
+    });
+    const rimMat = new THREE.MeshStandardMaterial({
+      color: COLOR_CYAN,
+      metalness: 0.9,
+      roughness: 0.1,
+    });
+    const brakeCalipMat = new THREE.MeshStandardMaterial({
+      color: COLOR_TURQUOISE,
+      metalness: 0.7,
+      roughness: 0.3,
+    });
+    const headlightMat = new THREE.MeshBasicMaterial({
       color: COLOR_CYAN,
     });
-    const tailLightMat = new THREE.MeshBasicMaterial({
+    const taillightMat = new THREE.MeshBasicMaterial({
       color: COLOR_TURQUOISE,
     });
 
-    materialsRef.current.push(bodyMat, cabinMat, trimMat, wheelMat, rimMat, lightMat, tailLightMat);
+    materialsRef.current.push(
+      bodyPaintMat,
+      bodyAccentMat,
+      glassMat,
+      darkChassisMat,
+      tireMat,
+      rimMat,
+      brakeCalipMat,
+      headlightMat,
+      taillightMat
+    );
 
-    // Main Chassis Lower Body
-    const lowerBodyGeo = new THREE.BoxGeometry(2.6, 0.45, 1.2);
-    const lowerBody = new THREE.Mesh(lowerBodyGeo, bodyMat);
-    lowerBody.position.y = 0.45;
-    lowerBody.castShadow = true;
-    lowerBody.receiveShadow = true;
-    carGroup.add(lowerBody);
+    // --- CAR BODY STRUCTURE ---
 
-    // Front Bumper Nose Aero
-    const noseGeo = new THREE.BoxGeometry(0.7, 0.35, 1.16);
-    const nose = new THREE.Mesh(noseGeo, bodyMat);
-    nose.position.set(1.4, 0.4, 0);
-    nose.rotation.z = -0.1;
-    nose.castShadow = true;
-    carGroup.add(nose);
+    // A. Main Center Hull
+    const mainHullGeo = new THREE.BoxGeometry(2.8, 0.42, 1.28);
+    const mainHull = new THREE.Mesh(mainHullGeo, bodyPaintMat);
+    mainHull.position.set(0, 0.44, 0);
+    mainHull.castShadow = true;
+    mainHull.receiveShadow = true;
+    carGroup.add(mainHull);
 
-    // Upper Cabin (Glass & Roof)
-    const cabinGeo = new THREE.BoxGeometry(1.45, 0.48, 1.05);
-    const cabin = new THREE.Mesh(cabinGeo, cabinMat);
-    cabin.position.set(-0.15, 0.82, 0);
+    // B. Sloping Hood / Bonnet (Front Aerodynamics)
+    const hoodGeo = new THREE.BoxGeometry(0.85, 0.28, 1.24);
+    const hood = new THREE.Mesh(hoodGeo, bodyPaintMat);
+    hood.position.set(1.4, 0.38, 0);
+    hood.rotation.z = -0.12;
+    hood.castShadow = true;
+    carGroup.add(hood);
+
+    // Front Bumper Lower Lip (Turquoise Accent)
+    const lipGeo = new THREE.BoxGeometry(0.4, 0.1, 1.28);
+    const lip = new THREE.Mesh(lipGeo, bodyAccentMat);
+    lip.position.set(1.72, 0.24, 0);
+    carGroup.add(lip);
+
+    // Front Radiator Air Intake Grill
+    const grillGeo = new THREE.BoxGeometry(0.08, 0.16, 0.8);
+    const grill = new THREE.Mesh(grillGeo, darkChassisMat);
+    grill.position.set(1.83, 0.34, 0);
+    carGroup.add(grill);
+
+    // C. Tapered Greenhouse / Cabin (Windshield + Roof + Rear Window)
+    const cabinGeo = new THREE.BoxGeometry(1.55, 0.48, 1.08);
+    const cabin = new THREE.Mesh(cabinGeo, glassMat);
+    cabin.position.set(-0.1, 0.82, 0);
     cabin.castShadow = true;
     carGroup.add(cabin);
 
-    // Roof Top Shell
-    const roofGeo = new THREE.BoxGeometry(1.3, 0.05, 1.0);
-    const roof = new THREE.Mesh(roofGeo, bodyMat);
-    roof.position.set(-0.15, 1.08, 0);
-    carGroup.add(roof);
+    // Roof Top Cap
+    const roofCapGeo = new THREE.BoxGeometry(1.35, 0.04, 1.02);
+    const roofCap = new THREE.Mesh(roofCapGeo, bodyPaintMat);
+    roofCap.position.set(-0.1, 1.07, 0);
+    carGroup.add(roofCap);
 
-    // Aero Side Skirts / Accents (Turquoise Surf)
-    const skirtGeo = new THREE.BoxGeometry(2.4, 0.06, 1.25);
-    const skirt = new THREE.Mesh(skirtGeo, trimMat);
-    skirt.position.set(0.1, 0.25, 0);
-    carGroup.add(skirt);
+    // D. Rear Fastback Trunk & Spoiler
+    const trunkGeo = new THREE.BoxGeometry(0.65, 0.36, 1.24);
+    const trunk = new THREE.Mesh(trunkGeo, bodyPaintMat);
+    trunk.position.set(-1.42, 0.46, 0);
+    trunk.rotation.z = 0.08;
+    trunk.castShadow = true;
+    carGroup.add(trunk);
 
-    // Front Headlights
-    const lightGeo = new THREE.BoxGeometry(0.08, 0.12, 0.28);
-    const leftLight = new THREE.Mesh(lightGeo, lightMat);
-    leftLight.position.set(1.72, 0.46, 0.4);
-    carGroup.add(leftLight);
+    const spoilerGeo = new THREE.BoxGeometry(0.2, 0.04, 1.26);
+    const spoiler = new THREE.Mesh(spoilerGeo, bodyAccentMat);
+    spoiler.position.set(-1.72, 0.66, 0);
+    carGroup.add(spoiler);
 
-    const rightLight = new THREE.Mesh(lightGeo, lightMat);
-    rightLight.position.set(1.72, 0.46, -0.4);
-    carGroup.add(rightLight);
+    // E. Side Aero Skirts (Turquoise Surf)
+    const leftSkirtGeo = new THREE.BoxGeometry(2.6, 0.06, 0.08);
+    const leftSkirt = new THREE.Mesh(leftSkirtGeo, bodyAccentMat);
+    leftSkirt.position.set(0, 0.24, 0.65);
+    carGroup.add(leftSkirt);
 
-    // Rear Taillights
-    const tailLightGeo = new THREE.BoxGeometry(0.08, 0.1, 0.32);
-    const leftTail = new THREE.Mesh(tailLightGeo, tailLightMat);
-    leftTail.position.set(-1.31, 0.52, 0.4);
-    carGroup.add(leftTail);
+    const rightSkirt = new THREE.Mesh(leftSkirtGeo, bodyAccentMat);
+    rightSkirt.position.set(0, 0.24, -0.65);
+    carGroup.add(rightSkirt);
 
-    const rightTail = new THREE.Mesh(tailLightGeo, tailLightMat);
-    rightTail.position.set(-1.31, 0.52, -0.4);
-    carGroup.add(rightTail);
+    // F. Sleek Side Mirrors
+    const mirrorGeo = new THREE.BoxGeometry(0.12, 0.08, 0.16);
+    const leftMirror = new THREE.Mesh(mirrorGeo, bodyPaintMat);
+    leftMirror.position.set(0.48, 0.72, 0.62);
+    carGroup.add(leftMirror);
 
-    // 4 Wheels
+    const rightMirror = new THREE.Mesh(mirrorGeo, bodyPaintMat);
+    rightMirror.position.set(0.48, 0.72, -0.62);
+    carGroup.add(rightMirror);
+
+    // G. Crisp LED Headlights (Light Cyan Projectors)
+    const headlightGeo = new THREE.BoxGeometry(0.06, 0.1, 0.28);
+    const leftHeadlight = new THREE.Mesh(headlightGeo, headlightMat);
+    leftHeadlight.position.set(1.82, 0.46, 0.44);
+    carGroup.add(leftHeadlight);
+
+    const rightHeadlight = new THREE.Mesh(headlightGeo, headlightMat);
+    rightHeadlight.position.set(1.82, 0.46, -0.44);
+    carGroup.add(rightHeadlight);
+
+    // H. Continuous Rear LED Lightbar (Turquoise Surf)
+    const lightbarGeo = new THREE.BoxGeometry(0.06, 0.08, 1.18);
+    const lightbar = new THREE.Mesh(lightbarGeo, taillightMat);
+    lightbar.position.set(-1.74, 0.52, 0);
+    carGroup.add(lightbar);
+
+    // I. 4 Detailed Sport Wheels with Rims & Brake Calipers
     const wheelPositions = [
-      { x: 0.95, y: 0.28, z: 0.65 },
-      { x: 0.95, y: 0.28, z: -0.65 },
-      { x: -0.85, y: 0.28, z: 0.65 },
-      { x: -0.85, y: 0.28, z: -0.65 },
+      { x: 1.05, y: 0.28, z: 0.68 },
+      { x: 1.05, y: 0.28, z: -0.68 },
+      { x: -1.02, y: 0.28, z: 0.68 },
+      { x: -1.02, y: 0.28, z: -0.68 },
     ];
 
-    const wheelGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.18, 24);
-    const rimGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.19, 16);
+    const tireGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.2, 28);
+    const rimCenterGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.21, 18);
+    const spokeGeo = new THREE.BoxGeometry(0.32, 0.03, 0.22);
+    const brakeDiscGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.04, 16);
+    const caliperGeo = new THREE.BoxGeometry(0.06, 0.08, 0.06);
 
     wheelPositions.forEach((pos) => {
-      const wheelHub = new THREE.Group();
-      wheelHub.position.set(pos.x, pos.y, pos.z);
+      const wheelAssembly = new THREE.Group();
+      wheelAssembly.position.set(pos.x, pos.y, pos.z);
 
-      const tire = new THREE.Mesh(wheelGeo, wheelMat);
+      // Rotating Wheel Hub
+      const rotatingHub = new THREE.Group();
+
+      const tire = new THREE.Mesh(tireGeo, tireMat);
       tire.rotation.x = Math.PI / 2;
       tire.castShadow = true;
-      wheelHub.add(tire);
+      rotatingHub.add(tire);
 
-      const rim = new THREE.Mesh(rimGeo, rimMat);
-      rim.rotation.x = Math.PI / 2;
-      wheelHub.add(rim);
+      const rimCenter = new THREE.Mesh(rimCenterGeo, rimMat);
+      rimCenter.rotation.x = Math.PI / 2;
+      rotatingHub.add(rimCenter);
 
-      carGroup.add(wheelHub);
-      wheelsRef.current.push(tire);
+      // 5-spoke sports rim detail
+      for (let i = 0; i < 3; i++) {
+        const spoke = new THREE.Mesh(spokeGeo, rimMat);
+        spoke.rotation.y = (i * Math.PI) / 3;
+        rotatingHub.add(spoke);
+      }
+
+      wheelAssembly.add(rotatingHub);
+
+      // Static Brake Disc & Caliper
+      const brakeDisc = new THREE.Mesh(brakeDiscGeo, darkChassisMat);
+      brakeDisc.rotation.x = Math.PI / 2;
+      brakeDisc.position.z = pos.z > 0 ? -0.06 : 0.06;
+      wheelAssembly.add(brakeDisc);
+
+      const caliper = new THREE.Mesh(caliperGeo, brakeCalipMat);
+      caliper.position.set(0, 0.08, pos.z > 0 ? -0.06 : 0.06);
+      wheelAssembly.add(caliper);
+
+      carGroup.add(wheelAssembly);
+      wheelsRef.current.push(rotatingHub);
     });
 
-    // Circular Holographic Scanner Ring under the car
-    const ringGeo = new THREE.RingGeometry(1.6, 1.66, 48);
-    const ringMat = new THREE.MeshBasicMaterial({
+    // J. Futuristic Floating Hologram Platform Rings (Frosted & Turquoise)
+    const ringGeo1 = new THREE.RingGeometry(1.85, 1.9, 64);
+    const ringMat1 = new THREE.MeshBasicMaterial({
       color: COLOR_TURQUOISE,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.45,
     });
-    materialsRef.current.push(ringMat);
-    const scannerRing = new THREE.Mesh(ringGeo, ringMat);
-    scannerRing.rotation.x = -Math.PI / 2;
-    scannerRing.position.y = 0.02;
-    scene.add(scannerRing);
+    const outerRing = new THREE.Mesh(ringGeo1, ringMat1);
+    outerRing.rotation.x = -Math.PI / 2;
+    outerRing.position.y = 0.02;
+    scene.add(outerRing);
 
-    // Ground Shadow Plane
-    const groundGeo = new THREE.PlaneGeometry(8, 8);
-    const groundMat = new THREE.ShadowMaterial({ opacity: 0.18 });
+    const ringGeo2 = new THREE.RingGeometry(1.4, 1.44, 48);
+    const ringMat2 = new THREE.MeshBasicMaterial({
+      color: COLOR_FROSTED,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.35,
+    });
+    const innerRing = new THREE.Mesh(ringGeo2, ringMat2);
+    innerRing.rotation.x = -Math.PI / 2;
+    innerRing.position.y = 0.03;
+    scene.add(innerRing);
+
+    materialsRef.current.push(ringMat1, ringMat2);
+
+    // K. Soft Ground Shadow Plane
+    const groundGeo = new THREE.PlaneGeometry(7, 7);
+    const groundMat = new THREE.ShadowMaterial({ opacity: 0.16 });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = 0;
@@ -217,7 +313,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     scene.add(carGroup);
     carGroup.position.set(0, 0, 0);
 
-    // 6. Interactive Mouse Drag Controls
+    // 6. Interactive Mouse & Touch Drag Handler
     const handleMouseDown = (e: MouseEvent) => {
       isDraggingRef.current = true;
       previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
@@ -229,7 +325,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       const deltaY = e.clientY - previousMousePositionRef.current.y;
 
       targetRotationY.current += deltaX * 0.012;
-      targetRotationX.current = Math.max(-0.2, Math.min(0.6, targetRotationX.current + deltaY * 0.008));
+      targetRotationX.current = Math.max(-0.15, Math.min(0.45, targetRotationX.current + deltaY * 0.008));
 
       previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -238,7 +334,6 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       isDraggingRef.current = false;
     };
 
-    // Touch Support for Mobile
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
         isDraggingRef.current = true;
@@ -251,8 +346,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       const deltaX = e.touches[0].clientX - previousMousePositionRef.current.x;
       const deltaY = e.touches[0].clientY - previousMousePositionRef.current.y;
 
-      targetRotationY.current += deltaX * 0.015;
-      targetRotationX.current = Math.max(-0.2, Math.min(0.6, targetRotationX.current + deltaY * 0.01));
+      targetRotationY.current += deltaX * 0.014;
+      targetRotationX.current = Math.max(-0.15, Math.min(0.45, targetRotationX.current + deltaY * 0.01));
 
       previousMousePositionRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     };
@@ -270,7 +365,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('touchend', handleTouchEnd);
 
-    // 7. Animation Loop
+    // 7. Polished Render Loop
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -278,23 +373,25 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Smooth Rotation LERP
+      // Smooth Auto-Drift
       if (!isDraggingRef.current) {
-        targetRotationY.current += 0.008; // Idle auto spin
+        targetRotationY.current += 0.006;
       }
 
-      carGroup.rotation.y += (targetRotationY.current - carGroup.rotation.y) * 0.08;
-      carGroup.rotation.x += (targetRotationX.current - carGroup.rotation.x) * 0.08;
+      // Damped interpolation for ultra-smooth rotation
+      carGroup.rotation.y += (targetRotationY.current - carGroup.rotation.y) * 0.06;
+      carGroup.rotation.x += (targetRotationX.current - carGroup.rotation.x) * 0.06;
 
-      // Subtle suspension bounce
-      carGroup.position.y = Math.sin(elapsedTime * 3) * 0.03 + 0.02;
+      // Gentle floating suspension wave
+      carGroup.position.y = Math.sin(elapsedTime * 2.2) * 0.035 + 0.03;
 
-      // Rotate Scanner Ring
-      scannerRing.rotation.z -= 0.015;
+      // Rotate concentric hologram rings in opposite directions
+      outerRing.rotation.z -= 0.008;
+      innerRing.rotation.z += 0.012;
 
       // Wheel rotation
       wheelsRef.current.forEach((w) => {
-        w.rotation.x += 0.06;
+        w.rotation.x += 0.05;
       });
 
       renderer.render(scene, camera);
@@ -302,11 +399,11 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     animate();
 
-    // 8. Resize Handler
+    // 8. Responsive Resize
     const handleResize = () => {
       if (!containerRef.current) return;
       const newWidth = containerRef.current.clientWidth;
-      const newHeight = isMobile ? 300 : 400;
+      const newHeight = isMobile ? 320 : 440;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
@@ -331,89 +428,13 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     };
   }, [isMobile]);
 
-  // Toggle Wireframe Diagnostic View
-  const toggleWireframe = () => {
-    const next = !wireframeMode;
-    setWireframeMode(next);
-    setActiveView(next ? 'X-RAY' : '3D');
-    materialsRef.current.forEach((mat) => {
-      if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshBasicMaterial) {
-        mat.wireframe = next;
-      }
-    });
-  };
-
-  const handleResetAngle = () => {
-    targetRotationY.current = 0.4;
-    targetRotationX.current = 0.15;
-  };
-
   return (
-    <div className="relative w-full rounded-3xl bg-white border border-[#90e0ef] shadow-[0_1px_3px_rgba(3,4,94,0.06),0_16px_36px_-8px_rgba(3,4,94,0.12)] p-4 sm:p-5 flex flex-col justify-between overflow-hidden group select-none">
-      {/* Top Bar: Vehicle Telemetry Status */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#90e0ef]/40 z-10">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#caf0f8] text-[#0077b6] flex items-center justify-center font-bold">
-            <DashboardSpeed className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="font-extrabold text-xs sm:text-sm text-[#03045e] tracking-tight">
-              FixGarasi 3D Studio Live
-            </h3>
-            <p className="text-[10px] text-[#0077b6] font-mono">Realtime Telemetry &bull; Drag to Rotate</p>
-          </div>
-        </div>
-
-        {/* Status Pill */}
-        <div className="flex items-center gap-1.5 bg-[#caf0f8] text-[#0077b6] border border-[#00b4d8] text-[10px] font-extrabold px-2.5 py-1 rounded-full">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Sistem Prima</span>
-        </div>
-      </div>
-
-      {/* 3D WebGL Canvas Viewport */}
+    <div className="relative w-full flex items-center justify-center select-none overflow-visible">
+      {/* 3D WebGL Canvas Viewport directly rendered with zero box/borders */}
       <div
         ref={containerRef}
-        className="w-full h-[260px] sm:h-[320px] flex items-center justify-center cursor-grab active:cursor-grabbing relative"
+        className="w-full h-[320px] sm:h-[440px] flex items-center justify-center cursor-grab active:cursor-grabbing"
       />
-
-      {/* Floating Interactive Controls & HUD Badges */}
-      <div className="pt-3 border-t border-[#90e0ef]/40 flex flex-wrap items-center justify-between gap-2 z-10">
-        {/* View Mode Switcher */}
-        <div className="flex items-center gap-1 bg-[#caf0f8]/40 p-1 rounded-xl border border-[#90e0ef]/60">
-          <button
-            onClick={() => { if (wireframeMode) toggleWireframe(); }}
-            className={`px-3 py-1 text-[10px] font-extrabold rounded-lg transition-colors duration-150 cursor-pointer ${
-              activeView === '3D' ? 'bg-[#0077b6] text-white' : 'text-[#03045e] hover:bg-[#caf0f8]'
-            }`}
-          >
-            3D Studio
-          </button>
-          <button
-            onClick={() => { if (!wireframeMode) toggleWireframe(); }}
-            className={`px-3 py-1 text-[10px] font-extrabold rounded-lg transition-colors duration-150 cursor-pointer flex items-center gap-1 ${
-              activeView === 'X-RAY' ? 'bg-[#0077b6] text-white' : 'text-[#03045e] hover:bg-[#caf0f8]'
-            }`}
-          >
-            <Eye className="w-3 h-3" />
-            <span>X-Ray Wireframe</span>
-          </button>
-        </div>
-
-        {/* Telemetry Quick Chips */}
-        <div className="flex items-center gap-2 text-[10px] font-mono">
-          <span className="bg-[#caf0f8] text-[#03045e] px-2 py-1 rounded-lg border border-[#90e0ef]">
-            RPM: <strong className="text-[#0077b6] tabular-nums">{rpm}</strong>
-          </span>
-          <button
-            onClick={handleResetAngle}
-            className="p-1.5 rounded-lg bg-white border border-[#90e0ef] hover:border-[#0077b6] text-[#03045e] active:scale-95 transition-transform cursor-pointer"
-            title="Reset Sudut Pandang"
-          >
-            <RefreshDouble className="w-3.5 h-3.5 text-[#0077b6]" />
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
