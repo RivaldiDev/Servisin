@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Xmark, ShieldCheck, Page, HelpCircle, RefreshDouble } from 'iconoir-react';
 
 interface LegalModalProps {
@@ -135,10 +135,10 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 Tim bantuan Servisin siap membantu Anda jika mengalami kendala transaksi atau pertanyaan operasional:
               </p>
               <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 space-y-2 text-xs">
-                <p><strong>📧 Email Bantuan:</strong> support@servisin.id</p>
-                <p><strong>💬 WhatsApp Resmi:</strong> +62 812-3456-7890</p>
-                <p><strong>🏢 Jam Operasional:</strong> Senin – Minggu (08:00 – 21:00 WIB)</p>
-                <p><strong>📍 Lokasi:</strong> Jakarta, Indonesia</p>
+                <p><strong>Email Bantuan:</strong> support@servisin.id</p>
+                <p><strong>WhatsApp Resmi:</strong> +62 812-3456-7890</p>
+                <p><strong>Jam Operasional:</strong> Senin – Minggu (08:00 – 21:00 WIB)</p>
+                <p><strong>Lokasi:</strong> Jakarta, Indonesia</p>
               </div>
             </div>
           )}

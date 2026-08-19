@@ -21,48 +21,48 @@
 
 ---
 
-## 📌 Tentang Servisin
+## Tentang Servisin
 
 **Servisin** adalah platform SaaS manajemen perawatan kendaraan dan buku servis digital yang dirancang khusus untuk pemilik mobil dan motor di Indonesia. Platform ini memudahkan pengguna dalam mencatat riwayat servis, mengelola anggaran biaya perawatan, menyimpan bukti foto kuitansi/nota bengkel secara terenkripsi, serta memantau jadwal penggantian oli dan suku cadang otomatis berbasis kilometer odometer maupun waktu.
 
-Dibangun dengan arsitektur **Mobile-First Responsive Web** yang dioptimalkan untuk performa tinggi, aplikasi ini dapat diakses langsung melalui browser maupun di-embed ke dalam **Android WebView Native** dengan *feel* aplikasi native yang mulus.
+Dibangun dengan arsitektur **Mobile-First Responsive Web** yang dioptimalkan untuk performa tinggi, aplikasi ini dapat diakses langsung melalui browser maupun di-embed ke dalam **Android WebView Native** dengan standar aplikasi native.
 
 ---
 
-## ✨ Fitur Unggulan
+## Fitur Utama
 
-### 🚗 1. Garasi Digital Multi-Kendaraan (Mobil & Motor)
+### 1. Garasi Digital Multi-Kendaraan (Mobil & Motor)
 - **Katalog 106+ Model Kendaraan Lokal**: Mendukung preset foto studio latar putih resolusi tinggi untuk seluruh kendaraan populer di Indonesia (Toyota, Honda, Daihatsu, Mitsubishi, Suzuki, Hyundai, Wuling, Yamaha, Kawasaki, Vespa, dll).
 - **Quick Odometer Update**: Tambah jarak tempuh harian/mingguan dengan tombol instan (`+50`, `+100`, `+500`, `+1.000` km).
-- **Manajemen Dokumen**: Simpan detail plat nomor, tahun perakitan, kapasitas mesin (CC), dan nomor rangka/mesin secara rapi.
+- **Manajemen Dokumen**: Simpan detail plat nomor, tahun perakitan, kapasitas mesin (CC), dan nomor rangka/mesin secara terstruktur.
 
-### 🛠️ 2. Pencatatan Servis & Rincian Biaya Transparan (Service Logs)
+### 2. Pencatatan Servis & Rincian Biaya (Service Logs)
 - **12 Kategori Perawatan Terstandarisasi**: Oli Mesin, Oli Transmisi/Gardan, Sistem Rem, Ban & Velg, Tune Up, Aki/Kelistrikan, Busi, Kaki-kaki/Suspensi, Filter Udara/AC, Radiator/Coolant, Pemeriksaan Rutin, dan Lain-lain.
 - **Dukungan Multi-Item Suku Cadang & Jasa**: Hitung total biaya servis otomatis per komponen.
 - **Upload Nota / Kwitansi Bengkel**: Simpan arsip foto kuitansi bengkel lengkap dengan fitur *fullscreen preview* & zoom.
 
-### 🔔 3. Smart Maintenance Reminders (Pengingat Servis Otomatis)
-- **Kalkulasi Cerdas**: Prediksi jatuh tempo servis berbasis jarak tempuh (KM) atau interval waktu (Bulan).
-- **Visual Status Badges**:
-  - 🔴 **Overdue**: Melewati batas kilometer atau tanggal target.
-  - 🟡 **Due Soon**: Sisa < 500 km atau < 14 hari sebelum jatuh tempo.
-  - 🟢 **Active**: Interval dalam batas aman.
+### 3. Smart Maintenance Reminders (Pengingat Servis Otomatis)
+- **Kalkulasi Otomatis**: Prediksi jatuh tempo servis berbasis jarak tempuh (KM) atau interval waktu (Bulan).
+- **Status Indikator**:
+  - **Overdue**: Melewati batas kilometer atau tanggal target.
+  - **Due Soon**: Sisa < 500 km atau < 14 hari sebelum jatuh tempo.
+  - **Active**: Interval dalam batas aman.
 - **One-Click Cycle Reset**: Tombol "Selesaikan Servis" untuk memperbarui siklus interval berikutnya secara instan.
 
-### 📊 4. Analitik & Laporan Pengeluaran Keuangan
+### 4. Analitik & Laporan Pengeluaran Keuangan
 - Total pengeluaran servis terakumulasi & rata-rata biaya perawatan.
 - Grafik batang tren pengeluaran bulanan (12 bulan terakhir).
 - Diagram distribusi pengeluaran per kategori komponen.
 - Komparasi total biaya perawatan antar kendaraan di garasi.
 
-### ⚡ 5. Model SaaS Freemium & Midtrans Ready
+### 5. Model SaaS Freemium & Integrasi Midtrans
 - **Tier Free**: Kelola hingga 2 unit kendaraan dengan fitur pencatatan esensial.
-- **Tier Pro ⚡**: Garasi tanpa batas (*Unlimited Vehicles*), penyimpanan bukti servis tak terbatas, dan laporan analitik menyeluruh.
+- **Tier Pro**: Garasi tanpa batas (*Unlimited Vehicles*), kapasitas penyimpanan bukti servis tanpa batas, dan laporan analitik menyeluruh.
 - **Integrasi Pembayaran Indonesia**: Siap dihubungkan ke gerbang pembayaran **Midtrans** (QRIS, Virtual Account Multi-Bank, & E-Wallet).
 
 ---
 
-## 🏗️ Arsitektur & Tech Stack
+## Arsitektur & Tech Stack
 
 ```
 Servisin/
@@ -90,10 +90,10 @@ Servisin/
 └── vercel.json                 # Root Vercel Monorepo Deployment Config
 ```
 
-| Lapisan | Teknologi |
+| Komponen | Teknologi |
 | :--- | :--- |
 | **Frontend Framework** | React 19 + TypeScript + Vite 6 |
-| **Styling & Icons** | Tailwind CSS v3.4 + Iconoir Icons (100% Pure Native SVG Stroke) |
+| **Styling & Icons** | Tailwind CSS v3.4 + Iconoir Icons (100% Native SVG Stroke) |
 | **Backend Framework** | Node.js + Express.js + TypeScript |
 | **Database & ORM** | Prisma ORM (SQLite for Dev, PostgreSQL for Prod) |
 | **Security & Auditing** | Helmet, Express Rate Limit (Auth & API), Strict File Whitelist, JWT |
@@ -101,7 +101,7 @@ Servisin/
 
 ---
 
-## 🚀 Panduan Memulai (Quick Start)
+## Panduan Instalasi & Menjalankan
 
 ### 1. Kloning Repositori
 ```bash
@@ -137,21 +137,21 @@ npm run seed
 cd ..
 ```
 
-### 5. Jalankan Aplikasi Secara Lokal
+### 5. Menjalankan Server Lokal
 ```bash
 npm run dev
 ```
 Akses aplikasi melalui browser:
-- 📱 **Frontend Web App**: `http://localhost:5173`
-- 🔌 **Backend REST API**: `http://localhost:5000/api/health`
+- **Frontend Web App**: `http://localhost:5173`
+- **Backend REST API**: `http://localhost:5000/api/health`
 
-**Akun Demo Siap Pakai:**
+**Akun Demo:**
 - **Email:** `demo@servisin.id`
 - **Password:** `password123`
 
 ---
 
-## 🌐 Panduan Deploy ke Vercel
+## Panduan Deploy ke Vercel
 
 Proyek ini telah dikonfigurasi dengan file `vercel.json` dan `client/vercel.json` sehingga siap di-deploy langsung ke Vercel.
 
@@ -163,19 +163,18 @@ Proyek ini telah dikonfigurasi dengan file `vercel.json` dan `client/vercel.json
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
 3. **Environment Variables di Vercel**:
-   - `VITE_API_URL`: URL backend API produksi Anda (misal: `https://api.servisin.id/api` atau layanan backend terpisah seperti Render/Railway).
-4. Klik **Deploy** 🚀.
+   - `VITE_API_URL`: URL backend API produksi Anda (misal: `https://api.servisin.id/api`).
+4. Klik **Deploy**.
 
 ---
 
-## 📱 Panduan Android WebView Native
+## Panduan Android WebView Native
 
-Ingin membungkus Servisin ke dalam aplikasi Android APK/AAB?
-Silakan baca panduan lengkap konfigurasi Android Studio (Kotlin), penanganan permission kamera/file upload, status bar theme, dan pull-to-refresh di [ANDROID_WEBVIEW_GUIDE.md](./ANDROID_WEBVIEW_GUIDE.md).
+Untuk membungkus Servisin ke dalam aplikasi Android APK/AAB, silakan baca panduan lengkap konfigurasi Android Studio (Kotlin), penanganan permission kamera/file upload, dan pull-to-refresh di [ANDROID_WEBVIEW_GUIDE.md](./ANDROID_WEBVIEW_GUIDE.md).
 
 ---
 
-## 🛡️ Keamanan & Kualitas Kode
+## Keamanan & Kualitas Kode
 
 - **Anti-Brute Force**: Pembatasan *rate limiting* ketat pada rute otentikasi login/register.
 - **Perlindungan Stored XSS**: Whitelist ketat MIME type upload file (`.jpg`, `.jpeg`, `.png`, `.webp`) dan penolakan otomatis format SVG berisiko.
@@ -187,7 +186,7 @@ Silakan baca panduan lengkap konfigurasi Android Studio (Kotlin), penanganan per
 
 ---
 
-## 📄 Informasi Legal & Layanan
+## Informasi Legal & Layanan
 
 - **Ketentuan Layanan & Kebijakan Privasi**: Tersedia di dalam aplikasi melalui modal *Informasi Legal & Layanan* atau halaman profil.
 - **Mitra Pembayaran**: Mendukung pembayaran aman via gerbang pembayaran berlisensi Bank Indonesia (Midtrans).
@@ -195,8 +194,8 @@ Silakan baca panduan lengkap konfigurasi Android Studio (Kotlin), penanganan per
 
 ---
 
-## 📝 Lisensi
+## Lisensi
 
 Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE).
 
-Dibuat dengan ❤️ oleh [Rivaldi](https://github.com/RivaldiDev) &middot; **Servisin Indonesia**
+Dibuat oleh [Rivaldi](https://github.com/RivaldiDev) &middot; **Servisin Indonesia**

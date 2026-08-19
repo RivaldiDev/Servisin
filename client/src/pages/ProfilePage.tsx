@@ -94,7 +94,7 @@ export const ProfilePage: React.FC = () => {
                 Status Paket SaaS
               </span>
               <h4 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-                Paket {user?.tier === 'PRO' ? 'Servisin PRO ⚡' : 'Servisin Gratis'}
+                Paket {user?.tier === 'PRO' ? 'Servisin PRO' : 'Servisin Gratis'}
               </h4>
             </div>
           </div>
@@ -157,7 +157,7 @@ export const ProfilePage: React.FC = () => {
               ? 'Mengubah status...'
               : user?.tier === 'PRO'
               ? 'Beralih ke Akun Free (Demo)'
-              : 'Aktifkan Paket PRO Sekarang ⚡'}
+              : 'Aktifkan Paket PRO Sekarang'}
           </button>
         </div>
       </div>
