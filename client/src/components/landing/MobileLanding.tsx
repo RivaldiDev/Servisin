@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Car,
-  BellNotification,
   DashboardSpeed,
-  Page,
   CheckCircle,
   ArrowRight,
   Eye,
   Refresh,
   SmartphoneDevice,
   Plus,
-  Minus
+  Minus,
+  Upload
 } from 'iconoir-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -89,7 +88,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </header>
 
-      {/* 2. Mobile Hero Section (No Eyebrow, No Pills Strip) */}
+      {/* 2. Mobile Hero Section */}
       <section className="px-5 pt-6 pb-6 bg-gradient-to-b from-white to-slate-50 space-y-4">
         <h1 className="text-3xl font-extrabold text-slate-950 tracking-tight leading-tight">
           Rawat Mobil &amp; Motor Lebih Hemat, <br />
@@ -181,29 +180,51 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 4. Streamlined 2-Part Feature Overview (No 3-tab repetitive switch) */}
-      <section className="px-5 py-4 space-y-3">
-        <h3 className="font-extrabold text-base text-slate-900">Fitur Utama di Ponsel</h3>
-        
-        <div className="space-y-3">
-          <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-1">
-              <BellNotification className="w-5 h-5" />
-            </div>
-            <h4 className="font-extrabold text-sm text-slate-900">Pengingat Servis Presisi KM</h4>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Jadwal ganti oli, ban, filter, busi, dan transmisi terhitung otomatis sesuai pola pemakaian kilometer harian Anda.
+      {/* 4. Mobile 3-Part Bento Stack (Exact Translation of the Reference Bento) */}
+      <section className="px-5 py-6 bg-[#0a0c10] text-white my-4 rounded-3xl space-y-4">
+        <h3 className="font-extrabold text-lg text-white">Fitur Terintegrasi</h3>
+
+        <div className="space-y-4">
+          {/* Bento Part 1: Visual Score Card */}
+          <div className="bg-[#12141a] rounded-2xl p-4 border border-slate-800 space-y-3">
+            <h4 className="font-extrabold text-sm text-white">Status Visual &amp; Skor Garasi</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Monitoring kondisi mesin terpusat untuk semua kendaraan harian Anda.
             </p>
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="p-2.5 bg-[#1a1d26] rounded-xl border border-brand-500/40 text-center">
+                <span className="text-xs font-bold text-white block">Innova Zenix</span>
+                <span className="text-[9px] font-mono text-slate-400">Score 98 • Prima</span>
+              </div>
+              <div className="p-2.5 bg-[#161820] rounded-xl border border-slate-800 text-center">
+                <span className="text-xs font-bold text-white block">HR-V 1.5</span>
+                <span className="text-[9px] text-amber-400 font-bold">Due Soon</span>
+              </div>
+            </div>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-1">
-              <Page className="w-5 h-5" />
-            </div>
-            <h4 className="font-extrabold text-sm text-slate-900">Scan Nota &amp; Analitik Pengeluaran</h4>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Foto kuitansi langsung dari kamera smartphone. Tersimpan rapi di cloud dan otomatis terangkum dalam grafik pengeluaran 12 bulan.
+          {/* Bento Part 2: Tracking Progress & Workshop Logs */}
+          <div className="bg-[#12141a] rounded-2xl p-4 border border-slate-800 space-y-3">
+            <h4 className="font-extrabold text-sm text-white">Tracking Interval Servis</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Kalkulasi otomatis hitung mundur ganti oli dan servis rem berkala.
             </p>
+            <div className="flex items-center justify-between p-2.5 bg-white/5 rounded-xl border border-white/10 text-xs">
+              <span className="text-slate-300">Ganti Oli 5.000 KM</span>
+              <span className="text-emerald-400 font-bold font-mono">Siap Reset</span>
+            </div>
+          </div>
+
+          {/* Bento Part 3: Upload Nota Cloud */}
+          <div className="bg-[#12141a] rounded-2xl p-4 border border-slate-800 space-y-3">
+            <h4 className="font-extrabold text-sm text-white">Arsip Foto Nota &amp; Kuitansi</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Foto bukti servis tersimpan aman di cloud terenkripsi PostgreSQL Neon.
+            </p>
+            <div className="p-3 bg-[#181b24] rounded-xl border border-slate-700/80 flex items-center justify-center gap-2 text-xs font-bold text-brand-400">
+              <Upload className="w-4 h-4" />
+              <span>Simpan Nota Otomatis</span>
+            </div>
           </div>
         </div>
       </section>
@@ -223,7 +244,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 6. Mobile Pricing Quick Card (No Eyebrow) */}
+      {/* 6. Mobile Pricing Quick Card */}
       <section className="px-5 py-4 space-y-3">
         <h3 className="font-extrabold text-lg text-slate-900">Pilihan Paket</h3>
 

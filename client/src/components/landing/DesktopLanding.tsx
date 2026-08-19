@@ -3,17 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Car,
   Motorcycle,
-  BellNotification,
   DashboardSpeed,
   Page,
-  StatsUpSquare,
   ShieldCheck,
   CheckCircle,
   CreditCard,
   ArrowRight,
   Eye,
   Refresh,
-  Lock
+  Lock,
+  Upload,
+  Camera,
+  Check
 } from 'iconoir-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -139,7 +140,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </header>
 
-      {/* 2. Hero Section (Clean 2-Column Split: No Eyebrow, No Pills Strip) */}
+      {/* 2. Hero Section */}
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200/80">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -292,80 +293,224 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 4. Asymmetric 2-Part Deep Dive Feature Section (No 3 equal cards, no eyebrows) */}
-      <section id="fitur" className="py-20 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
+      {/* 4. 3-COLUMN BENTO GRID FEATURE SECTION (Exact Layout from Reference Image) */}
+      <section id="fitur" className="py-24 bg-[#0a0c10] text-white border-b border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
           <div className="max-w-2xl">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Manajemen Perawatan Tanpa Buku Kertas
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Manajemen Garasi Modern
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base mt-2">
-              Seluruh riwayat mekanik, interval ganti oli, dan arsip kuitansi tersusun rapi dan dapat diakses kapan saja.
+            <p className="text-slate-400 text-sm sm:text-base mt-2">
+              Satu sistem terintegrasi untuk memantau kondisi fisik, jadwal servis, dan arsip dokumen setiap kendaraan.
             </p>
           </div>
 
-          {/* Feature Showcase: 2-Part Bento Deep Dive */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            {/* Block 1: Smart Reminders & Odometer (7 cols) */}
-            <div className="lg:col-span-7 bg-slate-50 rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:border-brand-500 transition-[border-color,box-shadow] duration-200 hover:shadow-[0_12px_28px_-6px_rgba(37,99,235,0.12)]">
+          {/* 3-Column Bento Grid Container */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+            
+            {/* COLUMN 1: Visual Multi-Vehicle Overview (Tall Card with 2x2 Grid & Focus Brackets) */}
+            <div className="bg-[#12141a] border border-slate-800/90 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition-[border-color,box-shadow] duration-200 shadow-xl">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center mb-6 shadow-md shadow-brand-600/20">
-                  <BellNotification className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-extrabold text-slate-900 mb-2">
-                  Pengingat Servis Presisi Berbasis Kilometer
+                <h3 className="text-lg font-extrabold text-white tracking-tight">
+                  Status Visual &amp; Skor Kesehatan
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed max-w-xl">
-                  Sistem otomatis menghitung mundur sisa jarak tempuh sebelum jadwal servis oli mesin, aki, rem, ban, dan transmisi jatuh tempo. Anda dapat me-reset siklus cukup dengan satu klik setelah servis selesai.
+                <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                  Evaluasi kondisi riil mesin dan transmisi kendaraan secara presisi berdasarkan riwayat servis aktual.
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-slate-200/80 grid grid-cols-2 gap-4 text-xs">
-                <div className="p-4 bg-white rounded-2xl border border-slate-200/60">
-                  <span className="font-bold text-slate-900 block mb-1">Dual-Trigger Tracking</span>
-                  <span className="text-slate-500">Mendukung interval kombinasi jarak tempuh KM dan tanggal kalender.</span>
+              {/* 2x2 Visual Vehicle Matrix with Focus Target Brackets */}
+              <div className="grid grid-cols-2 gap-3.5 my-6">
+                {/* Vehicle 1 (Focused with Scanner Brackets & Score Pill) */}
+                <div className="relative rounded-2xl bg-[#1a1d26] p-3 border border-brand-500/40 flex flex-col items-center justify-center text-center overflow-hidden group">
+                  {/* Focus Frame Brackets */}
+                  <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-brand-400 rounded-tl-sm" />
+                  <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-brand-400 rounded-tr-sm" />
+                  <div className="absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-brand-400 rounded-bl-sm" />
+                  <div className="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-brand-400 rounded-br-sm" />
+                  
+                  <div className="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mb-2 mt-1">
+                    <Car className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs font-extrabold text-white block">Innova Zenix</span>
+                  <span className="text-[10px] text-slate-400 font-mono">B 2410 RVD</span>
+                  
+                  {/* Floating Score Badge */}
+                  <div className="mt-2.5 bg-white text-slate-950 px-2.5 py-0.5 rounded-md text-[10px] font-extrabold font-mono shadow-sm">
+                    score 98
+                  </div>
                 </div>
-                <div className="p-4 bg-white rounded-2xl border border-slate-200/60">
-                  <span className="font-bold text-slate-900 block mb-1">Multi-Vehicle Sync</span>
-                  <span className="text-slate-500">Pantau seluruh mobil dan motor keluarga dalam satu akun terpusat.</span>
+
+                {/* Vehicle 2 */}
+                <div className="rounded-2xl bg-[#161820] p-3 border border-slate-800 flex flex-col items-center justify-center text-center opacity-85 hover:opacity-100 transition-opacity">
+                  <div className="w-12 h-12 rounded-xl bg-slate-800/80 flex items-center justify-center text-slate-300 mb-2 mt-1">
+                    <Car className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs font-extrabold text-white block">HR-V 1.5 SE</span>
+                  <span className="text-[10px] text-slate-400 font-mono">B 1984 RVD</span>
+                  <div className="mt-2.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold">
+                    Due Soon
+                  </div>
+                </div>
+
+                {/* Vehicle 3 */}
+                <div className="rounded-2xl bg-[#161820] p-3 border border-slate-800 flex flex-col items-center justify-center text-center opacity-85 hover:opacity-100 transition-opacity">
+                  <div className="w-12 h-12 rounded-xl bg-slate-800/80 flex items-center justify-center text-slate-300 mb-2 mt-1">
+                    <Car className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs font-extrabold text-white block">Fortuner VRZ</span>
+                  <span className="text-[10px] text-slate-400 font-mono">B 8888 RFS</span>
+                  <div className="mt-2.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold">
+                    Optimal
+                  </div>
+                </div>
+
+                {/* Vehicle 4 */}
+                <div className="rounded-2xl bg-[#161820] p-3 border border-slate-800 flex flex-col items-center justify-center text-center opacity-85 hover:opacity-100 transition-opacity">
+                  <div className="w-12 h-12 rounded-xl bg-slate-800/80 flex items-center justify-center text-slate-300 mb-2 mt-1">
+                    <Motorcycle className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs font-extrabold text-white block">Vespa Sprint</span>
+                  <span className="text-[10px] text-slate-400 font-mono">B 3321 KAS</span>
+                  <div className="mt-2.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold">
+                    Optimal
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                <span>Multi-Vehicle Dashboard</span>
+                <span className="text-brand-400 font-bold">Auto-Sync Odometer</span>
+              </div>
+            </div>
+
+            {/* COLUMN 2: Stacked 2 Cards (Track Progress & Schedule Maintenance) */}
+            <div className="flex flex-col gap-6">
+              {/* Card 2.A: Track Progress with Dot Track & Milestone Nodes */}
+              <div className="bg-[#12141a] border border-slate-800/90 rounded-3xl p-6 hover:border-slate-700 transition-[border-color,box-shadow] duration-200 shadow-xl flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-extrabold text-white tracking-tight">
+                    Tracking Siklus Servis
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Pantau setiap tahapan perawatan kendaraan dari servis berkala hingga jatuh tempo penggantian suku cadang.
+                  </p>
+                </div>
+
+                {/* Dot Track with Timeline Steps */}
+                <div className="my-5 space-y-4">
+                  {/* Subtle Dot Track Bar */}
+                  <div className="flex items-center justify-between px-2 text-slate-700">
+                    {[...Array(11)].map((_, i) => (
+                      <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 4 ? 'bg-brand-500 ring-4 ring-brand-500/20' : 'bg-slate-700'}`} />
+                    ))}
+                  </div>
+
+                  {/* Dynamic Floating Milestone Chips */}
+                  <div className="relative h-20 flex items-center justify-center">
+                    <div className="absolute top-0 left-6 bg-[#1b1f2b] border border-slate-700 px-3 py-1.5 rounded-xl text-[11px] font-bold text-slate-200 shadow-md">
+                      Oli Mesin 5.000 KM
+                    </div>
+                    <div className="absolute bottom-0 right-6 bg-[#161a24] border border-brand-500/40 text-brand-300 px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-md">
+                      Servis Rem 20.000 KM
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                  <span>Smart Maintenance Log</span>
+                  <span className="text-emerald-400 font-bold flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5" /> 1-Click Reset
+                  </span>
+                </div>
+              </div>
+
+              {/* Card 2.B: Schedule Maintenance Seamlessly (Side-by-side Visuals) */}
+              <div className="bg-[#12141a] border border-slate-800/90 rounded-3xl p-6 hover:border-slate-700 transition-[border-color,box-shadow] duration-200 shadow-xl flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-extrabold text-white tracking-tight">
+                    Riwayat Montir &amp; Bengkel
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Catat pengerjaan mekanik, estimasi jasa bengkel resmi vs umum tanpa ribet.
+                  </p>
+                </div>
+
+                {/* 2 Visual Thumbnail Cards Side-by-Side */}
+                <div className="grid grid-cols-2 gap-3 my-4">
+                  <div className="bg-[#171a23] rounded-2xl p-3 border border-slate-800 flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-brand-500/10 text-brand-400 flex items-center justify-center shrink-0">
+                      <Page className="w-4 h-4" />
+                    </div>
+                    <div className="truncate">
+                      <span className="text-xs font-bold text-white block truncate">Bengkel Resmi</span>
+                      <span className="text-[10px] text-slate-400 font-mono">Rp 650.000</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#171a23] rounded-2xl p-3 border border-slate-800 flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                      <Page className="w-4 h-4" />
+                    </div>
+                    <div className="truncate">
+                      <span className="text-xs font-bold text-white block truncate">Bengkel Rekanan</span>
+                      <span className="text-[10px] text-slate-400 font-mono">Rp 380.000</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                  <span>Transparansi Biaya</span>
+                  <span className="text-indigo-400 font-bold">Auto Expense Chart</span>
                 </div>
               </div>
             </div>
 
-            {/* Block 2: Vault Nota & Analitik Biaya (5 cols) */}
-            <div className="lg:col-span-5 bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 flex flex-col justify-between shadow-[0_12px_32px_-8px_rgba(15,23,42,0.4)]">
+            {/* COLUMN 3: Easy Upload & Cloud Vault (Tall Card with Dark Grid Pattern & Upload Action) */}
+            <div className="bg-[#12141a] border border-slate-800/90 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition-[border-color,box-shadow] duration-200 shadow-xl relative overflow-hidden">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-indigo-500 text-white flex items-center justify-center mb-6 shadow-md shadow-indigo-500/30">
-                  <Page className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-extrabold text-white mb-2">
-                  Vault Foto Nota &amp; Rekap Pengeluaran
+                <h3 className="text-lg font-extrabold text-white tracking-tight">
+                  Arsip Nota &amp; Scan Otomatis
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  Arsipkan foto kuitansi bengkel langsung dari smartphone. Nilai jual kembali kendaraan Anda terjaga tinggi berkat bukti transparansi perawatan digital.
+                <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                  Satu klik unggah atau drag &amp; drop kuitansi bengkel langsung tersimpan rapi di cloud terenkripsi.
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-slate-800 space-y-3">
-                <div className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/10 text-xs">
-                  <span className="text-slate-300 flex items-center gap-2">
-                    <StatsUpSquare className="w-4 h-4 text-emerald-400" /> Analitik 12 Bulan
-                  </span>
-                  <span className="font-mono tabular-nums text-emerald-400 font-bold">Otomatis Terkalkulasi</span>
-                </div>
-                <div className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/10 text-xs">
-                  <span className="text-slate-300 flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-brand-400" /> Enkripsi Nota Cloud
-                  </span>
-                  <span className="font-mono tabular-nums text-brand-300 font-bold">SSL 256-bit</span>
+              {/* Central Grid Mesh with Floating Upload Action Card */}
+              <div className="my-6 relative h-48 rounded-2xl bg-[#0e1015] border border-slate-800/80 flex items-center justify-center overflow-hidden">
+                {/* Background Blueprint Grid Mesh */}
+                <div 
+                  className="absolute inset-0 opacity-20 pointer-events-none"
+                  style={{
+                    backgroundImage: 'linear-gradient(to right, #475569 1px, transparent 1px), linear-gradient(to bottom, #475569 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}
+                />
+
+                {/* Floating Centered Upload Button Card */}
+                <div className="relative z-10 w-28 h-28 rounded-2xl bg-[#1c202b]/90 border border-slate-700/80 shadow-2xl flex flex-col items-center justify-center p-3 text-center group cursor-pointer hover:border-brand-500 hover:scale-105 transition-[transform,border-color] duration-150">
+                  <div className="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center mb-1.5 shadow-md shadow-brand-600/30 group-hover:scale-110 transition-transform">
+                    <Upload className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-extrabold text-slate-200">Upload Nota</span>
+                  <span className="text-[9px] text-slate-400">JPG, PNG, PDF</span>
                 </div>
               </div>
+
+              <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5 text-emerald-400" /> Support Kamera HP
+                </span>
+                <span className="text-brand-400 font-bold">Cloud Enkripsi</span>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* 5. Interactive ROI & Maintenance Cost Calculator (No Eyebrow) */}
+      {/* 5. Interactive ROI & Maintenance Cost Calculator */}
       <section id="kalkulator" className="py-20 bg-slate-50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_20px_40px_-10px_rgba(15,23,42,0.1)] border border-slate-200/80 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
@@ -500,7 +645,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 6. Vehicle Catalog Brand Showcase (No Eyebrow) */}
+      {/* 6. Vehicle Catalog Brand Showcase */}
       <section id="katalog" className="py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">
@@ -555,7 +700,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 7. Transparent Midtrans Pricing Table (No Eyebrow) */}
+      {/* 7. Transparent Midtrans Pricing Table */}
       <section id="harga" className="py-20 bg-slate-50 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-2">
