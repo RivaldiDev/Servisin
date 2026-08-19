@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  Car,
-  DashboardSpeed,
   CheckCircle,
   ArrowRight,
   Eye,
-  Refresh,
   SmartphoneDevice,
   Plus,
   Minus,
   Upload
 } from 'iconoir-react';
 import { useAuth } from '../../context/AuthContext';
+import { ThreeCarHero } from './ThreeCarHero';
 
 interface MobileLandingProps {
   onOpenLegal: (tab: 'terms' | 'privacy' | 'refund' | 'contact') => void;
@@ -23,7 +21,6 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
   const navigate = useNavigate();
   const [demoLoading, setDemoLoading] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
-  const [mobileOdo, setMobileOdo] = useState<number>(24500);
 
   const handleDemoLogin = async () => {
     setDemoLoading(true);
@@ -88,8 +85,8 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </header>
 
-      {/* 2. Mobile Hero Section */}
-      <section className="px-5 pt-6 pb-6 bg-[#caf0f8]/20 space-y-4">
+      {/* 2. Mobile Hero Section with Three.js 3D Car Live Studio */}
+      <section className="px-5 pt-6 pb-4 bg-[#caf0f8]/20 space-y-4">
         <h1 className="text-3xl font-extrabold text-[#03045e] tracking-tight leading-tight">
           Rawat Mobil &amp; Motor Lebih Hemat, <br />
           <span className="text-[#0077b6]">
@@ -100,6 +97,11 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         <p className="text-xs text-[#03045e]/80 leading-relaxed">
           Catat riwayat perawatan, simpan foto kuitansi bengkel, dan pantau jatuh tempo ganti oli di saku Anda.
         </p>
+
+        {/* 3D Car Live Studio in Mobile Hero */}
+        <div className="my-2">
+          <ThreeCarHero isMobile={true} />
+        </div>
 
         {/* Action Buttons */}
         <div className="pt-2 flex flex-col gap-2.5">
@@ -120,72 +122,11 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 3. Mobile Interactive Vehicle Preview Widget */}
-      <section className="px-5 py-3">
-        <div className="bg-white rounded-2xl p-4 shadow-[0_1px_3px_rgba(3,4,94,0.05),0_10px_24px_-6px_rgba(3,4,94,0.1)] border border-[#90e0ef] space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-[#90e0ef]/40">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#caf0f8] text-[#0077b6] flex items-center justify-center">
-                <Car className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="font-extrabold text-xs text-[#03045e]">Honda HR-V 1.5 SE</h4>
-                <p className="text-[10px] font-mono tabular-nums text-[#0077b6]">B 1984 RVD</p>
-              </div>
-            </div>
-            <span className="bg-[#caf0f8] text-[#0077b6] text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-[#00b4d8]">
-              Optimal
-            </span>
-          </div>
-
-          {/* Quick Odometer Simulator */}
-          <div className="p-3 bg-[#caf0f8]/30 rounded-xl border border-[#90e0ef]/40 space-y-2">
-            <div className="flex justify-between items-center text-xs">
-              <span className="text-[11px] font-bold text-[#03045e] flex items-center gap-1">
-                <DashboardSpeed className="w-3.5 h-3.5 text-[#0077b6]" /> Simulasi KM:
-              </span>
-              <span className="font-extrabold font-mono tabular-nums text-[#03045e]">{mobileOdo.toLocaleString('id-ID')} KM</span>
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              <button
-                onClick={() => setMobileOdo(prev => prev + 100)}
-                className="py-1.5 bg-white border border-[#90e0ef] hover:border-[#0077b6] active:scale-95 text-[#03045e] text-[10px] font-bold rounded-lg shadow-2xs transition-[transform,border-color] duration-150 cursor-pointer"
-              >
-                +100 KM
-              </button>
-              <button
-                onClick={() => setMobileOdo(prev => prev + 500)}
-                className="py-1.5 bg-white border border-[#90e0ef] hover:border-[#0077b6] active:scale-95 text-[#03045e] text-[10px] font-bold rounded-lg shadow-2xs transition-[transform,border-color] duration-150 cursor-pointer"
-              >
-                +500 KM
-              </button>
-              <button
-                onClick={() => setMobileOdo(24500)}
-                className="py-1.5 bg-[#caf0f8] active:scale-95 text-[#03045e] text-[10px] font-bold rounded-lg flex items-center justify-center gap-0.5 transition-[transform,background-color] duration-150 cursor-pointer"
-              >
-                <Refresh className="w-2.5 h-2.5" /> Reset
-              </button>
-            </div>
-          </div>
-
-          {/* Live Status indicator */}
-          <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition-colors duration-150 ${
-            mobileOdo >= 25000 ? 'bg-[#caf0f8] border-[#0077b6] text-[#03045e]' : 'bg-[#caf0f8] border-[#00b4d8] text-[#03045e]'
-          }`}>
-            <span className="font-bold text-[11px]">
-              {mobileOdo >= 25000 ? '⚠️ Waktunya Ganti Oli Mesin!' : `✅ Oli Mesin Aman (Sisa ${25000 - mobileOdo} KM)`}
-            </span>
-            <span className="text-[10px] font-mono tabular-nums font-bold text-[#0077b6]">25.000 KM</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Mobile 3-Part Bento Stack (Deep Twilight #03045e Base) */}
+      {/* 3. Mobile 3-Part Bento Stack */}
       <section className="px-5 py-6 bg-[#03045e] text-white my-4 rounded-3xl space-y-4">
         <h3 className="font-extrabold text-lg text-white">Fitur Terintegrasi</h3>
 
         <div className="space-y-4">
-          {/* Bento Part 1: Visual Score Card */}
           <div className="bg-[#02033b] rounded-2xl p-4 border border-[#0077b6]/50 space-y-3">
             <h4 className="font-extrabold text-sm text-white">Status Visual &amp; Skor Garasi</h4>
             <p className="text-xs text-[#90e0ef] leading-relaxed">
@@ -203,7 +144,6 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
             </div>
           </div>
 
-          {/* Bento Part 2: Tracking Progress & Workshop Logs */}
           <div className="bg-[#02033b] rounded-2xl p-4 border border-[#0077b6]/50 space-y-3">
             <h4 className="font-extrabold text-sm text-white">Tracking Interval Servis</h4>
             <p className="text-xs text-[#90e0ef] leading-relaxed">
@@ -215,7 +155,6 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
             </div>
           </div>
 
-          {/* Bento Part 3: Upload Nota Cloud */}
           <div className="bg-[#02033b] rounded-2xl p-4 border border-[#0077b6]/50 space-y-3">
             <h4 className="font-extrabold text-sm text-white">Arsip Foto Nota &amp; Kuitansi</h4>
             <p className="text-xs text-[#90e0ef] leading-relaxed">
@@ -229,7 +168,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 5. Mobile Android & Web App Integration Banner (Deep Twilight) */}
+      {/* 4. Mobile Android & Web App Integration Banner */}
       <section className="px-5 py-3">
         <div className="bg-[#03045e] text-white rounded-2xl p-4 shadow-md flex items-center gap-3 border border-[#0077b6]/50">
           <div className="w-12 h-12 rounded-xl bg-[#02033b] flex items-center justify-center shrink-0 text-[#00b4d8]">
@@ -244,7 +183,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 6. Mobile Pricing Quick Card (Deep Twilight + Turquoise #00b4d8 Glow) */}
+      {/* 5. Mobile Pricing Quick Card */}
       <section className="px-5 py-4 space-y-3">
         <h3 className="font-extrabold text-lg text-[#03045e]">Pilihan Paket</h3>
 
@@ -283,7 +222,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 7. Mobile Accordion FAQ */}
+      {/* 6. Mobile Accordion FAQ */}
       <section className="px-5 py-4 space-y-3">
         <h3 className="font-extrabold text-base text-[#03045e] text-center">FAQ (Tanya Jawab)</h3>
         <div className="space-y-2">
@@ -310,7 +249,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         </div>
       </section>
 
-      {/* 8. Mobile Footer Links (Deep Twilight) */}
+      {/* 7. Mobile Footer Links */}
       <footer className="px-5 pt-8 pb-4 text-center space-y-4 text-[#90e0ef] text-xs border-t border-[#0077b6]/30 mt-6 bg-[#03045e]">
         <div className="flex justify-center items-center gap-2">
           <img src="/logo.webp" alt="FixGarasi" className="w-6 h-6 rounded-md bg-white p-0.5" />
@@ -325,7 +264,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
         <p className="text-[10px] text-[#90e0ef]/70">&copy; 2026 FixGarasi Indonesia. Hak Cipta Dilindungi.</p>
       </footer>
 
-      {/* 9. Floating Thumb Sticky Bottom Action Bar */}
+      {/* 8. Floating Thumb Sticky Bottom Action Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#90e0ef]/80 p-3 shadow-[0_-4px_16px_rgba(3,4,94,0.08)] flex items-center gap-2.5 max-w-lg mx-auto">
         <button
           onClick={handleDemoLogin}

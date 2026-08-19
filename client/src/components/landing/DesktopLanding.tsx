@@ -3,20 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Car,
   Motorcycle,
-  DashboardSpeed,
   Page,
   ShieldCheck,
   CheckCircle,
   CreditCard,
   ArrowRight,
   Eye,
-  Refresh,
-  Lock,
   Upload,
   Camera,
   Check
 } from 'iconoir-react';
 import { useAuth } from '../../context/AuthContext';
+import { ThreeCarHero } from './ThreeCarHero';
 
 interface DesktopLandingProps {
   onOpenLegal: (tab: 'terms' | 'privacy' | 'refund' | 'contact') => void;
@@ -34,9 +32,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
   // Vehicle Brand Catalog Filter
   const [activeBrandFilter, setActiveBrandFilter] = useState<string>('ALL');
-
-  // Interactive Live Preview State
-  const [previewOdo, setPreviewOdo] = useState<number>(24500);
 
   const handleDemoLogin = async () => {
     setDemoLoading(true);
@@ -140,7 +135,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </header>
 
-      {/* 2. Hero Section (Strict Palette: Deep Twilight, Teal Blue, Turquoise Surf, Frosted Blue, Light Cyan) */}
+      {/* 2. Hero Section with Three.js 3D Car Live Animation */}
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-[#caf0f8]/20 border-b border-[#90e0ef]/50">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Value Proposition */}
@@ -176,99 +171,14 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </div>
           </div>
 
-          {/* Right Column: Interactive Digital Garage Preview Card */}
+          {/* Right Column: Three.js Interactive 3D Car Live Studio */}
           <div className="lg:col-span-5 relative">
-            <div className="bg-white rounded-3xl p-6 shadow-[0_1px_3px_rgba(3,4,94,0.06),0_16px_36px_-8px_rgba(3,4,94,0.15)] border border-[#90e0ef]/70 relative overflow-hidden">
-              {/* Header inside mockup */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#90e0ef]/30">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[#caf0f8] border border-[#90e0ef] flex items-center justify-center text-[#0077b6]">
-                    <Car className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-sm text-[#03045e]">Honda HR-V 1.5 SE</h3>
-                    <p className="text-[11px] font-mono tabular-nums text-[#0077b6]/80 font-bold">B 1984 RVD &bull; 2022</p>
-                  </div>
-                </div>
-                <span className="bg-[#caf0f8] text-[#0077b6] border border-[#00b4d8] text-[10px] font-extrabold px-2.5 py-1 rounded-full">
-                  Status: Prima
-                </span>
-              </div>
-
-              {/* Odometer Quick Adjust Interactive */}
-              <div className="my-4 p-4 bg-[#caf0f8]/30 rounded-2xl border border-[#90e0ef]/40">
-                <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="font-bold text-[#03045e] flex items-center gap-1.5">
-                    <DashboardSpeed className="w-4 h-4 text-[#0077b6]" />
-                    Odometer Aktif:
-                  </span>
-                  <span className="font-extrabold text-[#03045e] font-mono tabular-nums text-sm transition-all duration-150">
-                    {previewOdo.toLocaleString('id-ID')} KM
-                  </span>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    onClick={() => setPreviewOdo(prev => prev + 100)}
-                    className="py-1.5 bg-white border border-[#90e0ef] hover:border-[#0077b6] text-[#03045e] active:scale-95 text-[11px] font-extrabold rounded-xl shadow-2xs hover:text-[#0077b6] transition-[transform,border-color,color] duration-150 cursor-pointer"
-                  >
-                    +100 KM
-                  </button>
-                  <button
-                    onClick={() => setPreviewOdo(prev => prev + 500)}
-                    className="py-1.5 bg-white border border-[#90e0ef] hover:border-[#0077b6] text-[#03045e] active:scale-95 text-[11px] font-extrabold rounded-xl shadow-2xs hover:text-[#0077b6] transition-[transform,border-color,color] duration-150 cursor-pointer"
-                  >
-                    +500 KM
-                  </button>
-                  <button
-                    onClick={() => setPreviewOdo(24500)}
-                    className="py-1.5 bg-[#caf0f8] hover:bg-[#90e0ef] text-[#03045e] active:scale-95 text-[11px] font-extrabold rounded-xl transition-[transform,background-color] duration-150 flex items-center justify-center gap-1 cursor-pointer"
-                  >
-                    <Refresh className="w-3 h-3" /> Reset
-                  </button>
-                </div>
-              </div>
-
-              {/* Live Reminder Indicators */}
-              <div className="space-y-2.5">
-                <div className="p-3 bg-[#caf0f8] rounded-xl border border-[#00b4d8]/40 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-[#0077b6] animate-pulse" />
-                    <div>
-                      <strong className="text-[#03045e] block font-bold">Ganti Oli Mesin (5W-30)</strong>
-                      <span className="text-[11px] text-[#0077b6]">
-                        {previewOdo >= 25000 ? '⚠️ Jatuh tempo sekarang!' : `Sisa ${25000 - previewOdo} KM lagi`}
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-[11px] font-mono tabular-nums font-bold text-[#03045e] bg-white px-2 py-0.5 rounded-lg border border-[#90e0ef]">
-                    Target: 25.000 KM
-                  </span>
-                </div>
-
-                <div className="p-3 bg-white rounded-xl border border-[#90e0ef]/50 flex items-center justify-between text-xs shadow-2xs">
-                  <div>
-                    <strong className="text-[#03045e] block font-bold">Rotasi Ban &amp; Spooring</strong>
-                    <span className="text-[11px] text-[#0077b6]/70">Target 30.000 KM (Aman)</span>
-                  </div>
-                  <span className="text-xs font-mono tabular-nums font-bold text-[#0077b6]">30.000 KM</span>
-                </div>
-              </div>
-
-              {/* Bottom CTA within mockup */}
-              <div className="mt-4 pt-3 border-t border-[#90e0ef]/40 flex items-center justify-between text-[11px]">
-                <span className="text-[#0077b6] flex items-center gap-1">
-                  <Lock className="w-3.5 h-3.5 text-[#00b4d8]" /> Data terenkripsi Neon DB
-                </span>
-                <span className="text-[#0077b6] font-bold hover:underline cursor-pointer active:scale-95 inline-block transition-transform" onClick={handleDemoLogin}>
-                  Lihat Buku Servis Lengkap &rarr;
-                </span>
-              </div>
-            </div>
+            <ThreeCarHero isMobile={false} />
           </div>
         </div>
       </section>
 
-      {/* 3. Metric Stats Strip (Deep Twilight: #03045e) */}
+      {/* 3. Metric Stats Strip */}
       <section className="bg-[#03045e] text-white py-8 border-y border-[#0077b6]/40">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
@@ -290,7 +200,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 4. 3-COLUMN BENTO GRID FEATURE SECTION (Deep Twilight #03045e Base with Turquoise #00b4d8 & Frosted #90e0ef Accents) */}
+      {/* 4. 3-COLUMN BENTO GRID FEATURE SECTION */}
       <section id="fitur" className="py-24 bg-[#03045e] text-white border-b border-[#0077b6]/40">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           <div className="max-w-2xl">
@@ -305,7 +215,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
           {/* 3-Column Bento Grid Container */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
             
-            {/* COLUMN 1: Visual Multi-Vehicle Overview (Tall Card with 2x2 Grid & Focus Brackets) */}
+            {/* COLUMN 1: Visual Multi-Vehicle Overview */}
             <div className="bg-[#02033b] border border-[#0077b6]/50 rounded-3xl p-7 flex flex-col justify-between hover:border-[#00b4d8] transition-[border-color,box-shadow] duration-200 shadow-xl">
               <div>
                 <h3 className="text-lg font-extrabold text-white tracking-tight">
@@ -318,9 +228,8 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
               {/* 2x2 Visual Vehicle Matrix with Focus Target Brackets */}
               <div className="grid grid-cols-2 gap-3.5 my-6">
-                {/* Vehicle 1 (Focused with Scanner Brackets & Score Pill) */}
+                {/* Vehicle 1 */}
                 <div className="relative rounded-2xl bg-[#03045e] p-3 border border-[#00b4d8] flex flex-col items-center justify-center text-center overflow-hidden group">
-                  {/* Focus Frame Brackets in Turquoise Surf */}
                   <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-[#00b4d8] rounded-tl-sm" />
                   <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-[#00b4d8] rounded-tr-sm" />
                   <div className="absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-[#00b4d8] rounded-bl-sm" />
@@ -332,7 +241,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   <span className="text-xs font-extrabold text-white block">Innova Zenix</span>
                   <span className="text-[10px] text-[#90e0ef] font-mono">B 2410 RVD</span>
                   
-                  {/* Floating Score Badge in Light Cyan & Deep Twilight */}
                   <div className="mt-2.5 bg-[#caf0f8] text-[#03045e] px-2.5 py-0.5 rounded-md text-[10px] font-extrabold font-mono shadow-sm">
                     score 98
                   </div>
@@ -381,9 +289,9 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </div>
             </div>
 
-            {/* COLUMN 2: Stacked 2 Cards (Track Progress & Schedule Maintenance) */}
+            {/* COLUMN 2: Stacked 2 Cards */}
             <div className="flex flex-col gap-6">
-              {/* Card 2.A: Track Progress with Dot Track & Milestone Nodes */}
+              {/* Card 2.A */}
               <div className="bg-[#02033b] border border-[#0077b6]/50 rounded-3xl p-6 hover:border-[#00b4d8] transition-[border-color,box-shadow] duration-200 shadow-xl flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="text-lg font-extrabold text-white tracking-tight">
@@ -394,16 +302,13 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </p>
                 </div>
 
-                {/* Dot Track with Timeline Steps */}
                 <div className="my-5 space-y-4">
-                  {/* Subtle Dot Track Bar */}
                   <div className="flex items-center justify-between px-2 text-[#0077b6]">
                     {[...Array(11)].map((_, i) => (
                       <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 4 ? 'bg-[#00b4d8] ring-4 ring-[#00b4d8]/30' : 'bg-[#0077b6]/50'}`} />
                     ))}
                   </div>
 
-                  {/* Dynamic Floating Milestone Chips */}
                   <div className="relative h-20 flex items-center justify-center">
                     <div className="absolute top-0 left-6 bg-[#03045e] border border-[#0077b6] px-3 py-1.5 rounded-xl text-[11px] font-bold text-[#caf0f8] shadow-md">
                       Oli Mesin 5.000 KM
@@ -422,7 +327,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 </div>
               </div>
 
-              {/* Card 2.B: Schedule Maintenance Seamlessly (Side-by-side Visuals) */}
+              {/* Card 2.B */}
               <div className="bg-[#02033b] border border-[#0077b6]/50 rounded-3xl p-6 hover:border-[#00b4d8] transition-[border-color,box-shadow] duration-200 shadow-xl flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="text-lg font-extrabold text-white tracking-tight">
@@ -433,7 +338,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </p>
                 </div>
 
-                {/* 2 Visual Thumbnail Cards Side-by-Side */}
                 <div className="grid grid-cols-2 gap-3 my-4">
                   <div className="bg-[#03045e] rounded-2xl p-3 border border-[#0077b6]/40 flex items-center gap-2.5">
                     <div className="w-9 h-9 rounded-xl bg-[#0077b6]/20 text-[#00b4d8] flex items-center justify-center shrink-0">
@@ -463,7 +367,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </div>
             </div>
 
-            {/* COLUMN 3: Easy Upload & Cloud Vault (Tall Card with Dark Grid Pattern & Upload Action) */}
+            {/* COLUMN 3: Easy Upload & Cloud Vault */}
             <div className="bg-[#02033b] border border-[#0077b6]/50 rounded-3xl p-7 flex flex-col justify-between hover:border-[#00b4d8] transition-[border-color,box-shadow] duration-200 shadow-xl relative overflow-hidden">
               <div>
                 <h3 className="text-lg font-extrabold text-white tracking-tight">
@@ -474,18 +378,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 </p>
               </div>
 
-              {/* Central Grid Mesh with Floating Upload Action Card */}
               <div className="my-6 relative h-48 rounded-2xl bg-[#03045e] border border-[#0077b6]/40 flex items-center justify-center overflow-hidden">
-                {/* Background Blueprint Grid Mesh */}
-                <div 
-                  className="absolute inset-0 opacity-25 pointer-events-none"
-                  style={{
-                    backgroundColor: '#02033b',
-                    backgroundSize: '20px 20px'
-                  }}
-                />
-
-                {/* Floating Centered Upload Button Card */}
                 <div className="relative z-10 w-28 h-28 rounded-2xl bg-[#02033b] border border-[#00b4d8]/60 shadow-2xl flex flex-col items-center justify-center p-3 text-center group cursor-pointer hover:border-[#00b4d8] hover:scale-105 transition-[transform,border-color] duration-150">
                   <div className="w-10 h-10 rounded-xl bg-[#0077b6] text-white flex items-center justify-center mb-1.5 shadow-md shadow-[#0077b6]/40 group-hover:scale-110 transition-transform">
                     <Upload className="w-5 h-5" />
@@ -520,9 +413,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 Lihat perbandingan antara biaya servis berkala yang teratur dengan risiko biaya perbaikan besar (turun mesin / overhaul) akibat lalai servis.
               </p>
 
-              {/* Controls */}
               <div className="space-y-4 pt-2">
-                {/* Vehicle Type Switch */}
                 <div>
                   <label className="block text-xs font-bold text-[#03045e] mb-1.5">Tipe Kendaraan</label>
                   <div className="grid grid-cols-2 gap-3">
@@ -551,7 +442,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </div>
                 </div>
 
-                {/* Monthly KM Slider */}
                 <div>
                   <div className="flex justify-between text-xs font-bold text-[#03045e] mb-1">
                     <span>Jarak Tempuh Rata-Rata per Bulan:</span>
@@ -573,7 +463,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                   </div>
                 </div>
 
-                {/* Vehicle Age Slider */}
                 <div>
                   <div className="flex justify-between text-xs font-bold text-[#03045e] mb-1">
                     <span>Usia Kendaraan:</span>
@@ -592,7 +481,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </div>
             </div>
 
-            {/* Calculator Results Display */}
+            {/* Calculator Results */}
             <div className="lg:col-span-6 bg-[#03045e] text-white p-8 rounded-3xl shadow-[0_1px_2px_rgba(3,4,94,0.2),0_18px_36px_-8px_rgba(3,4,94,0.4)] space-y-6 border border-[#0077b6]/60">
               <span className="text-xs font-extrabold text-[#00b4d8] uppercase tracking-wider block">
                 Hasil Estimasi Tahunan
@@ -616,7 +505,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 </div>
               </div>
 
-              {/* Highlight Savings Box */}
               <div className="p-5 bg-[#02033b] rounded-2xl border border-[#00b4d8] space-y-2">
                 <div className="flex items-center gap-2 text-[#00b4d8] text-xs font-extrabold">
                   <ShieldCheck className="w-4 h-4" />
@@ -654,7 +542,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </p>
           </div>
 
-          {/* Brand Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
             {brands.map(b => (
               <button
@@ -671,7 +558,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             ))}
           </div>
 
-          {/* Vehicle Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {showcaseVehicles.map((veh, idx) => (
               <div key={idx} className="bg-white rounded-2xl p-5 border border-[#90e0ef] hover:border-[#0077b6] hover:shadow-[0_8px_20px_-4px_rgba(0,119,182,0.15)] transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out">
@@ -697,7 +583,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 7. Transparent Midtrans Pricing Table */}
+      {/* 7. Midtrans Pricing Table */}
       <section id="harga" className="py-20 bg-white border-b border-[#90e0ef]/50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-2">
@@ -750,7 +636,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               </Link>
             </div>
 
-            {/* Pro Plan (Deep Twilight #03045e + Turquoise #00b4d8 High-Contrast Glow) */}
+            {/* Pro Plan */}
             <div className="bg-[#03045e] text-white rounded-3xl p-8 border-2 border-[#00b4d8] shadow-[0_1px_2px_rgba(3,4,94,0.2),0_20px_40px_-10px_rgba(0,180,216,0.3)] relative flex flex-col justify-between">
               <div className="absolute -top-3.5 right-6 bg-[#00b4d8] text-[#03045e] font-extrabold text-[10px] px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
                 Paling Populer &bull; Hemat 35%
@@ -802,7 +688,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 8. Desktop FAQ Section */}
+      {/* 8. FAQ Section */}
       <section id="faq" className="py-20 bg-[#caf0f8]/20 border-b border-[#90e0ef]/50">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-12 space-y-2">
@@ -846,10 +732,9 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
         </div>
       </section>
 
-      {/* 9. Desktop Footer (Deep Twilight: #03045e) */}
+      {/* 9. Footer */}
       <footer className="bg-[#03045e] text-white pt-16 pb-12 border-t border-[#0077b6]/40">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          {/* Col 1: Brand Info */}
           <div className="space-y-4 md:col-span-2">
             <div className="flex items-center gap-3">
               <img src="/logo.webp" alt="FixGarasi Logo" className="w-10 h-10 rounded-xl bg-white p-0.5" />
@@ -867,7 +752,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </div>
           </div>
 
-          {/* Col 2: Navigasi */}
           <div className="space-y-3 text-xs">
             <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Navigasi Layanan</h5>
             <ul className="space-y-2 text-[#90e0ef]">
@@ -879,7 +763,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
             </ul>
           </div>
 
-          {/* Col 3: Legal & Bantuan */}
           <div className="space-y-3 text-xs">
             <h5 className="font-bold text-white uppercase tracking-wider text-[11px]">Legal &amp; Dukungan</h5>
             <ul className="space-y-2 text-[#90e0ef]">
@@ -908,7 +791,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
           </div>
         </div>
 
-        {/* Bottom Copyright */}
         <div className="max-w-7xl mx-auto px-6 pt-8 border-t border-[#0077b6]/30 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#90e0ef]/70 gap-4">
           <p>&copy; 2026 FixGarasi Indonesia. Hak Cipta Dilindungi Undang-Undang.</p>
           <p>Ditenagai oleh Neon Serverless PostgreSQL &amp; Vercel Edge Network.</p>
