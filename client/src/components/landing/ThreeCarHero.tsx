@@ -124,7 +124,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
     // 2. Camera with large bounding box perspective
     const camera = new THREE.PerspectiveCamera(38, initialWidth / initialHeight, 0.1, 100);
-    camera.position.set(0, 1.25, isMobile ? 5.2 : 4.6);
+    camera.position.set(0, 1.3, isMobile ? 5.6 : 5.0);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -228,7 +228,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const ringGeo = new THREE.RingGeometry(2.4, 2.46, 64);
+    const ringGeo = new THREE.RingGeometry(1.9, 1.95, 64);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xd90429,
       side: THREE.DoubleSide,
@@ -292,8 +292,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         model.position.y = -box.min.y;
         model.position.z = -center.z;
 
-        // Natural, balanced 1.12x scale for generous bounding box clearance
-        model.scale.set(1.12, 1.12, 1.12);
+        // Compact, sleek 0.85x scale for generous breathing room inside bounding box
+        model.scale.set(0.85, 0.85, 0.85);
 
         carRootGroup.add(model);
         setLoading(false);
