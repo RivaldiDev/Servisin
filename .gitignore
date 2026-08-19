@@ -49,3 +49,5 @@ Thumbs.db
 .agents/
 .claude/
 .gemini/
+tools/
+scripts/

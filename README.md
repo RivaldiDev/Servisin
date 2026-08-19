@@ -84,7 +84,6 @@ Servisin/
 │   │   └── routes/             # RESTful API Endpoints
 │   └── uploads/                # User Upload Directory
 │
-├── tools/oxlint/anti-slop/     # Opinionated Anti-Slop Linter Rules
 ├── ANDROID_WEBVIEW_GUIDE.md    # Panduan Implementasi Android Studio (Kotlin)
 ├── oxlint.config.ts            # Oxlint Security & Type Safety Configuration
 └── vercel.json                 # Root Vercel Monorepo Deployment Config
