@@ -1,0 +1,31 @@
+{
+  "name": "servisin",
+  "version": "1.0.0",
+  "description": "Servisin SaaS - Vehicle & Service History Management System (Android WebView Ready)",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "server:build": "cd server && npm run build",
+    "client:build": "cd client && npm run build",
+    "build": "npm run server:build && npm run client:build",
+    "seed": "cd server && npm run seed",
+    "lint": "oxlint"
+  },
+  "keywords": [
+    "saas",
+    "vehicle-management",
+    "service-tracker",
+    "react",
+    "express",
+    "prisma",
+    "android-webview"
+  ],
+  "author": "Servisin",
+  "license": "ISC",
+  "devDependencies": {
+    "@oxlint/plugins": "^1.79.0",
+    "concurrently": "^9.1.2",
+    "oxlint": "^1.79.0"
+  }
+}

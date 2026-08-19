@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad_honda-jazz-ge8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+    <linearGradient id="accentGrad_honda-jazz-ge8" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="cardGrad_honda-jazz-ge8" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Card Background -->
+  <rect width="400" height="260" rx="20" fill="url(#bgGrad_honda-jazz-ge8)"/>
+  
+  <!-- Subtle Grid Lines -->
+  <line x1="0" y1="65" x2="400" y2="65" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+  <line x1="0" y1="185" x2="400" y2="185" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+  
+  <!-- Ground Reflection Line -->
+  <line x1="30" y1="182" x2="370" y2="182" stroke="url(#accentGrad_honda-jazz-ge8)" stroke-width="2" opacity="0.6"/>
+  <ellipse cx="200" cy="184" rx="160" ry="12" fill="#dc2626" opacity="0.15"/>
+
+  <!-- Vehicle Silhouette Vector Graphic -->
+  <g transform="translate(0, 5)">
+    
+      <!-- Hatchback Silhouette -->
+      <path d="M 65 150 L 105 118 L 165 106 L 260 106 L 310 135 L 335 152 L 335 160 L 60 160 Z" fill="#dc2626" opacity="0.85"/>
+      <path d="M 112 119 L 165 110 L 165 140 L 95 140 Z" fill="#ffffff" opacity="0.35"/>
+      <path d="M 173 110 L 250 110 L 275 140 L 173 140 Z" fill="#ffffff" opacity="0.3"/>
+      <!-- Wheels -->
+      <circle cx="108" cy="160" r="19" fill="#0f172a"/>
+      <circle cx="108" cy="160" r="10" fill="#94a3b8"/>
+      <circle cx="108" cy="160" r="4" fill="#f8fafc"/>
+      <circle cx="288" cy="160" r="19" fill="#0f172a"/>
+      <circle cx="288" cy="160" r="10" fill="#94a3b8"/>
+      <circle cx="288" cy="160" r="4" fill="#f8fafc"/>
+      <!-- Rear Spoiler -->
+      <path d="M 255 102 L 275 98 L 270 106 Z" fill="#ef4444"/>
+      <!-- Lights -->
+      <polygon points="62,150 78,148 74,156 60,155" fill="#fef08a"/>
+      <polygon points="335,148 322,146 325,155 335,154" fill="#ef4444"/>
+      
+  </g>
+
+  <!-- Top Header Pill Badges -->
+  <g transform="translate(20, 20)">
+    <!-- Type Pill -->
+    <rect x="0" y="0" width="56" height="22" rx="6" fill="#2563eb"/>
+    <text x="28" y="15" fill="#ffffff" font-size="10" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" text-anchor="middle" letter-spacing="0.5">MOBIL</text>
+
+    <!-- Brand Name -->
+    <text x="66" y="16" fill="#f8fafc" font-size="14" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" letter-spacing="0.5">HONDA</text>
+  </g>
+
+  <!-- Year Range Badge Top Right -->
+  <g transform="translate(260, 20)">
+    <rect x="0" y="0" width="120" height="22" rx="6" fill="#ffffff" fill-opacity="0.12" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1"/>
+    <text x="60" y="15" fill="#e2e8f0" font-size="10" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" text-anchor="middle">📅 2008 – 2014</text>
+  </g>
+
+  <!-- Bottom Details Container -->
+  <rect x="14" y="194" width="372" height="54" rx="12" fill="url(#cardGrad_honda-jazz-ge8)" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+
+  <!-- Model Title -->
+  <text x="28" y="215" fill="#ffffff" font-size="12.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800">Jazz GE8 (S / RS i-VTEC)</text>
+  
+  <!-- Subtitle / CC & Category -->
+  <text x="28" y="235" fill="#94a3b8" font-size="10" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="600">⚡ 1.500 cc L15A i-VTEC 120 PS • Sporty Hatchback</text>
+
+  <!-- Servisin Guarantee Stamp Icon -->
+  <g transform="translate(348, 208)">
+    <circle cx="12" cy="12" r="12" fill="url(#accentGrad_honda-jazz-ge8)"/>
+    <path d="M 8 12 L 11 15 L 17 9" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  phoneNumber  String?
+  avatarUrl    String?
+  tier         String    @default("FREE")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  vehicles     Vehicle[]
+
+  @@map("users")
+}
+
+model Vehicle {
+  id              String            @id @default(uuid())
+  userId          String
+  type            String            @default("CAR")
+  brand           String
+  model           String
+  licensePlate    String
+  year            Int
+  currentOdometer Int               @default(0)
+  photoUrl        String?
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceLogs     ServiceLog[]
+  reminders       ServiceReminder[]
+
+  @@map("vehicles")
+}
+
+model ServiceLog {
+  id              String          @id @default(uuid())
+  vehicleId       String
+  serviceDate     DateTime
+  odometer        Int
+  workshopName    String?
+  workshopAddress String?
+  totalCost       Int             @default(0)
+  invoicePhotoUrl String?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  vehicle         Vehicle         @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  items           ServiceItem[]
+
+  @@map("service_logs")
+}
+
+model ServiceItem {
+  id           String     @id @default(uuid())
+  serviceLogId String
+  category     String     @default("GENERAL_CHECKUP")
+  description  String
+  cost         Int        @default(0)
+
+  serviceLog   ServiceLog @relation(fields: [serviceLogId], references: [id], onDelete: Cascade)
+
+  @@map("service_items")
+}
+
+model ServiceReminder {
+  id                  String    @id @default(uuid())
+  vehicleId           String
+  title               String
+  category            String    @default("ENGINE_OIL")
+  intervalKm          Int?
+  intervalMonths      Int?
+  lastServiceOdometer Int?
+  lastServiceDate     DateTime?
+  nextDueOdometer     Int?
+  nextDueDate         DateTime?
+  status              String    @default("ACTIVE")
+  notes               String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  vehicle             Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@map("service_reminders")
+}
