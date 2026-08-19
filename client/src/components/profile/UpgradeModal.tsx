@@ -89,7 +89,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, onS
       });
       if (res.data.success) {
         await refreshUser();
-        alert('Selamat! Paket Servisin PRO Anda telah aktif.');
+        alert('Selamat! Paket FixGarasi PRO Anda telah aktif.');
         if (onSuccess) onSuccess();
         onClose();
       }
@@ -110,7 +110,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, onS
               <Sparks className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-extrabold text-slate-900">Upgrade ke Servisin PRO</h3>
+              <h3 className="text-sm font-extrabold text-slate-900">Upgrade ke FixGarasi PRO</h3>
               <p className="text-[11px] text-slate-500">Buka akses penuh seluruh fitur garasi</p>
             </div>
           </div>
@@ -166,7 +166,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, onS
 
           {/* Features Comparison List */}
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2.5">
-            <h4 className="font-extrabold text-slate-900 text-xs">Keuntungan Servisin PRO:</h4>
+            <h4 className="font-extrabold text-slate-900 text-xs">Keuntungan FixGarasi PRO:</h4>
             <div className="space-y-2 text-[11px] text-slate-600">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />

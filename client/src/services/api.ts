@@ -22,7 +22,7 @@ const api = axios.create({
 // Add auth token to all requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('servisin_token');
+    const token = localStorage.getItem('fixgarasi_token') || localStorage.getItem('servisin_token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -39,6 +39,8 @@ api.interceptors.response.use(
       // Sesi expired
       const currentPath = window.location.pathname;
       if (currentPath !== '/login' && currentPath !== '/register') {
+        localStorage.removeItem('fixgarasi_token');
+        localStorage.removeItem('fixgarasi_user');
         localStorage.removeItem('servisin_token');
         localStorage.removeItem('servisin_user');
         window.location.href = '/login';

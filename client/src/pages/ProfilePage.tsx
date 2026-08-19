@@ -96,7 +96,7 @@ export const ProfilePage: React.FC = () => {
                 Status Paket SaaS
               </span>
               <h4 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-                Paket {user?.tier === 'PRO' ? 'Servisin PRO' : 'Servisin Gratis'}
+                Paket {user?.tier === 'PRO' ? 'FixGarasi PRO' : 'FixGarasi Gratis'}
               </h4>
             </div>
           </div>
@@ -115,7 +115,7 @@ export const ProfilePage: React.FC = () => {
         {/* Pricing tag for Midtrans review transparency */}
         <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between text-xs">
           <div>
-            <span className="font-extrabold text-slate-900">Tarif Servisin PRO:</span>
+            <span className="font-extrabold text-slate-900">Tarif FixGarasi PRO:</span>
             <p className="text-[11px] text-slate-500">Mulai Rp 19.000 / bulan</p>
           </div>
           <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
@@ -150,7 +150,7 @@ export const ProfilePage: React.FC = () => {
             className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-2xl font-extrabold text-xs shadow-md shadow-amber-500/25 transition-all flex items-center justify-center gap-2 tap-bounce"
           >
             <Sparks className="w-4 h-4" />
-            <span>{user?.tier === 'PRO' ? 'Perpanjang / Kelola Paket PRO (Midtrans)' : 'Upgrade ke Servisin PRO (Midtrans)'}</span>
+            <span>{user?.tier === 'PRO' ? 'Perpanjang / Kelola Paket PRO (Midtrans)' : 'Upgrade ke FixGarasi PRO (Midtrans)'}</span>
           </button>
 
           <button

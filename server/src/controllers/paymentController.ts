@@ -11,11 +11,11 @@ const planSchema = z.object({
 const PLAN_CONFIG = {
   MONTHLY: {
     price: 19000,
-    name: 'Servisin PRO - 1 Bulan',
+    name: 'FixGarasi PRO - 1 Bulan',
   },
   YEARLY: {
     price: 149000,
-    name: 'Servisin PRO - 1 Tahun (Hemat 35%)',
+    name: 'FixGarasi PRO - 1 Tahun (Hemat 35%)',
   },
 } as const;
 
@@ -37,7 +37,7 @@ export const createPaymentToken = async (req: AuthRequest, res: Response): Promi
     }
 
     const selectedPlan = PLAN_CONFIG[planType];
-    const orderId = `SERVISIN-${planType}-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const orderId = `FIXGARASI-${planType}-${Date.now().toString().slice(-6)}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
     let snapToken = '';
     let snapRedirectUrl = '';

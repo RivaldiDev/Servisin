@@ -17,12 +17,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem('servisin_token'));
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem('fixgarasi_token') || localStorage.getItem('servisin_token')
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshUser = async () => {
     try {
-      if (!localStorage.getItem('servisin_token')) {
+      const activeToken = localStorage.getItem('fixgarasi_token') || localStorage.getItem('servisin_token');
+      if (!activeToken) {
         setUser(null);
         return;
       }
@@ -33,6 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('Failed to fetch user data', error);
       setUser(null);
+      localStorage.removeItem('fixgarasi_token');
       localStorage.removeItem('servisin_token');
     } finally {
       setIsLoading(false);
@@ -52,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await api.post('/auth/login', credentials);
       if (res.data.success) {
         const { token: newToken, user: userData } = res.data.data;
-        localStorage.setItem('servisin_token', newToken);
+        localStorage.setItem('fixgarasi_token', newToken);
         setToken(newToken);
         setUser(userData);
         return { success: true, message: res.data.message };
@@ -69,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await api.post('/auth/register', data);
       if (res.data.success) {
         const { token: newToken, user: userData } = res.data.data;
-        localStorage.setItem('servisin_token', newToken);
+        localStorage.setItem('fixgarasi_token', newToken);
         setToken(newToken);
         setUser(userData);
         return { success: true, message: res.data.message };
@@ -82,6 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
+    localStorage.removeItem('fixgarasi_token');
     localStorage.removeItem('servisin_token');
     setToken(null);
     setUser(null);

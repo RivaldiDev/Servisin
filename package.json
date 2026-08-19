@@ -1,8 +1,8 @@
 {
-  "name": "servisin",
+  "name": "fixgarasi",
   "version": "1.0.0",
   "type": "module",
-  "description": "Servisin SaaS - Vehicle & Service History Management System (Android WebView Ready)",
+  "description": "FixGarasi SaaS - Vehicle Maintenance, Digital Garage & Service History Management System",
   "scripts": {
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "server:dev": "cd server && npm run dev",
@@ -11,19 +11,22 @@
     "client:build": "cd client && npm run build",
     "build": "npm run server:build && npm run client:build",
     "seed": "cd server && npm run seed",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "prisma:push:neon": "cd server && npx prisma db push --schema=prisma/schema.postgresql.prisma"
   },
   "keywords": [
     "saas",
+    "fixgarasi",
     "vehicle-management",
     "service-tracker",
+    "digital-garage",
     "react",
     "express",
     "prisma",
-    "android-webview"
+    "neon-postgres"
   ],
-  "author": "Servisin",
-  "license": "ISC",
+  "author": "FixGarasi",
+  "license": "MIT",
   "devDependencies": {
     "@oxlint/plugins": "^1.79.0",
     "concurrently": "^9.1.2",

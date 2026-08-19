@@ -38,13 +38,13 @@ export const TopHeader: React.FC = () => {
           <Link to="/" className="flex items-center gap-2.5">
             <img
               src="/logo.webp"
-              alt="Servisin Logo"
+              alt="FixGarasi Logo"
               className="w-9 h-9 rounded-xl object-contain shadow-xs border border-slate-100 bg-white"
             />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-extrabold text-base tracking-tight text-slate-900">
-                  SERVIS<span className="text-brand-600">IN</span>
+                  FIX<span className="text-brand-600">GARASI</span>
                 </span>
                 <span
                   className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${

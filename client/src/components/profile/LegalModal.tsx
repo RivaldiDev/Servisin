@@ -37,7 +37,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-extrabold text-slate-900">Informasi Legal & Layanan</h3>
-              <p className="text-[11px] text-slate-500">Servisin - Manajemen Kendaraan SaaS</p>
+              <p className="text-[11px] text-slate-500">FixGarasi - Manajemen Kendaraan SaaS</p>
             </div>
           </div>
           <button
@@ -72,9 +72,9 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         <div className="p-5 overflow-y-auto space-y-4 text-xs text-slate-600 leading-relaxed">
           {activeTab === 'terms' && (
             <div className="space-y-3">
-              <h4 className="font-bold text-slate-900 text-sm">1. Ketentuan Penggunaan Layanan Servisin</h4>
+              <h4 className="font-bold text-slate-900 text-sm">1. Ketentuan Penggunaan Layanan FixGarasi</h4>
               <p>
-                Selamat datang di Servisin. Dengan mengakses dan menggunakan platform SaaS Servisin (aplikasi web maupun mobile), Anda menyetujui untuk terikat oleh syarat dan ketentuan berikut.
+                Selamat datang di FixGarasi. Dengan mengakses dan menggunakan platform SaaS FixGarasi (aplikasi web maupun mobile), Anda menyetujui untuk terikat oleh syarat dan ketentuan berikut.
               </p>
               <h5 className="font-bold text-slate-800">Akun & Keamanan</h5>
               <p>
@@ -82,7 +82,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
               </p>
               <h5 className="font-bold text-slate-800">Paket Layanan SaaS</h5>
               <p>
-                Servisin menyediakan tier <strong>Free</strong> (hingga 2 unit kendaraan) dan <strong>Pro</strong> (kendaraan tak terbatas, analitik mendalam, dan kapasitas penyimpanan bukti servis tak terbatas).
+                FixGarasi menyediakan tier <strong>Free</strong> (hingga 2 unit kendaraan) dan <strong>Pro</strong> (kendaraan tak terbatas, analitik mendalam, dan kapasitas penyimpanan bukti servis tak terbatas).
               </p>
               <h5 className="font-bold text-slate-800">Kepemilikan Data</h5>
               <p>
@@ -95,7 +95,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             <div className="space-y-3">
               <h4 className="font-bold text-slate-900 text-sm">2. Kebijakan Privasi (Privacy Policy)</h4>
               <p>
-                Servisin menghormati privasi setiap pengguna. Dokumen ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda.
+                FixGarasi menghormati privasi setiap pengguna. Dokumen ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda.
               </p>
               <h5 className="font-bold text-slate-800">Data yang Kami Kumpulkan</h5>
               <ul className="list-disc pl-4 space-y-1">
@@ -114,7 +114,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             <div className="space-y-3">
               <h4 className="font-bold text-slate-900 text-sm">3. Kebijakan Pembayaran & Pengembalian Dana (Refund)</h4>
               <p>
-                Pembayaran paket Servisin PRO diproses melalui mitra gerbang pembayaran resmi berlisensi Bank Indonesia (termasuk QRIS, Virtual Account Multi-Bank, dan E-Wallet).
+                Pembayaran paket FixGarasi PRO diproses melalui mitra gerbang pembayaran resmi berlisensi Bank Indonesia (termasuk QRIS, Virtual Account Multi-Bank, dan E-Wallet).
               </p>
               <h5 className="font-bold text-slate-800">Tarif Langganan</h5>
               <ul className="list-disc pl-4 space-y-1">
@@ -132,10 +132,10 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             <div className="space-y-3">
               <h4 className="font-bold text-slate-900 text-sm">4. Kontak & Layanan Pelanggan</h4>
               <p>
-                Tim bantuan Servisin siap membantu Anda jika mengalami kendala transaksi atau pertanyaan operasional:
+                Tim bantuan FixGarasi siap membantu Anda jika mengalami kendala transaksi atau pertanyaan operasional:
               </p>
               <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 space-y-2 text-xs">
-                <p><strong>Email Bantuan:</strong> support@servisin.id</p>
+                <p><strong>Email Bantuan:</strong> support@fixgarasi.id</p>
                 <p><strong>WhatsApp Resmi:</strong> +62 812-3456-7890</p>
                 <p><strong>Jam Operasional:</strong> Senin – Minggu (08:00 – 21:00 WIB)</p>
                 <p><strong>Lokasi:</strong> Jakarta, Indonesia</p>

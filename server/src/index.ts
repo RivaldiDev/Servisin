@@ -65,7 +65,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
         callback(null, true);
       } else {
-        callback(new Error('Origin tidak diizinkan oleh kebijakan CORS Servisin.'));
+        callback(new Error('Origin tidak diizinkan oleh kebijakan CORS FixGarasi.'));
       }
     },
     credentials: true,
@@ -88,7 +88,7 @@ app.use('/uploads', express.static(uploadsPath));
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'online',
-    service: 'Servisin API',
+    service: 'FixGarasi API',
     timestamp: new Date().toISOString(),
   });
 });
@@ -113,7 +113,7 @@ app.use('/api/*', (req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servisin Backend Server running on http://localhost:${PORT}`);
+  console.log(`FixGarasi Backend Server running on http://localhost:${PORT}`);
 });
 
 export default app;

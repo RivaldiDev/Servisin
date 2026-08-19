@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/RivaldiDev/Servisin/main/client/public/logo.png" width="160" alt="Servisin Logo" />
+  <img src="https://raw.githubusercontent.com/RivaldiDev/Servisin/main/client/public/logo.png" width="160" alt="FixGarasi Logo" />
 </p>
 
-<h1 align="center">Servisin</h1>
+<h1 align="center">FixGarasi</h1>
 
 <p align="center">
   <strong>Modern SaaS Vehicle Maintenance & Digital Garage Management System</strong><br>
@@ -14,6 +14,7 @@
   <img src="https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Express-4.21-000000?style=flat-square&logo=express" alt="Express" />
   <img src="https://img.shields.io/badge/Prisma-6.4-2D3748?style=flat-square&logo=prisma" alt="Prisma" />
+  <img src="https://img.shields.io/badge/Database-Neon_PostgreSQL-00e599?style=flat-square&logo=postgresql" alt="Neon PostgreSQL" />
   <img src="https://img.shields.io/badge/TailwindCSS-3.4-38bdf8?style=flat-square&logo=tailwindcss" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/Deploy-Vercel-black?style=flat-square&logo=vercel" alt="Vercel" />
   <img src="https://img.shields.io/badge/License-MIT-emerald?style=flat-square" alt="MIT License" />
@@ -21,9 +22,9 @@
 
 ---
 
-## Tentang Servisin
+## Tentang FixGarasi
 
-**Servisin** adalah platform SaaS manajemen perawatan kendaraan dan buku servis digital yang dirancang khusus untuk pemilik mobil dan motor di Indonesia. Platform ini memudahkan pengguna dalam mencatat riwayat servis, mengelola anggaran biaya perawatan, menyimpan bukti foto kuitansi/nota bengkel secara terenkripsi, serta memantau jadwal penggantian oli dan suku cadang otomatis berbasis kilometer odometer maupun waktu.
+**FixGarasi** adalah platform SaaS manajemen perawatan kendaraan dan buku servis digital yang dirancang khusus untuk pemilik mobil dan motor di Indonesia. Platform ini memudahkan pengguna dalam mencatat riwayat servis, mengelola anggaran biaya perawatan, menyimpan bukti foto kuitansi/nota bengkel secara terenkripsi, serta memantau jadwal penggantian oli dan suku cadang otomatis berbasis kilometer odometer maupun waktu.
 
 Dibangun dengan arsitektur **Mobile-First Responsive Web** yang dioptimalkan untuk performa tinggi, aplikasi ini dapat diakses langsung melalui browser maupun di-embed ke dalam **Android WebView Native** dengan standar aplikasi native.
 
@@ -65,7 +66,7 @@ Dibangun dengan arsitektur **Mobile-First Responsive Web** yang dioptimalkan unt
 ## Arsitektur & Tech Stack
 
 ```
-Servisin/
+FixGarasi/
 ├── client/                     # Frontend Vite + React 19 SPA
 │   ├── src/
 │   │   ├── components/         # Reusable UI & Modal Components
@@ -77,9 +78,9 @@ Servisin/
 │   └── vercel.json             # Vercel SPA Routing Configuration
 │
 ├── server/                     # Backend Node.js + Express REST API
-│   ├── prisma/                 # Database Schema (SQLite Dev & PostgreSQL Prod)
+│   ├── prisma/                 # Database Schema (SQLite Dev & Neon PostgreSQL Prod)
 │   ├── src/
-│   │   ├── controllers/        # Auth, Vehicle, ServiceLog, Reminder, Analytics
+│   │   ├── controllers/        # Auth, Vehicle, ServiceLog, Reminder, Analytics, Payment
 │   │   ├── middlewares/        # JWT Auth, Multer Upload Whitelist, Helmet, Rate Limiters
 │   │   └── routes/             # RESTful API Endpoints
 │   └── uploads/                # User Upload Directory
@@ -94,7 +95,7 @@ Servisin/
 | **Frontend Framework** | React 19 + TypeScript + Vite 6 |
 | **Styling & Icons** | Tailwind CSS v3.4 + Iconoir Icons (100% Native SVG Stroke) |
 | **Backend Framework** | Node.js + Express.js + TypeScript |
-| **Database & ORM** | Prisma ORM (SQLite for Dev, PostgreSQL for Prod) |
+| **Database & ORM** | Prisma ORM (SQLite Lokal Dev / Neon Serverless PostgreSQL Prod) |
 | **Security & Auditing** | Helmet, Express Rate Limit (Auth & API), Strict File Whitelist, JWT |
 | **Code Quality & Linting** | Oxlint + Anti-Slop Rules + Ponytail Minimalist Guidelines |
 
@@ -104,8 +105,8 @@ Servisin/
 
 ### 1. Kloning Repositori
 ```bash
-git clone https://github.com/RivaldiDev/Servisin.git
-cd Servisin
+git clone https://github.com/RivaldiDev/Servisin.git FixGarasi
+cd FixGarasi
 ```
 
 ### 2. Instalasi Dependensi
@@ -145,8 +146,22 @@ Akses aplikasi melalui browser:
 - **Backend REST API**: `http://localhost:5000/api/health`
 
 **Akun Demo:**
-- **Email:** `demo@servisin.id`
+- **Email:** `demo@fixgarasi.id`
 - **Password:** `password123`
+
+---
+
+## Setup Neon Serverless PostgreSQL (Production)
+
+1. Buat database baru di **[Neon.tech](https://neon.tech)** (pilih region Singapore / AWS `ap-southeast-1`).
+2. Masukkan connection string ke dalam `.env` server atau konfigurasi environment hosting:
+   ```env
+   DATABASE_URL="postgresql://[user]:[password]@[endpoint].ap-southeast-1.aws.neon.tech/fixgarasi_db?sslmode=require"
+   ```
+3. Sinkronisasikan skema Prisma ke Neon PostgreSQL:
+   ```bash
+   npm run prisma:push:neon
+   ```
 
 ---
 
@@ -162,14 +177,14 @@ Proyek ini telah dikonfigurasi dengan file `vercel.json` dan `client/vercel.json
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
 3. **Environment Variables di Vercel**:
-   - `VITE_API_URL`: URL backend API produksi Anda (misal: `https://api.servisin.id/api`).
+   - `VITE_API_URL`: URL backend API produksi Anda (misal: `https://api.fixgarasi.id`).
 4. Klik **Deploy**.
 
 ---
 
 ## Panduan Android WebView Native
 
-Untuk membungkus Servisin ke dalam aplikasi Android APK/AAB, silakan baca panduan lengkap konfigurasi Android Studio (Kotlin), penanganan permission kamera/file upload, dan pull-to-refresh di [ANDROID_WEBVIEW_GUIDE.md](./ANDROID_WEBVIEW_GUIDE.md).
+Untuk membungkus FixGarasi ke dalam aplikasi Android APK/AAB, silakan baca panduan lengkap konfigurasi Android Studio (Kotlin), penanganan permission kamera/file upload, dan pull-to-refresh di [ANDROID_WEBVIEW_GUIDE.md](./ANDROID_WEBVIEW_GUIDE.md).
 
 ---
 
@@ -180,7 +195,7 @@ Untuk membungkus Servisin ke dalam aplikasi Android APK/AAB, silakan baca pandua
 - **Tenant Isolation**: Setiap query Prisma diisolasi berdasarkan `userId` token JWT terotentikasi.
 - **Linting & Validasi**:
   ```bash
-  npm run lint   # Menjalankan Oxlint dengan 109 aturan Anti-Slop
+  npm run lint   # Menjalankan Oxlint
   ```
 
 ---
@@ -189,7 +204,7 @@ Untuk membungkus Servisin ke dalam aplikasi Android APK/AAB, silakan baca pandua
 
 - **Ketentuan Layanan & Kebijakan Privasi**: Tersedia di dalam aplikasi melalui modal *Informasi Legal & Layanan* atau halaman profil.
 - **Mitra Pembayaran**: Mendukung pembayaran aman via gerbang pembayaran berlisensi Bank Indonesia (Midtrans).
-- **Layanan Pelanggan**: `support@servisin.id`
+- **Layanan Pelanggan**: `support@fixgarasi.id`
 
 ---
 
@@ -197,4 +212,4 @@ Untuk membungkus Servisin ke dalam aplikasi Android APK/AAB, silakan baca pandua
 
 Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE).
 
-Dibuat oleh [Rivaldi](https://github.com/RivaldiDev) &middot; **Servisin Indonesia**
+Dibuat oleh [Rivaldi](https://github.com/RivaldiDev) &middot; **FixGarasi Indonesia**

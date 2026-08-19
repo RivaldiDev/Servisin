@@ -120,7 +120,7 @@ export const createVehicle = async (req: AuthRequest, res: Response): Promise<vo
         res.status(403).json({
           success: false,
           code: 'TIER_LIMIT_REACHED',
-          message: 'Batas kuota kendaraan akun Gratis telah tercapai (maksimal 2 kendaraan). Upgrade ke Servisin Pro untuk menambah kendaraan tanpa batas!',
+          message: 'Batas kuota kendaraan akun Gratis telah tercapai (maksimal 2 kendaraan). Upgrade ke FixGarasi Pro untuk menambah kendaraan tanpa batas!',
         });
         return;
       }

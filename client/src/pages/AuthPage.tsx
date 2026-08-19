@@ -63,12 +63,12 @@ export const AuthPage: React.FC = () => {
           <div className="flex items-center gap-3 mb-3">
             <img
               src="/logo.webp"
-              alt="Servisin Logo"
+              alt="FixGarasi Logo"
               className="w-12 h-12 rounded-2xl object-contain bg-white/95 p-1 shadow-md border border-white/20"
             />
             <div>
               <h1 className="text-xl font-extrabold tracking-tight">
-                SERVIS<span className="text-amber-300">IN</span>
+                FIX<span className="text-amber-300">GARASI</span>
               </h1>
               <p className="text-[11px] text-brand-100 font-medium">
                 SaaS Manajemen Servis Kendaraan Pribadi
@@ -218,7 +218,7 @@ export const AuthPage: React.FC = () => {
                   <span>Memproses...</span>
                 ) : (
                   <>
-                    <span>{isLoginTab ? 'Masuk ke Servisin' : 'Buat Akun Baru'}</span>
+                    <span>{isLoginTab ? 'Masuk ke FixGarasi' : 'Buat Akun Baru'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

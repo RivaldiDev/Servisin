@@ -1,7 +1,7 @@
 {
-  "name": "servisin-server",
+  "name": "fixgarasi-server",
   "version": "1.0.0",
-  "description": "Backend API for Servisin SaaS",
+  "description": "Backend REST API for FixGarasi SaaS",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
@@ -10,18 +10,21 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:push": "prisma db push",
+    "prisma:push:neon": "prisma db push --schema=prisma/schema.postgresql.prisma",
     "seed": "ts-node-dev --transpile-only src/seed.ts",
     "test:api": "ts-node-dev --transpile-only src/test_api.ts"
   },
   "keywords": [
     "saas",
+    "fixgarasi",
     "vehicle-management",
     "service-tracker",
     "express",
-    "prisma"
+    "prisma",
+    "neon-postgres"
   ],
-  "author": "Servisin",
-  "license": "ISC",
+  "author": "FixGarasi",
+  "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.4.1",
     "bcryptjs": "^3.0.2",

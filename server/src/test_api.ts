@@ -2,7 +2,7 @@ import app from './index';
 import http from 'http';
 
 async function runTests() {
-  console.log('🧪 Starting Servisin End-to-End API Integration Tests...\n');
+  console.log('🧪 Starting FixGarasi End-to-End API Integration Tests...\n');
 
   const server = http.createServer(app);
   await new Promise<void>((resolve) => server.listen(0, resolve));
@@ -30,7 +30,7 @@ async function runTests() {
     assert(healthRes.status === 200 && healthData.status === 'online', '1. GET /health');
 
     // 2. Auth: Register Fresh Test User
-    const testEmail = `tester_${Date.now()}@servisin.id`;
+    const testEmail = `tester_${Date.now()}@fixgarasi.id`;
     const regRes = await fetch(`${baseUrl}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

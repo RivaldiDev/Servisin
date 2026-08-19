@@ -1,6 +1,6 @@
-# Panduan Integrasi Android WebView: Servisin SaaS
+# Panduan Integrasi Android WebView: FixGarasi SaaS
 
-Aplikasi web **Servisin** didesain secara khusus *mobile-first* agar dapat di-embed langsung ke dalam aplikasi **Android Native (Kotlin/Java)** menggunakan `WebView` dengan performa tinggi, tampilan bebas distorsi, dan dukungan upload foto nota/kendaraan.
+Aplikasi web **FixGarasi** didesain secara khusus *mobile-first* agar dapat di-embed langsung ke dalam aplikasi **Android Native (Kotlin/Java)** menggunakan `WebView` dengan performa tinggi, tampilan bebas distorsi, dan dukungan upload foto nota/kendaraan.
 
 ---
 
@@ -11,7 +11,7 @@ Tambahkan izin internet dan konfigurasi cleartext (jika testing via IP lokal `ht
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.servisinapp">
+    package="com.example.fixgarasiapp">
 
     <!-- Izin Akses Internet & Kamera/File -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,10 +23,10 @@ Tambahkan izin internet dan konfigurasi cleartext (jika testing via IP lokal `ht
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Servisin"
+        android:label="FixGarasi"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Servisin"
+        android:theme="@style/Theme.FixGarasi"
         android:usesCleartextTraffic="true"> <!-- true untuk HTTP lokal, false saat HTTPS produksi -->
 
         <activity
@@ -69,8 +69,7 @@ Tambahkan izin internet dan konfigurasi cleartext (jika testing via IP lokal `ht
 Kode lengkap dengan penanganan **File Chooser / Upload Kamera & Galeri** untuk upload foto nota:
 
 ```kotlin
-package com.example.servisinapp
-
+package com.example.fixgarasiapp
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -125,7 +124,7 @@ class MainActivity : AppCompatActivity() {
         settings.builtInZoomControls = false
 
         // Custom User Agent (Opsional)
-        settings.userAgentString = settings.userAgentString + " ServisinApp/1.0.0"
+        settings.userAgentString = settings.userAgentString + " FixGarasiApp/1.0.0"
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
@@ -181,5 +180,5 @@ class MainActivity : AppCompatActivity() {
 
 1. Pastikan HP Android dan Laptop terhubung ke **Wi-Fi yang sama**.
 2. Cek IP lokal laptop Anda via PowerShell: `ipconfig` (misal: `192.168.1.25`).
-3. Jalankan `npm run dev` pada proyek Servisin.
+3. Jalankan `npm run dev` pada proyek FixGarasi.
 4. Buka browser Chrome di HP Android: `http://192.168.1.25:5173` atau load IP tersebut di WebView Android Studio.
