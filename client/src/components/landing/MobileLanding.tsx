@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   CheckCircle,
   ArrowRight,
-  Eye,
   SmartphoneDevice,
   Plus,
   Minus,
   Upload
 } from 'iconoir-react';
-import { useAuth } from '../../context/AuthContext';
 import { ThreeCarHero } from './ThreeCarHero';
 
 interface MobileLandingProps {
@@ -17,26 +15,8 @@ interface MobileLandingProps {
 }
 
 export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [demoLoading, setDemoLoading] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
 
-  const handleDemoLogin = async () => {
-    setDemoLoading(true);
-    try {
-      const res = await login({ email: 'demo@fixgarasi.id', password: 'password123' });
-      if (res.success) {
-        navigate('/');
-      } else {
-        navigate('/login');
-      }
-    } catch {
-      navigate('/login');
-    } finally {
-      setDemoLoading(false);
-    }
-  };
 
   const faqs = [
     {
@@ -68,14 +48,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
           </span>
         </Link>
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleDemoLogin}
-            disabled={demoLoading}
-            className="px-2.5 py-1.5 rounded-lg border border-[#90e0ef] text-[#03045e] bg-white active:scale-95 text-[11px] font-extrabold flex items-center gap-1 shadow-2xs transition-[transform,background-color] duration-150 cursor-pointer"
-          >
-            <Eye className="w-3.5 h-3.5 text-[#0077b6]" />
-            <span>{demoLoading ? '...' : 'Demo'}</span>
-          </button>
+
           <Link
             to="/login"
             className="px-3 py-1.5 bg-[#0077b6] hover:bg-[#00b4d8] active:scale-95 text-white text-xs font-extrabold rounded-lg shadow-xs transition-transform duration-150"
@@ -112,13 +85,7 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
             <span>Daftar Gratis Sekarang</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-          <button
-            onClick={handleDemoLogin}
-            className="w-full py-3 bg-white border border-[#90e0ef] active:scale-[0.97] text-[#03045e] text-xs font-bold rounded-xl shadow-2xs flex items-center justify-center gap-1.5 transition-[transform,background-color] duration-150 ease-out cursor-pointer"
-          >
-            <Eye className="w-4 h-4 text-[#0077b6]" />
-            <span>Coba Demo 1-Klik Tanpa Daftar</span>
-          </button>
+
         </div>
       </section>
 
@@ -265,21 +232,13 @@ export const MobileLanding: React.FC<MobileLandingProps> = ({ onOpenLegal }) => 
       </footer>
 
       {/* 8. Floating Thumb Sticky Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#90e0ef]/80 p-3 shadow-[0_-4px_16px_rgba(3,4,94,0.08)] flex items-center gap-2.5 max-w-lg mx-auto">
-        <button
-          onClick={handleDemoLogin}
-          disabled={demoLoading}
-          className="w-1/3 py-2.5 bg-[#caf0f8] hover:bg-[#90e0ef] active:scale-95 text-[#03045e] text-xs font-extrabold rounded-xl transition-[transform,background-color] duration-150 text-center flex items-center justify-center gap-1 cursor-pointer"
-        >
-          <Eye className="w-3.5 h-3.5 text-[#0077b6]" />
-          <span>Demo</span>
-        </button>
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#90e0ef]/80 p-3 shadow-[0_-4px_16px_rgba(3,4,94,0.08)] flex items-center max-w-lg mx-auto">
         <Link
           to="/register"
-          className="w-2/3 py-2.5 bg-[#0077b6] hover:bg-[#00b4d8] active:scale-[0.97] text-white text-xs font-extrabold rounded-xl shadow-[0_4px_14px_-2px_rgba(0,119,182,0.35)] text-center flex items-center justify-center gap-1.5 transition-[transform,background-color] duration-150 cursor-pointer"
+          className="w-full py-3 bg-[#0077b6] hover:bg-[#00b4d8] active:scale-[0.97] text-white text-xs font-extrabold rounded-xl shadow-[0_4px_14px_-2px_rgba(0,119,182,0.35)] text-center flex items-center justify-center gap-2 transition-[transform,background-color] duration-150 cursor-pointer"
         >
-          <span>Mulai Gratis</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <span>Mulai Garasi Gratis Sekarang</span>
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     </div>

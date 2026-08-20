@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Car,
   Motorcycle,
@@ -8,12 +8,10 @@ import {
   CheckCircle,
   CreditCard,
   ArrowRight,
-  Eye,
   Upload,
   Camera,
   Check
 } from 'iconoir-react';
-import { useAuth } from '../../context/AuthContext';
 import { ThreeCarHero } from './ThreeCarHero';
 
 interface DesktopLandingProps {
@@ -21,9 +19,6 @@ interface DesktopLandingProps {
 }
 
 export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [demoLoading, setDemoLoading] = useState(false);
 
   // Calculator State
   const [vehicleType, setVehicleType] = useState<'CAR' | 'MOTORCYCLE'>('CAR');
@@ -33,21 +28,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
   // Vehicle Brand Catalog Filter
   const [activeBrandFilter, setActiveBrandFilter] = useState<string>('ALL');
 
-  const handleDemoLogin = async () => {
-    setDemoLoading(true);
-    try {
-      const res = await login({ email: 'demo@fixgarasi.id', password: 'password123' });
-      if (res.success) {
-        navigate('/');
-      } else {
-        navigate('/login');
-      }
-    } catch {
-      navigate('/login');
-    } finally {
-      setDemoLoading(false);
-    }
-  };
 
   // Calculator estimations
   const estimatedYearlyOilCost = vehicleType === 'CAR' ? Math.round((monthlyKm * 12 / 5000) * 450000) : Math.round((monthlyKm * 12 / 2500) * 85000);
@@ -108,14 +88,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
 
           {/* Right Action CTAs */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={handleDemoLogin}
-              disabled={demoLoading}
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#90e0ef] hover:border-[#0077b6] bg-white hover:bg-[#caf0f8]/40 text-[#03045e] hover:text-[#0077b6] active:scale-[0.97] text-xs font-extrabold transition-[transform,background-color,border-color,color] duration-150 ease-out shadow-xs cursor-pointer"
-            >
-              <Eye className="w-4 h-4 text-[#0077b6]" />
-              <span>{demoLoading ? 'Menyiapkan...' : 'Coba Demo 1-Klik'}</span>
-            </button>
+
 
             <Link
               to="/login"
@@ -161,13 +134,7 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
-              <button
-                onClick={handleDemoLogin}
-                className="inline-flex items-center gap-2 px-6 py-4 bg-white hover:bg-[#caf0f8]/50 active:scale-[0.97] text-[#03045e] text-sm font-bold rounded-2xl border border-[#90e0ef] shadow-xs hover:border-[#0077b6] transition-[transform,background-color,border-color] duration-150 ease-out cursor-pointer"
-              >
-                <Eye className="w-4 h-4 text-[#0077b6]" />
-                <span>Buka Demo Interaktif</span>
-              </button>
+
             </div>
           </div>
 
@@ -759,7 +726,6 @@ export const DesktopLanding: React.FC<DesktopLandingProps> = ({ onOpenLegal }) =
               <li><a href="#kalkulator" className="hover:text-white transition-colors duration-150">Kalkulator Servis</a></li>
               <li><a href="#katalog" className="hover:text-white transition-colors duration-150">Katalog Kendaraan</a></li>
               <li><a href="#harga" className="hover:text-white transition-colors duration-150">Paket &amp; Harga PRO</a></li>
-              <li><button onClick={handleDemoLogin} className="hover:text-white transition-colors duration-150 text-left cursor-pointer">Demo Interaktif</button></li>
             </ul>
           </div>
 
