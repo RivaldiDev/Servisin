@@ -123,10 +123,10 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera: Increased FOV (44) and distance (6.2) so the car is NEVER clipped and fits 100%
-    const camera = new THREE.PerspectiveCamera(44, initialWidth / initialHeight, 0.1, 100);
-    camera.position.set(0, 0.9, isMobile ? 6.8 : 5.8);
-    camera.lookAt(0, 0.35, 0);
+    // 2. Camera: Sweet spot FOV 42° & balanced distance for optimal size
+    const camera = new THREE.PerspectiveCamera(42, initialWidth / initialHeight, 0.1, 100);
+    camera.position.set(0, 1.0, isMobile ? 6.0 : 5.1);
+    camera.lookAt(0, 0.32, 0);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -269,16 +269,16 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
           }
         });
 
-        // Center model geometry & RAISE IT MUCH HIGHER (+0.55 in Y)
+        // Center model geometry & RAISE IT HIGH (+0.42 in Y)
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
 
         model.position.x = -center.x;
-        model.position.y = -center.y + 0.55; // Elevated high up in upper-center stage
+        model.position.y = -center.y + 0.42; // Floating high and proud
         model.position.z = -center.z;
 
-        // Perfectly proportioned 0.52x scale so entire car (front to rear) fits comfortably
-        model.scale.set(0.52, 0.52, 0.52);
+        // SWEET SPOT 0.68x SCALE: Bold, prominent, high visual impact & 100% ZERO-CLIPPING
+        model.scale.set(0.68, 0.68, 0.68);
 
         carRootGroup.add(model);
         setLoading(false);
@@ -341,7 +341,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       animationFrameId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // Ultra-slow, luxurious showroom drift (0.0008)
+      // Ultra-slow showroom drift (0.0008)
       if (!isDraggingRef.current) {
         targetRotationY.current += 0.0008;
       }
@@ -350,8 +350,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.05;
         carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.05;
 
-        // Elegant Zero-Gravity Floating Wave (High Elevation)
-        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.05 + 0.12;
+        // Elegant Zero-Gravity Floating Wave
+        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.05 + 0.10;
         carRootGroup.rotation.z = Math.sin(elapsedTime * 1.2) * 0.01;
       }
 
@@ -359,7 +359,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         wheel.rotation.x += 0.008;
       });
 
-      camera.lookAt(0, 0.35, 0);
+      camera.lookAt(0, 0.32, 0);
       renderer.render(scene, camera);
     };
 
@@ -408,10 +408,10 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
   return (
     <div className="relative w-full flex flex-col items-center select-none isolate">
-      {/* 3D WebGL Canvas Stage - Wide & High Bounding Box */}
+      {/* 3D WebGL Canvas Stage - Generous Viewport */}
       <div
         ref={containerRef}
-        className="w-full h-[400px] sm:h-[480px] lg:h-[540px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden"
+        className="w-full h-[420px] sm:h-[500px] lg:h-[560px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden"
       />
 
       {/* Loading Skeleton */}
