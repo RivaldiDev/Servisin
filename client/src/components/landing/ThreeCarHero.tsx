@@ -96,9 +96,9 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
   const pointerDownPosRef = useRef({ x: 0, y: 0 });
   const previousMousePositionRef = useRef({ x: 0, y: 0 });
   const targetRotationY = useRef(0.65);
-  const targetRotationX = useRef(0.1);
+  const targetRotationX = useRef(0.08);
 
-  // Minimalist Color Swatches (No Text / Pure Swatches)
+  // Minimalist Color Swatches
   const colorOptions = [
     { id: 'red' as const, name: 'Merah', hex: 0xd90429, swatchBg: 'bg-[#d90429]' },
     { id: 'blue' as const, name: 'Biru', hex: 0x0077b6, swatchBg: 'bg-[#0077b6]' },
@@ -117,15 +117,16 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     if (!containerRef.current) return;
     const container = containerRef.current;
     const rect = container.getBoundingClientRect();
-    const initialWidth = rect.width || (isMobile ? 380 : 700);
-    const initialHeight = rect.height || (isMobile ? 460 : 680);
+    const initialWidth = rect.width || (isMobile ? 380 : 720);
+    const initialHeight = rect.height || (isMobile ? 420 : 540);
 
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera Framing (Framed to focus on raised floating car)
-    const camera = new THREE.PerspectiveCamera(38, initialWidth / initialHeight, 0.1, 100);
-    camera.position.set(0, 1.2, isMobile ? 5.8 : 5.1);
+    // 2. Camera: Increased FOV (44) and distance (6.2) so the car is NEVER clipped and fits 100%
+    const camera = new THREE.PerspectiveCamera(44, initialWidth / initialHeight, 0.1, 100);
+    camera.position.set(0, 0.9, isMobile ? 6.8 : 5.8);
+    camera.lookAt(0, 0.35, 0);
 
     // 3. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -165,7 +166,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
     frontFill.position.set(0, 2, 6);
     scene.add(frontFill);
 
-    const underGlow = new THREE.DirectionalLight(0x90e0ef, 0.55);
+    const underGlow = new THREE.DirectionalLight(0x90e0ef, 0.6);
     underGlow.position.set(0, -3, 0);
     scene.add(underGlow);
 
@@ -224,7 +225,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
       clearcoat: 0.95,
     });
 
-    // 6. 3D Car Root Group (Elevated Zero-Gravity Floating)
+    // 6. 3D Car Root Group (Elevated High in Scene)
     const carRootGroup = new THREE.Group();
     scene.add(carRootGroup);
     carRootGroupRef.current = carRootGroup;
@@ -268,15 +269,16 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
           }
         });
 
-        // Center model geometry & RAISE IT HIGHER (+0.32 in Y)
+        // Center model geometry & RAISE IT MUCH HIGHER (+0.55 in Y)
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
 
         model.position.x = -center.x;
-        model.position.y = -center.y + 0.32; // Elevated higher for majestic floating view
+        model.position.y = -center.y + 0.55; // Elevated high up in upper-center stage
         model.position.z = -center.z;
 
-        model.scale.set(0.85, 0.85, 0.85);
+        // Perfectly proportioned 0.52x scale so entire car (front to rear) fits comfortably
+        model.scale.set(0.52, 0.52, 0.52);
 
         carRootGroup.add(model);
         setLoading(false);
@@ -348,8 +350,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         carRootGroup.rotation.y += (targetRotationY.current - carRootGroup.rotation.y) * 0.05;
         carRootGroup.rotation.x += (targetRotationX.current - carRootGroup.rotation.x) * 0.05;
 
-        // Elegant Zero-Gravity Floating Wave (Elevated)
-        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.06 + 0.08;
+        // Elegant Zero-Gravity Floating Wave (High Elevation)
+        carRootGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.05 + 0.12;
         carRootGroup.rotation.z = Math.sin(elapsedTime * 1.2) * 0.01;
       }
 
@@ -357,6 +359,7 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         wheel.rotation.x += 0.008;
       });
 
+      camera.lookAt(0, 0.35, 0);
       renderer.render(scene, camera);
     };
 
@@ -405,10 +408,10 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
 
   return (
     <div className="relative w-full flex flex-col items-center select-none isolate">
-      {/* 3D WebGL Canvas Stage - Extra Large & Tall Bounding Box */}
+      {/* 3D WebGL Canvas Stage - Wide & High Bounding Box */}
       <div
         ref={containerRef}
-        className="w-full h-[460px] sm:h-[580px] lg:h-[660px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden rounded-3xl"
+        className="w-full h-[400px] sm:h-[480px] lg:h-[540px] flex items-center justify-center cursor-grab active:cursor-grabbing overflow-hidden"
       />
 
       {/* Loading Skeleton */}
@@ -421,8 +424,8 @@ export const ThreeCarHero: React.FC<ThreeCarHeroProps> = ({ isMobile = false }) 
         </div>
       )}
 
-      {/* Minimalist Color-Only Swatch Buttons (Zero Text / Pure Clean Swatches) */}
-      <div className="mt-3 flex items-center gap-3 z-10 bg-[#03045e]/80 p-2 rounded-full border border-[#90e0ef]/30 backdrop-blur-md shadow-lg">
+      {/* Minimalist Color-Only Swatch Buttons */}
+      <div className="mt-2 flex items-center gap-3 z-10 bg-[#03045e]/80 p-2 rounded-full border border-[#90e0ef]/30 backdrop-blur-md shadow-lg">
         {colorOptions.map((opt) => (
           <button
             key={opt.id}
